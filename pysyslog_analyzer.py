@@ -60,7 +60,7 @@ def gen_info():
     except Exception as e:
         print('except', str(e))
     db[d].insert({'server': s, 'app': a, 'level': l, 'time': t, 'message': m})
-    return 'Done\n' + out
+    return 'Done\n'
 
 
 @app.route('/servers/', methods=['GET', 'POST'])
