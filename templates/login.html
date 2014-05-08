@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}
+    Login needed
+{% endblock %}
+{% block body %}
+    <h2>Login needed</h2>
+    <form class="form-inline" action="{{ url_for('login') }}" method=post>
+        <input name=username type="text" class="input-small" placeholder="Никнейм">
+        <input name=password type="password" class="input-small" placeholder="Пароль">
+        <label class="checkbox">
+            <input type="checkbox"> Запомнить меня
+        </label>
+        <button type="submit" class="btn">Войти</button>
+    </form>
+{% endblock %}

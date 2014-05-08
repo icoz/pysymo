@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}
+    Home
+{% endblock %}
+{% block body %}
+    <h2>Hello, world!</h2>
+    {% if session.logged_in %}
+        Hello, {{ session.username }}!
+    {% endif %}
+{% endblock %}
