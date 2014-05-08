@@ -1,13 +1,84 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 from datetime import datetime
 from random import random
 
-from flask import Flask, request
+from flask import Flask, request, render_template, flash, session, redirect, url_for
 
+from auth import login_required
 from db import db
 
 
+DEBUG = True
+SECRET_KEY = 'sifdj ncs dcq odicn pdscn[os ncpasvaidcjn sajc acbqisbc csbabcdsac valsdcb alsjd bafd ba'
+
 app = Flask(__name__)
+app.config.from_object(__name__)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'GET':
+        session['next'] = None
+        return render_template('login.html')
+    if request.method == 'POST':
+        r = db['users'].find_one({'user': request.form['username']})
+        # user, passwd = ("user", "pass")
+        print(r)
+        print()
+        if r is None:
+            flash('Invalid username')
+        elif request.form['password'] != r['password']:
+            flash('Invalid password')
+        else:
+            print('login ok, setting session')
+            session['logged_in'] = True
+            print('process 1', session)
+            session['username'] = request.form['username']
+            print('process 2', session)
+            # TODO store user_id
+            session['user_id'] = str(r['_id'])
+            print('before flash')
+            flash("Logged in successfully.")
+            print('after flash')
+            if 'next' in session:
+                url = session['next']
+                session['next'] = None
+                return redirect(url)
+            else:
+                return redirect(url_for('home'))
+                # return redirect(request.args.get("next") or url_for("home"))
+    return redirect(url_for('home'))
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
+
+
+@app.route('/register', methods=['GET', "POST"])
+def register():
+    if request.method == "GET":
+        return render_template('register.html')
+    if request.method == 'POST':
+        user = request.form['username']
+        password = request.form['password']
+        mail = request.form['email']
+        dbu = db['users']
+        # TODO: check on exists
+        rec = dbu.find_one({"user": user})
+        if rec is None:
+            # TODO: make it safe to save to mongodb
+            dbu.insert({'user': user, 'password': password, 'mail': mail})
+            flash('Registered. Sending to login page.')
+            session['next'] = None
+            return redirect(url_for('login'))
+        else:
+            flash('Error! Login is not unique!')
+    pass
 
 
 def date_convert(d):
@@ -18,48 +89,59 @@ def date_convert(d):
 
 
 def random_record():
-    server = 'serv {0}'.format(int(random() * 5))
-    # print(server)
+    host = 'serv {0}'.format(int(random() * 5))
+    facilities = ['kern', 'auth', 'cron', 'daemon', 'user', 'mail']
+    facility = facilities[int(random() * len(facilities))]
+    priority = int(random() * 7)
     apps = ['samba', 'exim', 'postfix', 'httpd', 'ftpd']
-    app = apps[int(random() * 5)]
-    # print(app)
-    """ level:
-    1 - debug
-    2 - info
-    3 - warning
-    4 - error
-    5 - critical
-    """
-    level = int(random() * 5)
-    # print(level)
-    time = str(datetime.today().time())
+    app = apps[int(random() * len(apps))]
+    dt = str(datetime.today().timestamp())
     words = ['hello', 'world', 'how', 'are', 'you']
-    message = ' '.join([words[int(random() * 5)] for i in range(3)])
-    return server, app, level, time, message
+    message = ' '.join([words[int(random() * len(words))] for i in range(5)])
+    # h = host
+    # f = facility(???)
+    # p = priority(0 - 7)
+    # dt = date-time.timestamp
+    # a = app | program
+    # m = msg
+    return host, facility, priority, app, dt, message
 
 
 @app.route('/')
-def hello_world():
-    return 'Hello World!'
+def home():
+    print(session)
+    return render_template('home.html')
 
 
-@app.route('/gen_info')
-def gen_info():
+@app.route('/gen_info/<num>')
+def gen_info(num=None):
     # print(type(datetime.today()))
-    d = date_convert(datetime.today())
-    # out = d
-    # print(d)
-    s, a, l, t, m = random_record()
-    print(s, a, l, t, m)
-    # db.test.insert({'some': 12})
-    # db['d12_12_12'].insert({'cool':1})
-    try:
-        if db.dates.find_one({'date': str(datetime.today().date()), 'servers': s}) is None:
-            db.dates.update({'date': str(datetime.today().date()), 'coll_name': d}, {'$push': {'servers': s}},
-                            upsert=True)
-    except Exception as e:
-        print('except', str(e))
-    db[d].insert({'server': s, 'app': a, 'level': l, 'time': t, 'message': m})
+    if num is None:
+        num = 1
+    num = int(num)
+    while num > 0:
+        # d = date_convert(datetime.today())
+        # out = d
+        # print(d)
+        h, f, p, a, d, m = random_record()
+        print(h, f, p, a, d, m)
+        db['messages'].insert({'h': h, 'f': f, 'p': p, 'a': a, 'd': d, 'm': m})
+        db['messages'].ensure_index('h')
+        db['messages'].ensure_index('p')
+        # db['messages'].ensure_index({'p': 1})
+        # db['messages'].ensure_index({'a': 1})
+        # db['messages'].ensure_index({'d': 1})
+        # db['messages'].ensure_index({'m': 0})
+        # db.test.insert({'some': 12})
+        # db['d12_12_12'].insert({'cool':1})
+        # try:
+        #     if db.dates.find_one({'date': str(datetime.today().date()), 'servers': s}) is None:
+        #         db.dates.update({'date': str(datetime.today().date()), 'coll_name': d}, {'$push': {'servers': s}},
+        #                         upsert=True)
+        # except Exception as e:
+        #     print('except', str(e))
+        # db[d].insert({'h': s, 'a': a, 'p': l, 'd': t, 'm': m})
+        num -= 1
     return 'Done\n'
 
 
@@ -69,7 +151,9 @@ def servers():
     if request.method == 'GET':
         # collections = db.dates.find({}, {'coll_name': 1})
         print('get')
-        info = db['dates'].aggregate({'$group': {"_id": 'servers', 'servers': {'$addToSet': '$servers'}}})
+        info = db['dates'].aggregate({'$match': {'d': 0}})
+        # info = db['dates'].aggregate({'$match': {'d': {'$and': [{'$gte':1}, {'$lte': 1}]}}},
+        #                              {'$group': {"_id": 'servers', 'servers': {'$addToSet': '$servers'}}})
         if info['ok']:
             out = ""
             servers = info['result'][0]['servers'][0]
