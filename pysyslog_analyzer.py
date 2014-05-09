@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+__author__ = 'icoz'
+
 from datetime import datetime
+from functools import wraps
 from random import random
 
 from flask import Flask, request, render_template, flash, session, redirect, url_for
 
-from auth import login_required
 from db import db
 
 
@@ -15,6 +17,18 @@ SECRET_KEY = 'sifdj ncs dcq odicn pdscn[os ncpasvaidcjn sajc acbqisbc csbabcdsac
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+def login_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if session.get('logged_in'):
+            return func(*args, **kwargs)
+        else:
+            print('url=',request.url)
+            session['next'] = request.url
+            return redirect(url_for('login'), code=302)
+
+    return decorated_view
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -42,7 +56,7 @@ def login():
             print('before flash')
             flash("Logged in successfully.")
             print('after flash')
-            if 'next' in session:
+            if session.get('next'):
                 url = session['next']
                 session['next'] = None
                 return redirect(url)
@@ -113,12 +127,10 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/gen_info/<num>')
-def gen_info(num=None):
+@app.route('/gen_info/<int:num>')
+@login_required
+def gen_info(num=1):
     # print(type(datetime.today()))
-    if num is None:
-        num = 1
-    num = int(num)
     while num > 0:
         # d = date_convert(datetime.today())
         # out = d
