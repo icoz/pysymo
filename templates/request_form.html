@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}
+    Get info from db
+{% endblock %}
+{% block body %}
+    <div class="hero-unit">
+        <h2>GetInfo form</h2>
+
+        <form class="form" action="{{ url_for('get_info') }}" method=post>
+            <select name="host">
+                <option value=""></option>
+                {% for host in hosts %}
+                    <option value="{{ host }}"
+                            {% if active.get('host') == host %}
+                            selected
+                            {% endif %}
+                            >{{ host }}</option>
+                {% endfor %}
+            </select>
+            <select name="app">
+                <option value=""></option>
+                {% for app in apps %}
+                    <option value="{{ app }}"
+                            {% if active.get('app') == app %}
+                            selected
+                            {% endif %}
+                            >{{ app }}</option>
+                {% endfor %}
+            </select>
+            <select name="prio">
+                <option value=""></option>
+                {% for prio in range(8) %}
+                    <option value="{{ prio }}"
+                            {% if active.get('prio') == prio %}
+                            selected
+                            {% endif %}
+                            >{{ ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')[prio] }}</option>
+                {% endfor %}
+            </select>
+            {% if active.get('regex') %}
+                <input name="msg_regex" type="text" class="input-small" placeholder="RegExp"
+                       value="{{ active.get('regex') }}">
+            {% else %}
+                <input name="msg_regex" type="text" class="input-small" placeholder="RegExp">
+            {% endif %}
+
+            {#        <input name="username" type="text" class="input-small" placeholder="Никнейм">#}
+            {#        <input name="password" type="password" class="input-small" placeholder="Пароль">#}
+            {#        <input name="email" type="text" class="input-small" placeholder="Адрес почты">#}
+            <button type="submit" class="btn">Получить</button>
+        </form>
+        {% if data %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Host</th>
+                    <th>App</th>
+                    <th>Date/time</th>
+                    <th>Priority</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for d in data %}
+                    <tr>
+                        <td>{{ d['h'] }}</td>
+                        <td>{{ d['a'] }}</td>
+                        <td>{{ d['d'] }}</td>
+                        <td>{{ ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')[d['p']] }}</td>
+                        <td>{{ d['m'] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {#            <form action="{{ url_for('get_info') }}" method=post>#}
+            {#            <button type="submit" class="btn">Следующие строки</button>#}
+            {#            </form>#}
+        {% endif %}
+    </div>
+{% endblock %}
