@@ -19,3 +19,4 @@ __author__ = 'ilya-il'
 '''
 # priority list, constant
 MSG_PRIORITY_LIST = ('alert', 'crit', 'debug', 'err', 'info', 'notice', 'warning', 'emerg')
+# ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')
