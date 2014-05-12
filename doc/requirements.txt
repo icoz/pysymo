@@ -1,0 +1,64 @@
+=== AppArmor config ===
+
+    /var/log/audit/audit.log - audit log
+    /etc/init.d/boot.apparmor start/stop - start/stop
+
+    /etc/apparmor.d/sbin.syslog-ng - syslog rules config
+
+        /var/lib/mongodb/mongodb.syslog-ng.pipe rw,
+        /usr/bin/mongo ix,
+        /bin/bash ix,
+
+=== Pipe ===
+
+    # mkfifo /var/lib/mongodb/mongodb.syslog-ng.pipe
+    # chmod 640 /var/lib/mongodb/mongodb.syslog-ng.pipe (???)
+
+=== Syslog config ===
+    # PIPE
+    destination d_mongodb {
+            program("/usr/bin/mongo --quiet syslog < /var/lib/mongodb/mongodb.syslog-ng.pipe");
+            pipe("/var/lib/mongodb/mongodb.syslog-ng.pipe"
+                template("db.messages.insert({host: '$HOST', facility: '$FACILITY', priority: '$PRIORITY', datetime: $UNIXTIME, program: '$PROGRAM', msg: '$MSG'})\n") template-escape(yes));
+    };
+
+    # JSON line
+    destination d_mongodb {
+            program("/usr/local/bin/mongo_piper.py"
+                template("{\"h\": \"$HOST\", \"f\": \"$FACILITY\", \"p\": \"$PRIORITY\", \"d\": \"$UNIXTIME\", \"a\": \"$PROGRAM\", \"m\": \"$MSG\"}\n")
+                template-escape(yes)
+                flush_lines(1)
+                flush_timeout(1000)
+        );
+    };
+
+    log { source(remote); destination(d_mongodb); };
+
+=== Mongo piper ===
+    #!/usr/bin/python
+
+    import sys
+    import json
+    from pymongo import MongoClient
+
+    MONGO_HOST = '127.0.0.1'
+    MONGO_PORT = 27017
+    MONGO_DATABASE = 'syslog'
+
+    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+
+    try:
+        while 1:
+            line = sys.stdin.readline()
+            if not line:
+                break
+            data = json.loads(line)
+            db['messages'].insert(data)
+
+    except Exception, e:
+        f = open('/usr/local/bin/error.txt','ab')
+        f.write(e.message)
+        f.write('\n')
+        f.write(line)
+        f.close()
+        exit(0)
