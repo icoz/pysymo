@@ -1,6 +1,7 @@
 __author__ = 'icoz'
 
 from app import app
+from forms import RequestForm
 from app.db import db, get_apps, get_hosts
 from app.auth import login_required
 
@@ -11,6 +12,42 @@ from flask import request, render_template, session
 def home():
     print(session)
     return render_template('home.html')
+
+
+# test get info on flask-wtf forms
+@app.route('/get_info2', methods=['GET', 'POST'])
+@login_required
+def get_info2():
+    data = None
+    form = RequestForm()
+    if form.validate_on_submit():
+        print('Form submitted')
+        print('get-info: post', form.data)
+
+        req = dict()
+        sk = 0
+        if form.host.data:
+            if form.hostie.data == '0':
+                req['h'] = {'$in': form.host.data}
+            else:
+                req['h'] = {'$nin': form.host.data}
+        if form.prio.data:
+            # convert prio to int
+            req['p'] = {'$in': [int(i) for i in form.prio.data]}
+        if form.datef.data:
+            print form.datef.data
+            req['d'] = {'$gt': form.datef.data}
+
+        print(req)
+
+        # multiple choice find or - db.messages.find( { $or: [{"h": 'serv 0'}, {"h":'serv 1'}] } )
+        # multiple choice find in - db.messages.find( { h: { $in: ['serv 0','serv 1']}, p: {$in: [0,1]} })
+        info = db.messages.find(req).limit(100 + sk).skip(sk)
+        data = [i for i in info]
+    else:
+        print('Form NO submitted')
+
+    return render_template('request_form2.html', form=form, data=data)
 
 @app.route('/get_info', methods=['GET', 'POST'])
 @login_required

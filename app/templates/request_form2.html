@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}
+    Get info from db
+{% endblock %}
+{% block body %}
+    <div class="hero-unit">
+        <h2>GetInfo2 form</h2>
+
+        <form class="form" action="{{ url_for('get_info2') }}" method=post>
+            {{ form.hidden_tag() }}
+            <div class="control-group">
+                <div class="controls form-inline">
+                    {{ form.hostie }}
+                    {{ form.host.label }}
+                    {{ form.host(size=10) }}
+                    {{ form.prio.label }}
+                    {{ form.prio(size=10) }}
+                    {{ form.datef.label }}
+                    {{ form.datef }}
+                </div>
+                    {% for error in form.datef.errors %}
+                       <span style="color: red;"> <br> [{{ error }}] <br> </span>
+                    {% endfor %}
+            </div>
+            <button type="submit" class="btn">Получить</button>
+        </form>
+
+        {% if data %}
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Host</th>
+                    <th>App</th>
+                    <th>Date/time</th>
+                    <th>Priority</th>
+                    <th>Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for d in data %}
+                    <tr>
+                        <td>{{ d['h'] }}</td>
+                        <td>{{ d['a'] }}</td>
+                        <td>{{ d['d'] }}</td>
+                        <td>{{ ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')[d['p']] }}</td>
+                        <td>{{ d['m'] }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {#            <form action="{{ url_for('get_info') }}" method=post>#}
+            {#            <button type="submit" class="btn">Следующие строки</button>#}
+            {#            </form>#}
+        {% endif %}
+    </div>
+{% endblock %}
