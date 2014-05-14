@@ -17,6 +17,10 @@ __author__ = 'ilya-il'
                    program name and the pid. In syslog-ng 3.0, the MSG macro became equivalent with the MSGONLY macro.
                    The program name and the pid together are available in the MSGHDR macro.
 '''
+
+CSRF_ENABLED = True
+SECRET_KEY = 'sifdj ncs dcq odicn pdscn[os ncpasvaidcjn sajc acbqisbc csbabcdsac valsdcb alsjd bafd ba'
+
 # priority list, constant
 MSG_PRIORITY_LIST = ('alert', 'crit', 'debug', 'err', 'info', 'notice', 'warning', 'emerg')
 # ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')

@@ -3,9 +3,12 @@ from random import random
 
 __author__ = 'icoz'
 
-from app import app, login_required, db
+from app import app
+from app.db import db
+from app.auth import login_required
 
 # if DEBUG:
+
 
 def date_convert(d):
     if type(d) is datetime:
@@ -31,6 +34,7 @@ def random_record():
     # a = app | program
     # m = msg
     return host, facility, priority, app, dt, message
+
 
 @app.route('/gen_info/<int:num>')
 @login_required

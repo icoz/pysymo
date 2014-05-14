@@ -7,3 +7,11 @@ MONGO_PORT = 27017
 MONGO_DATABASE = 'syslog'
 
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+
+
+def get_hosts():
+    return db.messages.distinct('h')
+
+
+def get_apps():
+    return db.messages.distinct('a')

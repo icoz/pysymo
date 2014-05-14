@@ -1,8 +1,10 @@
 from functools import wraps
-from app import app, db
+from app import app
+from app.db import db
 from flask import session, request, redirect, url_for, render_template, flash
 
 __author__ = 'icoz'
+
 
 def login_required(func):
     @wraps(func)
