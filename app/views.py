@@ -31,6 +31,11 @@ def get_info2():
                 req['h'] = {'$in': form.host.data}
             else:
                 req['h'] = {'$nin': form.host.data}
+        if form.app.data:
+            if form.appie.data == '0':
+                req['a'] = {'$in': form.app.data}
+            else:
+                req['a'] = {'$nin': form.app.data}
         if form.prio.data:
             # convert prio to int
             req['p'] = {'$in': [int(i) for i in form.prio.data]}
