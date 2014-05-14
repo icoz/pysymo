@@ -13,14 +13,16 @@
                     {{ form.hostie }}
                     {{ form.host.label }}
                     {{ form.host(size=10) }}
+                    {{ form.app.label }}
+                    {{ form.app(size=10) }}
                     {{ form.prio.label }}
                     {{ form.prio(size=10) }}
                     {{ form.datef.label }}
                     {{ form.datef }}
                 </div>
-                    {% for error in form.datef.errors %}
-                       <span style="color: red;"> <br> [{{ error }}] <br> </span>
-                    {% endfor %}
+                {% for error in form.datef.errors %}
+                    <span style="color: red;"> <br> [{{ error }}] <br> </span>
+                {% endfor %}
             </div>
             <button type="submit" class="btn">Получить</button>
         </form>
@@ -38,7 +40,20 @@
                 </thead>
                 <tbody>
                 {% for d in data %}
-                    <tr>
+                    <tr
+                            {% if 0 < d['p'] < 4 %}
+                                class="error"
+                            {% endif %}
+                            {% if d['p'] == 4 %}
+                                class="warning"
+                            {% endif %}
+                            {% if d['p'] == 5 or d['p'] == 6 %}
+                                class="info"
+                            {% endif %}
+                            {% if d['p'] == 7 %}
+                                class="success"
+                            {% endif %}
+                            >
                         <td>{{ d['h'] }}</td>
                         <td>{{ d['a'] }}</td>
                         <td>{{ d['d'] }}</td>

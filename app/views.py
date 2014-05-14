@@ -1,11 +1,11 @@
 __author__ = 'icoz'
 
+from flask import request, render_template, session
+
 from app import app
-from forms import RequestForm
+from app.forms import RequestForm
 from app.db import db, get_apps, get_hosts
 from app.auth import login_required
-
-from flask import request, render_template, session
 
 
 @app.route('/')
@@ -35,7 +35,7 @@ def get_info2():
             # convert prio to int
             req['p'] = {'$in': [int(i) for i in form.prio.data]}
         if form.datef.data:
-            print form.datef.data
+            print(form.datef.data)
             req['d'] = {'$gt': form.datef.data}
 
         print(req)
@@ -48,6 +48,7 @@ def get_info2():
         print('Form NO submitted')
 
     return render_template('request_form2.html', form=form, data=data)
+
 
 @app.route('/get_info', methods=['GET', 'POST'])
 @login_required
