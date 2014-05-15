@@ -8,95 +8,95 @@
         <div class="panel-body">
             <form class="form" action="{{ url_for('get_info2') }}" method=post>
                 {{ form.hidden_tag() }}
-                    <div class="row">
-                        <div class="col-md-3">
-                            {{ form.host_ie(class="list-unstyled") }}
-                            {{ form.host.label }}
-                            {{ form.host(size=10, class="form-control") }}
-                        </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form.host_ie(class="list-unstyled") }}
+                        {{ form.host.label }}
+                        {{ form.host(size=10, class="form-control") }}
+                    </div>
 
-                        <div class="col-md-3">
+                    <div class="col-md-3">
                         {{ form.application_ie(class="list-unstyled") }}
                         {{ form.application.label }}
                         {{ form.application(size=10, class="form-control") }}
-                        </div>
+                    </div>
 
-                        <div class="col-md-3">
+                    <div class="col-md-3">
                         {{ form.facility_ie(class="list-unstyled") }}
                         {{ form.facility.label }}
                         {{ form.facility(size=10, class="form-control") }}
-                        </div>
+                    </div>
 
-                        <div class="col-md-3">
+                    <div class="col-md-3">
                         {{ form.priority_ie(class="list-unstyled") }}
                         {{ form.priority.label }}
                         {{ form.priority(size=10, class="form-control") }}
-                        </div>
-
                     </div>
 
-                    <div class="row">
-                        &nbsp;
-                    </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-horizontal">
-                                {{ form.date_from.label(class='col-md-1 control-label') }}
-                                <div class="col-md-5">
-                                    {{ form.date_from(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-horizontal">
-                                {{ form.records_per_page.label(class='col-md-3 control-label') }}
-                                <div class="col-md-3">
-                                    {{ form.records_per_page(class="form-control") }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="row">
+                    &nbsp;
+                </div>
 
-                    <div class="row">
-                        &nbsp;
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-horizontal">
-                                {{ form.date_to.label(class='col-md-1 control-label') }}
-                                <div class="col-md-5">
-                                    {{ form.date_to(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-horizontal">
-                                {{ form.sort_direction.label(class='col-md-2 control-label') }}
-                                <div class="col-md-4">
-                                    {{ form.sort_direction(class="form-control") }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        &nbsp;
-                    </div>
-
-                    <div class="row">
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group form-horizontal">
-                            {{ form.search_str.label(class='col-md-1 control-label') }}
-                                <div class="col-md-11">
-                                    {{ form.search_str(class="form-control", placeholder='RegEx') }}
-                                </div>
+                            {{ form.date_from.label(class='col-md-1 control-label') }}
+                            <div class="col-md-5">
+                                {{ form.date_from(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
+                            </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-horizontal">
+                            {{ form.records_per_page.label(class='col-md-3 control-label') }}
+                            <div class="col-md-3">
+                                {{ form.records_per_page(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    {% for error in form.priority_ie.errors %}
-                       <span style="color: red;"> <br> [{{ error }}] <br> </span>
-                    {% endfor %}
+                <div class="row">
+                    &nbsp;
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group form-horizontal">
+                            {{ form.date_to.label(class='col-md-1 control-label') }}
+                            <div class="col-md-5">
+                                {{ form.date_to(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-horizontal">
+                            {{ form.sort_direction.label(class='col-md-2 control-label') }}
+                            <div class="col-md-4">
+                                {{ form.sort_direction(class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    &nbsp;
+                </div>
+
+                <div class="row">
+                    <div class="form-group form-horizontal">
+                        {{ form.search_str.label(class='col-md-1 control-label') }}
+                        <div class="col-md-11">
+                            {{ form.search_str(class="form-control", placeholder='RegEx') }}
+                        </div>
+                    </div>
+                </div>
+
+                {% for error in form.priority_ie.errors %}
+                    <span style="color: red;"> <br> [{{ error }}] <br> </span>
+                {% endfor %}
                 <br>
                 <button type="submit" class="btn">Получить</button>
             </form>
@@ -117,7 +117,20 @@
             </thead>
             <tbody>
             {% for d in data %}
-                <tr>
+                <tr
+                        {% if 0 <= d['p'] < 4 %}
+                            class="danger"
+                        {% endif %}
+                        {% if d['p'] == 4 %}
+                            class="warning"
+                        {% endif %}
+                        {% if d['p'] == 5 or d['p'] == 6 %}
+                            class="info"
+                        {% endif %}
+                        {% if d['p'] == 7 %}
+                            class="success"
+                        {% endif %}
+                        >
                     <td>{{ d['h'] }}</td>
                     <td>{{ d['d'] }}</td>
                     <td>{{ d['a'] }}</td>
