@@ -1,7 +1,7 @@
 __author__ = 'icoz'
 
 from app import app
-from forms import RequestForm
+from app.forms import RequestForm
 from app.db import db, get_applications, get_hosts
 from app.auth import login_required
 
