@@ -8,7 +8,7 @@ from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 host_list = [(i, i) for i in get_hosts()]
 application_list = [(i, i) for i in get_applications()]
 facility_list = [(i, i) for i in get_facility()]
-priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in xrange(len(MSG_PRIORITY_LIST))]
+priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, 'Include'), (1, 'Exclude')]
 
 datetime_mask = '%d.%m.%Y %H:%M:%S'
