@@ -13,5 +13,9 @@ def get_hosts():
     return db.messages.distinct('h')
 
 
-def get_apps():
+def get_applications():
     return db.messages.distinct('a')
+
+
+def get_facility():
+    return  db.messages.distinct('f')

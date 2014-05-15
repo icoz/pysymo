@@ -1,6 +1,6 @@
 === Docs ===
 
-Syslog protocol RFC - http://tools.ietf.org/html/rfc5424
+Syslog protocol  - RFC - http://tools.ietf.org/html/rfc5424
 
 Syslog macro - 
 
@@ -18,6 +18,10 @@ Syslog macro -
                    Note that this has changed in syslog-ng version 3.0; in earlier versions this macro included the
                    program name and the pid. In syslog-ng 3.0, the MSG macro became equivalent with the MSGONLY macro.
                    The program name and the pid together are available in the MSGHDR macro.
+
+Bootstrap visual editor - http://www.bootply.com/new?visual=1
+
+Bootstrap docs - http://getbootstrap.com/components/
 
 === AppArmor config ===
 

@@ -7,43 +7,43 @@
 
     <!-- Bootstrap -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
     <title>PySyMo - {% block title %}{% endblock %}</title>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span12">
-            <div class="navbar">
-                <div class="navbar-inner">
-                    <a class="brand" href="{{ url_for('home') }}">PySyMo</a>
-                    <ul class="nav nav-tabs">
-                        <li><a href="{{ url_for('home') }}">Главная</a></li>
-                        <li></li>
-                        {% if not session.logged_in %}
-                            <li class="tabs-right">
-                                <form class="navbar-form" action="{{ url_for('login') }}" method=post>
-                                    <input name=username type="text" class="input-small" placeholder="Email">
-                                    <input name=password type="password" class="input-small" placeholder="Пароль">
-                                    {#                                    <label class="checkbox">#}
-                                    {#                                        <input type="checkbox"> Запомнить меня#}
-                                    {#                                    </label>#}
-                                    <button type="submit" class="btn">Войти</button>
-                                </form>
-                            </li>
-                            <li><a href="{{ url_for('register') }}">Зарегистрироваться</a></li>
-                        {% else %}
-                            <li><a href="{{ url_for('json_servers') }}">Список серверов</a></li>
-                            <li><a href="{{ url_for('json_apps') }}">Список приложений</a></li>
-                            <li><a href="{{ url_for('get_info') }}">Запрос</a></li>
-                            <li><a href="{{ url_for('get_info2') }}">Запрос2</a></li>
-                            <li><a href="{{ url_for('gen_info', num=10) }}">Сгенерировать данные</a></li>
-                            <a class="btn" href="{{ url_for('logout') }}">Выйти</a>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </div>
+
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ url_for('home') }}">PySyMo</a>
     </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+          {% if not session.logged_in %}
+                <li class="tabs-right">
+                    <form class="navbar-form" action="{{ url_for('login') }}" method=post>
+                        <input name=username type="text" class="form-control" placeholder="Email">
+                        <input name=password type="password" class="form-control" placeholder="Пароль">
+                        {#                                    <label class="checkbox">#}
+                        {#                                        <input type="checkbox"> Запомнить меня#}
+                        {#                                    </label>#}
+                        <button type="submit" class="btn">Войти</button>
+                    </form>
+                </li>
+                <li><a href="{{ url_for('register') }}">Зарегистрироваться</a></li>
+          {% else %}
+                <li><a href="{{ url_for('json_servers') }}">Список серверов</a></li>
+                <li><a href="{{ url_for('json_apps') }}">Список приложений</a></li>
+                <li><a href="{{ url_for('get_info') }}">Запрос</a></li>
+                <li><a href="{{ url_for('get_info2') }}">Запрос2</a></li>
+                <li><a href="{{ url_for('gen_info', num=10) }}">Сгенерировать данные</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+          {% endif %}
+      </ul>
+    </div> <!-- navbar-collapse -->
+
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="row-fluid">
@@ -60,17 +60,37 @@
             </div>
         {% endif %}
     {% endwith %}
+
+  </div> <!-- container-fluid -->
+</nav>
+
+<div class="container">
+    {% block body %}
+    {% endblock %}
 </div>
-<div class="row-fluid">
-    <div class="span10 offset1">
-        {% block body %}
-        {% endblock %}
-    </div>
-</div>
+
 {% block scripts %}
     {#<!-- http://code.jquery.com/jquery-latest.js -->#}
-    <script src="{{ url_for('static', filename='js/jquery-2.0.2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
+    <script type="text/javascript">
+        $('#date_from').datetimepicker(
+                {
+                    lang: 'ru',
+                    step: 15,
+                    format: 'd.m.Y H:i:s'
+                }
+        );
+        $('#date_to').datetimepicker(
+                {
+                    lang: 'ru',
+                    step: 15,
+                    format: 'd.m.Y H:i:s'
+                }
+        );
+    </script>
+
     {#<!-- <script src="{{ url_for('static', filename='js/bootstrap-dropdown.js') }}"></script>#}
     {#<script src="{{ url_for('static', filename='js/bootstrap-alert.js') }}"></script> -->#}
 {% endblock %}
