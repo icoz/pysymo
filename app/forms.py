@@ -5,13 +5,14 @@ from flask_wtf import Form
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, TextField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
-host_list = [(i, i) for i in get_hosts()]
-application_list = [(i, i) for i in get_applications()]
+host_list = sorted([(i, i) for i in get_hosts()])
+application_list = sorted([(i, i) for i in get_applications()])
 facility_list = [(i, i) for i in get_facility()]
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, 'Include'), (1, 'Exclude')]
 
 datetime_mask = '%d.%m.%Y %H:%M:%S'
+
 
 class RequestForm(Form):
     # HOST
