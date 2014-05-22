@@ -89,3 +89,17 @@ Bootstrap docs - http://getbootstrap.com/components/
         f.write(line)
         f.close()
         exit(0)
+
+=== Aggregation ===
+
+Top hosts:
+
+    db.messages.aggregate([
+                            {"$group": {"_id": "$h",
+                                        "count": {"$sum": 1}}},
+                            {"$sort": {"count": -1}}
+                          ])
+
+Multiple host group:
+
+db.messages.aggregate([{"$match": {"h": "wlc"}}, {"$group": {"_id": {"h": "$h", "p":"$p"}, "count": {"$sum": 1}}}])

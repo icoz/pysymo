@@ -13,6 +13,13 @@ def home():
     print(session)
     return render_template('home.html')
 
+# test get info on flask-wtf forms
+@app.route('/charts')
+@login_required
+def charts():
+    chart_data = {'Value1': 50, 'Value2': 32, 'Value3': 67}
+    return render_template('charts.html', data=chart_data)
+
 
 # test get info on flask-wtf forms
 @app.route('/get_info2', methods=['GET', 'POST'])

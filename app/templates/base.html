@@ -38,6 +38,7 @@
                 <li><a href="{{ url_for('json_apps') }}">Список приложений</a></li>
                 <li><a href="{{ url_for('get_info') }}">Запрос</a></li>
                 <li><a href="{{ url_for('get_info2') }}">Запрос2</a></li>
+                <li><a href="{{ url_for('charts') }}">Графики</a></li>
                 <li><a href="{{ url_for('gen_info', num=10) }}">Сгенерировать данные</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти</a></li>
           {% endif %}
@@ -64,16 +65,17 @@
   </div> <!-- container-fluid -->
 </nav>
 
-<div class="container">
-    {% block body %}
-    {% endblock %}
-</div>
+
 
 {% block scripts %}
     {#<!-- http://code.jquery.com/jquery-latest.js -->#}
     <script src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
+    <script src="http://www.google.com/jsapi"></script>
+    <!--script src="http://code.highcharts.com/highcharts.js"></script-->
+    <script src="{{ url_for('static', filename='js/chartkick.js') }}"></script>
+
     <script type="text/javascript">
         $('#date_from').datetimepicker(
                 {
@@ -94,5 +96,12 @@
     {#<!-- <script src="{{ url_for('static', filename='js/bootstrap-dropdown.js') }}"></script>#}
     {#<script src="{{ url_for('static', filename='js/bootstrap-alert.js') }}"></script> -->#}
 {% endblock %}
+
+
+<div class="container">
+    {% block body %}
+    {% endblock %}
+</div>
+
 </body>
 </html>
