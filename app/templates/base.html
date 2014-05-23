@@ -65,38 +65,14 @@
   </div> <!-- container-fluid -->
 </nav>
 
-
-
 {% block scripts %}
     {#<!-- http://code.jquery.com/jquery-latest.js -->#}
     <script src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
-    <script src="http://www.google.com/jsapi"></script>
-    <!--script src="http://code.highcharts.com/highcharts.js"></script-->
-    <script src="{{ url_for('static', filename='js/chartkick.js') }}"></script>
-
-    <script type="text/javascript">
-        $('#date_from').datetimepicker(
-                {
-                    lang: 'ru',
-                    step: 15,
-                    format: 'd.m.Y H:i:s'
-                }
-        );
-        $('#date_to').datetimepicker(
-                {
-                    lang: 'ru',
-                    step: 15,
-                    format: 'd.m.Y H:i:s'
-                }
-        );
-    </script>
 
     {#<!-- <script src="{{ url_for('static', filename='js/bootstrap-dropdown.js') }}"></script>#}
     {#<script src="{{ url_for('static', filename='js/bootstrap-alert.js') }}"></script> -->#}
 {% endblock %}
-
 
 <div class="container">
     {% block body %}

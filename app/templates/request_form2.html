@@ -3,6 +3,8 @@
     Get info from db
 {% endblock %}
 {% block body %}
+    <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
+
     <div class="panel panel-default">
         <div class="panel-heading">Запрос данных</div>
         <div class="panel-body">
@@ -145,4 +147,21 @@
         {#            <button type="submit" class="btn">Следующие строки</button>#}
         {#            </form>#}
     {% endif %}
+
+    <script type="text/javascript">
+        $('#date_from').datetimepicker(
+                {
+                    lang: 'ru',
+                    step: 15,
+                    format: 'd.m.Y H:i:s'
+                }
+        );
+        $('#date_to').datetimepicker(
+                {
+                    lang: 'ru',
+                    step: 15,
+                    format: 'd.m.Y H:i:s'
+                }
+        );
+    </script>
 {% endblock %}

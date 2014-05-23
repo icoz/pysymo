@@ -3,5 +3,11 @@
     Get info from db
 {% endblock %}
 {% block body %}
-    {% bar_chart data %}
+    <script src="http://www.google.com/jsapi"></script>
+    <!--script src="http://code.highcharts.com/highcharts.js"></script-->
+    <script src="{{ url_for('static', filename='js/chartkick.js') }}"></script>
+
+    {% pie_chart data with library={"title": "Top hosts"}%}
+
+    {% area_chart data2 with library={"title": "Daily stat"} %}
 {% endblock %}

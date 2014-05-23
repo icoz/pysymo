@@ -2,7 +2,7 @@ __author__ = 'icoz'
 
 from app import app
 from app.forms import RequestForm
-from app.db import db, get_applications, get_hosts
+from app.db import db, get_applications, get_hosts, get_top_hosts, get_daily_stat
 from app.auth import login_required
 
 from flask import request, render_template, session
@@ -17,8 +17,9 @@ def home():
 @app.route('/charts')
 @login_required
 def charts():
-    chart_data = {'Value1': 50, 'Value2': 32, 'Value3': 67}
-    return render_template('charts.html', data=chart_data)
+    chart_data = get_top_hosts()
+    chart_data2 = get_daily_stat()
+    return render_template('charts.html', data=chart_data, data2=chart_data2)
 
 
 # test get info on flask-wtf forms
