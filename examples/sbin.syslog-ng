@@ -1,0 +1,55 @@
+# $Id$
+# ------------------------------------------------------------------
+#
+#    Copyright (C) 2006 Novell/SUSE
+#    Copyright (C) 2006 Christian Boltz
+#
+#    This program is free software; you can redistribute it and/or
+#    modify it under the terms of version 2 of the GNU General Public
+#    License published by the Free Software Foundation.
+#
+# ------------------------------------------------------------------
+
+#include <tunables/global>
+
+#define this to be where syslog-ng is chrooted
+@{CHROOT_BASE}=""
+
+/sbin/syslog-ng {
+  #include <abstractions/base>
+  #include <abstractions/consoles>
+  #include <abstractions/nameservice>
+
+  capability chown,
+  capability dac_override,
+  capability fsetid,
+  capability fowner,
+  capability sys_tty_config,
+
+  /dev/log w,
+  /dev/syslog w,
+  /dev/tty10 rw,
+  /dev/xconsole rw,
+  /etc/syslog-ng/* r,
+  @{PROC}/kmsg r,
+  /etc/hosts.deny r,
+  /etc/hosts.allow r,
+  /sbin/syslog-ng mr,
+  # chrooted applications
+  @{CHROOT_BASE}/var/lib/*/dev/log w,
+  @{CHROOT_BASE}/var/lib/syslog-ng/syslog-ng.persist rw,
+  @{CHROOT_BASE}/var/log/** w,
+  @{CHROOT_BASE}/var/run/syslog-ng.pid krw,
+  # IL 27.10.2011
+  /mnt/logs/** w,
+  # IL 18.04.2012
+  /var/lib/mysql/mysql.syslog-ng.pipe rw,
+  /bin/bash ix,
+  /usr/bin/mysql ix,
+  # IL 26.05.2014
+  /srv/www/htdocs/pysymo/tools/** ixrw,
+  /usr/lib64/python2.6/** rm,
+  /usr/local/lib64/python2.6/** rm,
+  /proc/** r,
+}
+

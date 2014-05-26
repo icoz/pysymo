@@ -6,8 +6,7 @@ from datetime import datetime
 
 from pymongo import MongoClient
 
-from tools.save_to_db import save_to_db
-
+from save_to_db import save_to_db
 
 MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017
@@ -27,7 +26,6 @@ try:
         data['d'] = datetime.fromtimestamp(data['d'])
 
         save_to_db(db, data)
-
 
 except Exception, e:
     f = open('/usr/local/bin/error.txt', 'ab')

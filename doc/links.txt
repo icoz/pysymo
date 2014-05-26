@@ -1,0 +1,5 @@
+Syslog protocol RFC     - http://tools.ietf.org/html/rfc5424
+Syslog macro            - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3.3-guides/en/syslog-ng-ose-v3.3-guide-admin-en/html/reference_macros.html
+Bootstrap visual editor - http://www.bootply.com/new?visual=1
+Bootstrap docs          - http://getbootstrap.com/components/
+Chartkick               - https://github.com/mher/chartkick.py, chartkick.com
