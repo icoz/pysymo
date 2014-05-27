@@ -4,7 +4,7 @@ __author__ = 'icoz'
 
 MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017
-MONGO_DATABASE = 'syslog_gen'
+MONGO_DATABASE = 'syslog'
 
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
@@ -14,7 +14,9 @@ def get_hosts():
 
 
 def get_applications():
-    return db.messages.distinct('a')
+    # filter: '--', empty strings, digital applications
+    query = {'a': {'$nin': ['--', ''], '$regex': '\D'}}
+    return db.messages.find(query).distinct('a')
 
 
 def get_facility():

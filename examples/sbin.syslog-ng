@@ -47,9 +47,10 @@
   /bin/bash ix,
   /usr/bin/mysql ix,
   # IL 26.05.2014
-  /srv/www/htdocs/pysymo/tools/** ixrw,
+  /srv/www/htdocs/pysymo/tools/** ixr,
   /usr/lib64/python2.6/** rm,
   /usr/local/lib64/python2.6/** rm,
   /proc/** r,
+  /var/log/pysymo/** w,
 }
 

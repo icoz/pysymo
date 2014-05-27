@@ -2,16 +2,14 @@
 __author__ = 'ilya-il'
 from app.db import get_hosts, get_applications, get_facility
 from flask_wtf import Form
-from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, TextField
+from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, StringField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
 host_list = sorted([(i, i) for i in get_hosts()])
 application_list = sorted([(i, i) for i in get_applications()])
-facility_list = [(i, i) for i in get_facility()]
+facility_list = sorted([(i, i) for i in get_facility()])
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, 'Include'), (1, 'Exclude')]
-
-datetime_mask = '%d.%m.%Y %H:%M:%S'
 
 
 class RequestForm(Form):
@@ -41,4 +39,4 @@ class RequestForm(Form):
     sort_direction = SelectField('Sort', choices=[(1, 'ASC'), (-1, 'DESC')], coerce=int, default=-1)
 
     # SEARCH STRING (regexp)
-    search_str = TextField('Search')
+    search_str = StringField('Search')

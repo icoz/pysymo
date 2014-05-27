@@ -28,7 +28,7 @@ try:
         save_to_db(db, data)
 
 except Exception, e:
-    f = open('/usr/local/bin/error.txt', 'ab')
+    f = open('/var/log/pysymo/piper_error.log', 'ab')
     f.write(e.message)
     f.write('\n')
     f.write(line)

@@ -13,6 +13,7 @@ def home():
     print(session)
     return render_template('home.html')
 
+
 # test get info on flask-wtf forms
 @app.route('/charts')
 @login_required
@@ -98,6 +99,7 @@ def get_info2():
         print('Form NO submitted')
 
     return render_template('request_form2.html', form=form, data=data)
+
 
 @app.route('/get_info', methods=['GET', 'POST'])
 @login_required
