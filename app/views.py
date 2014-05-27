@@ -169,3 +169,9 @@ def json_apps():
         #                              {'$group': {"_id": 'servers', 'servers': {'$addToSet': '$servers'}}})
     else:
         return str([])
+
+
+@app.errorhandler(500)
+def internal_error(exception):
+    app.logger.error('EXCEPTION!')
+    return render_template('500.html')

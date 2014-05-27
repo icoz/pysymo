@@ -28,6 +28,12 @@ Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3
                    program name and the pid. In syslog-ng 3.0, the MSG macro became equivalent with the MSGONLY macro.
                    The program name and the pid together are available in the MSGHDR macro.
 
+Collection 'cache'
+-----------------
+
+* type: h/f/a - host, facility, application
+* value: [] - list of distinct values
+
 
 #For caching
 

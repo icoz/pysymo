@@ -3,11 +3,20 @@
     Get info from db
 {% endblock %}
 {% block body %}
-    <script src="http://www.google.com/jsapi"></script>
-    <!--script src="http://code.highcharts.com/highcharts.js"></script-->
+    <!--script src="http://www.google.com/jsapi"></script-->
+    <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/chartkick.js') }}"></script>
 
-    {% pie_chart data with library={"title": "Top hosts"}%}
+    {% pie_chart data with library={"title": {
+                                        "text": "Top hosts"
+                                    },
+                                    "plotOptions": {
+                                        "pie": {
+                                            "showInLegend": true
+                                        }
+                                      }
+                                    }
+            %}
 
     {% area_chart data2 with library={"title": "Daily stat"} %}
 {% endblock %}

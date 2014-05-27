@@ -10,23 +10,22 @@ db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
 
 def get_hosts():
-    return db.messages.distinct('h')
+    return db.cache.find_one({'type': 'h'})['value']
 
 
 def get_applications():
-    # filter: '--', empty strings, digital applications
-    query = {'a': {'$nin': ['--', ''], '$regex': '\D'}}
-    return db.messages.find(query).distinct('a')
+    return db.cache.find_one({'type': 'a'})['value']
 
 
 def get_facility():
-    return db.messages.distinct('f')
+    return db.cache.find_one({'type': 'f'})['value']
 
 
 # top hosts and messages count, desc order
 def get_top_hosts():
     res = db.messages.aggregate([{"$group": {"_id": "$h", "count": {"$sum": 1}}},
-                                 {"$sort": {"count": -1}}
+                                 {"$sort": {"count": -1}},
+                                 {"$limit": 5}
                                  ])
     # return list [['Label', value], }] for chartkick
     # BUG: chartkick can't use unicode string like u'test'

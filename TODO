@@ -1,0 +1,12 @@
+Pysymo TODO
+===========
+
+-1) CR/LF in source files - shebang string doesn't work on Linux
+0) JSON parse and error strings (special symbols and \escape)
+1) Pagination
+2) Charts - types, cache data
+3) Script to remove old data from db - older 1 month (configurable)
+4) Tail button with autorefresh
+5) Config file for tools scripts
+6) Indexes
+7) Usable statistics (db stat - size, messages count)
