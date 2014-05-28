@@ -1,4 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+__author__ = 'ilya-il'
 
 import sys
 import json
@@ -20,9 +23,18 @@ try:
         line = sys.stdin.readline()
         if not line:
             break
-        # 1) fix \' strings
-        data = json.loads(line.decode('string_escape'))
-        # 2) convert UNIXTIME to Python datetime
+
+        # 1) # replace \' to '
+        line = line.replace(r"\'", "'")
+        # 2) replace \\ to empty string
+        line = line.replace(r"\\", "")
+        # 3) non unicode symbols - strip out
+        # https://docs.python.org/2/howto/unicode.html#the-unicode-type
+        line = line.decode('utf-8', errors='ignore')
+
+        data = json.loads(line)
+
+        # 4) convert UNIXTIME to Python datetime
         data['d'] = datetime.fromtimestamp(data['d'])
 
         save_to_db(db, data)

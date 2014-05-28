@@ -1,6 +1,8 @@
-from pymongo import MongoClient
+# -*- coding: utf-8 -*-
 
 __author__ = 'icoz'
+
+from pymongo import MongoClient
 
 MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017

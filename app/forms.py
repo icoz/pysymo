@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+
 __author__ = 'ilya-il'
+
 from app.db import get_hosts, get_applications, get_facility
 from flask_wtf import Form
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, StringField

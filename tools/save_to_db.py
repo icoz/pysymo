@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+__author__ = 'icoz'
+
 from datetime import datetime, time
 from random import random
 import sys
 
 from pymongo import MongoClient
-
-
-__author__ = 'icoz'
 
 MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017

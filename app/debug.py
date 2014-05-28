@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
+__author__ = 'icoz'
+
 from datetime import datetime, timedelta
 from random import random
 
-__author__ = 'icoz'
 
 from app import app
 from app.db import db
