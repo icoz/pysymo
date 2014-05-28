@@ -148,6 +148,14 @@
         {#            </form>#}
     {% endif %}
 
+    {% if stat %}
+        <div>
+            Time elapsed - {{ stat['time_elapsed'] }} seconds
+            <br>
+            Records found - {{ stat['total_records'] }}
+        </div>
+    {% endif %}
+
     <script type="text/javascript">
         $('#date_from').datetimepicker(
                 {

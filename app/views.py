@@ -2,6 +2,8 @@
 
 __author__ = 'icoz'
 
+import time
+
 from app import app
 from app.forms import RequestForm
 from app.db import db, get_applications, get_hosts, get_top_hosts, get_daily_stat
@@ -30,6 +32,8 @@ def charts():
 @login_required
 def get_info2():
     data = None
+    stat = dict()
+
     form = RequestForm()
     if form.validate_on_submit():
         print('Form submitted')
@@ -85,7 +89,11 @@ def get_info2():
         if form.search_str.data:
             req['m'] = {'$regex': form.search_str.data}
 
-        print(req)
+        print('db-request', req)
+
+        # statistics
+        begin = time.time()
+        total_records = db.messages.find(req).count()
 
         # multiple choice find or - db.messages.find( { $or: [{"h": 'serv 0'}, {"h":'serv 1'}] } )
         # multiple choice find in - db.messages.find( { h: { $in: ['serv 0','serv 1']}, p: {$in: [0,1]} })
@@ -97,10 +105,18 @@ def get_info2():
 
         data = [i for i in info]
 
+        end = time.time()
+
+        stat['total_records'] = total_records
+        stat['time_elapsed'] = end-begin
     else:
         print('Form NO submitted')
 
-    return render_template('request_form2.html', form=form, data=data)
+    # fill statistic dict
+    return render_template('request_form2.html',
+                           form=form,
+                           data=data,
+                           stat=stat)
 
 
 @app.route('/get_info', methods=['GET', 'POST'])
