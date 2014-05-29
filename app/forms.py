@@ -7,27 +7,24 @@ from flask_wtf import Form
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, StringField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
-host_list = sorted([(i, i) for i in get_hosts()])
-application_list = sorted([(i, i) for i in get_applications()])
-facility_list = sorted([(i, i) for i in get_facility()])
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, 'Include'), (1, 'Exclude')]
+sort_list = [(1, 'ASC'), (-1, 'DESC')]
 
 
 class RequestForm(Form):
     # HOST
     host_ie = RadioField('HostIE', choices=ie_list, default=0, coerce=int)
-    host = SelectMultipleField('Host', choices=host_list)
+    host = SelectMultipleField('Host')
     # PROGRAM
     application_ie = RadioField('ApplicationIE', choices=ie_list, default=0, coerce=int)
-    application = SelectMultipleField('Application', choices=application_list)
+    application = SelectMultipleField('Application')
     # FACILITY
     facility_ie = RadioField('FacilityIE', choices=ie_list, default=0, coerce=int)
-    facility = SelectMultipleField('Facility', choices=facility_list)
+    facility = SelectMultipleField('Facility')
     # PRIORITY
     priority_ie = RadioField('PriorityIE', choices=ie_list, default=0, coerce=int)
     priority = SelectMultipleField('Priority', choices=priority_list, coerce=int)
-
     # DATETIME (%Y-%m-%d %H:%M:%S)
     date_from = DateTimeField('From', [validators.optional()], format=DATETIME_FORMAT)
     date_to = DateTimeField('To', [validators.optional()], format=DATETIME_FORMAT)
@@ -38,7 +35,17 @@ class RequestForm(Form):
                                    coerce=int,
                                    default=25)
     # SORT DIRECTION - index - MongoDB sort style
-    sort_direction = SelectField('Sort', choices=[(1, 'ASC'), (-1, 'DESC')], coerce=int, default=-1)
+    sort_direction = SelectField('Sort', choices=sort_list, coerce=int, default=-1)
 
     # SEARCH STRING (regexp)
     search_str = StringField('Search')
+
+    # select fields with dynamic lists
+    @classmethod
+    def new(cls):
+        form = cls()
+        form.host.choices = get_hosts()
+        form.application.choices = get_applications()
+        form.facility.choices = get_facility()
+        return form
+

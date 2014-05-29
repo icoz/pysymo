@@ -34,7 +34,7 @@ def get_info2():
     data = None
     stat = dict()
 
-    form = RequestForm()
+    form = RequestForm.new()
     if form.validate_on_submit():
         print('Form submitted')
         print('get-info: post', form.data)
