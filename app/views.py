@@ -8,9 +8,9 @@ from app import app
 from app.forms import RequestForm
 from app.db import db, get_applications, get_hosts, get_top_hosts, get_daily_stat
 from app.auth import login_required
+from app.pagination import Pagination
 
 from flask import request, render_template, session
-
 
 @app.route('/')
 def home():
@@ -32,15 +32,14 @@ def charts():
 @login_required
 def get_info2():
     data = None
-    stat = dict()
 
     form = RequestForm.new()
     if form.validate_on_submit():
         print('Form submitted')
         print('get-info: post', form.data)
 
+        stat = dict()
         req = dict()
-        sk = 0
 
         # HOST
         if form.host.data:
@@ -91,6 +90,9 @@ def get_info2():
 
         print('db-request', req)
 
+        # pagination skip records
+        skip_records = (form.current_page.data - 1)*form.records_per_page.data
+
         # statistics
         begin = time.time()
         total_records = db.messages.find(req).count()
@@ -99,7 +101,7 @@ def get_info2():
         # multiple choice find in - db.messages.find( { h: { $in: ['serv 0','serv 1']}, p: {$in: [0,1]} })
         #info = db.messages.find(req).limit(form.records_per_page.data + sk).skip(sk).sort('d', form.sort_direction.data)
         info = db.messages.find(spec=req,
-                                skip=sk,
+                                skip=skip_records,
                                 limit=form.records_per_page.data,
                                 sort=[('d', form.sort_direction.data)])
 
@@ -109,14 +111,22 @@ def get_info2():
 
         stat['total_records'] = total_records
         stat['time_elapsed'] = end-begin
+
+        pagination = Pagination(page_num=form.current_page.data,
+                                records_per_page=form.records_per_page.data,
+                                total_records=total_records,
+                                function='change_page')
     else:
+        stat = None
+        pagination = None
         print('Form NO submitted')
 
     # fill statistic dict
     return render_template('request_form2.html',
                            form=form,
                            data=data,
-                           stat=stat)
+                           stat=stat,
+                           pagination=pagination)
 
 
 @app.route('/get_info', methods=['GET', 'POST'])
