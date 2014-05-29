@@ -12,19 +12,15 @@ db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
 
 def get_hosts():
-    print('get_hosts called')
-    res = db.cache.find_one({'type': 'h'})['value']
-    return sorted([(i, i) for i in res])
+    return db.cache.find_one({'type': 'h'})['value']
 
 
 def get_applications():
-    res = db.cache.find_one({'type': 'a'})['value']
-    return sorted([(i, i) for i in res])
+    return db.cache.find_one({'type': 'a'})['value']
 
 
 def get_facility():
-    res = db.cache.find_one({'type': 'f'})['value']
-    return sorted([(i, i) for i in res])
+    return db.cache.find_one({'type': 'f'})['value']
 
 
 # top hosts and messages count, desc order

@@ -1,8 +1,8 @@
 Pysymo TODO
 ===========
 
--1) CR/LF in source files - shebang string doesn't work on Linux
-0) JSON parse and error strings (special symbols and \escape)
++ -1) CR/LF in source files - shebang string doesn't work on Linux
++ 0) JSON parse and error strings (special symbols and \escape)
 1) Pagination
 2) Charts - types, cache data
 3) Script to remove old data from db - older 1 month (configurable)

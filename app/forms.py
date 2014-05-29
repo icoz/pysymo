@@ -44,8 +44,8 @@ class RequestForm(Form):
     @classmethod
     def new(cls):
         form = cls()
-        form.host.choices = get_hosts()
-        form.application.choices = get_applications()
-        form.facility.choices = get_facility()
+        form.host.choices = sorted([(j, j) for j in get_hosts()])
+        form.application.choices = sorted([(j, j) for j in get_applications()])
+        form.facility.choices = sorted([(j, j) for j in get_facility()])
         return form
 
