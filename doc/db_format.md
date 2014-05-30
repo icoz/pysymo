@@ -4,12 +4,12 @@ DB Format
 Collection 'messages'
 ---------------------
 
-* h = host
-* f = facility
-* p = priority (0-7)
+* h = host     (string)
+* f = facility (string)
+* p = priority (integer, 0-7)
 * d = datetime (unix timestamp)
-* a = program
-* m = msg
+* a = program  (string)
+* m = msg      (string)
 
 Collection 'messages' fields to syslog macro
 --------------------------------------------
@@ -32,8 +32,14 @@ Collection 'cache'
 -----------------
 
 * type: h/f/a - host, facility, application
-* value: [] - list of distinct values
+* value: list of distinct values - ["value1", "value2", ]
 
+Collection 'charts'
+-------------------
+
+* type: - chart type - pie, columns, bar, area, line
+* title: - chart title
+* data: - chart data - [['label', value], ['label', value], ]
 
 #For caching
 
