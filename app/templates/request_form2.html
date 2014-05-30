@@ -95,12 +95,8 @@
                         </div>
                     </div>
                 </div>
-
+{#
                 <div class="row">
-                    &nbsp;
-                </div>
-
-                 <div class="row">
                     <div class="form-group form-horizontal">
                         {{ form.current_page.label(class='col-md-1 control-label') }}
                         <div class="col-md-11">
@@ -108,8 +104,8 @@
                         </div>
                     </div>
                 </div>
-
-                {% for error in form.priority_ie.errors %}
+ #}
+                {% for error in form.errors %}
                     <span style="color: red;"> <br> [{{ error }}] <br> </span>
                 {% endfor %}
                 <br>

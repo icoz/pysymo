@@ -4,7 +4,7 @@ __author__ = 'ilya-il'
 
 from app.db import get_hosts, get_applications, get_facility
 from flask_wtf import Form
-from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, StringField, IntegerField, HiddenField
+from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, StringField, HiddenField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
@@ -41,7 +41,9 @@ class RequestForm(Form):
     search_str = StringField('Search')
 
     # PAGE NUMBER
-    current_page = IntegerField('CurrentPage', default=1)
+    # hidden field has coerce=string - this cannot be changed
+    # use int() in views to work with
+    current_page = HiddenField('CurrentPage', default=1)
 
     # select fields with dynamic lists
     @classmethod

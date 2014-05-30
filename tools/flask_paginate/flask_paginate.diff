@@ -1,0 +1,33 @@
+122a123,124
+> 
+>             **href**: <a> href parameter, MUST contain {0} to format page number
+155a158,159
+>         self.href = kwargs.get('href', None)
+> 
+164a169,174
+>     def page_href(self, page):
+>         if self.href:
+>             return self.href.format(page)
+>         else:
+>             return url_for(self.endpoint, page=page, **self.args)
+> 
+193c203
+<             url = url_for(self.endpoint, page=page, **self.args)
+---
+>             url = self.page_href(page)
+201c211
+<             url = url_for(self.endpoint, page=self.page + 1, **self.args)
+---
+>             url = self.page_href(self.page + 1)
+210c220
+<             return LINK.format(url_for(self.endpoint, page=1, **self.args), 1)
+---
+>             return LINK.format(self.page_href(1), 1)
+217c227
+<             url = url_for(self.endpoint, page=self.total_pages, **self.args)
+---
+>             url = self.page_href(self.total_pages)
+269c279
+<         return LINK.format(url_for(self.endpoint, page=page, **self.args), page)
+---
+>         return LINK.format(self.page_href(page), page)

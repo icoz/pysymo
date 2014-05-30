@@ -8,7 +8,7 @@ from app import app
 from app.forms import RequestForm
 from app.db import db, get_applications, get_hosts, get_top_hosts, get_daily_stat
 from app.auth import login_required
-from app.pagination import Pagination
+from flask_paginate import Pagination
 
 from flask import request, render_template, session
 
@@ -91,7 +91,7 @@ def get_info2():
         print('db-request', req)
 
         # pagination skip records
-        skip_records = (form.current_page.data - 1)*form.records_per_page.data
+        skip_records = (int(form.current_page.data) - 1)*form.records_per_page.data
 
         # statistics
         begin = time.time()
@@ -112,10 +112,11 @@ def get_info2():
         stat['total_records'] = total_records
         stat['time_elapsed'] = end-begin
 
-        pagination = Pagination(page_num=form.current_page.data,
-                                records_per_page=form.records_per_page.data,
-                                total_records=total_records,
-                                function='change_page')
+        pagination = Pagination(page=int(form.current_page.data),
+                                per_page=form.records_per_page.data,
+                                total=total_records,
+                                bs_version=3,
+                                href='javascript:change_page({0})')
     else:
         stat = None
         pagination = None
