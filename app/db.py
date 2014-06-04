@@ -23,29 +23,17 @@ def get_facility():
     return db.cache.find_one({'type': 'f'})['value']
 
 
-# top hosts and messages count, desc order
-def get_top_hosts():
-    res = db.messages.aggregate([{"$group": {"_id": "$h", "count": {"$sum": 1}}},
-                                 {"$sort": {"count": -1}},
-                                 {"$limit": 5}
-                                 ])
-    # return list [['Label', value], }] for chartkick
-    # BUG: chartkick can't use unicode string like u'test'
-    # add count to hostname - create label for chart
-    return [[i['_id'].encode('utf8') + ' - ' + str(i['count']), i['count']] for i in res['result']]
+# list of available charts from chart cache
+def get_charts_list():
+    res = db.charts.find({}, {'name': 1, 'title': 1, 'created': 1, '_id': 0}).sort('title', 1)
+    return [i for i in res]
 
 
-# messages count per day
-def get_daily_stat():
-    res = db.messages.aggregate([{"$project": {"host": "$h",
-                                               "y": {"$year": "$d"},
-                                               "m": {"$month": "$d"},
-                                               "d": {"$dayOfMonth": "$d"}}
-                                  },
-                                 {"$group": {"_id": {"y": "$y", "m": "$m", "d": "$d"},
-                                             "count": {"$sum": 1}}
-                                  }
-                                 ])
-    #return res['result']
-    return [['{0}-{1:02d}-{2:02d}'.format(i["_id"]["y"], i["_id"]["m"], i["_id"]["d"]), i['count']]
-            for i in res['result']]
+# get specified chart data from chart cache
+def get_chart_data(chart_name):
+    res = db.charts.find_one({'name': chart_name})
+    # chartkick doesn't support Unicode strings (!!!)
+    # http://api.mongodb.org/python/current/tutorial.html#a-note-on-unicode-strings
+    if res:
+        res['data'] = [[i[0].encode('utf8'), i[1]] for i in res['data']]
+    return res

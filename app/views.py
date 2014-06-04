@@ -6,7 +6,7 @@ import time
 
 from app import app
 from app.forms import RequestForm
-from app.db import db, get_applications, get_hosts, get_top_hosts, get_daily_stat
+from app.db import db, get_applications, get_hosts, get_charts_list, get_chart_data
 from app.auth import login_required
 from flask_paginate import Pagination
 
@@ -18,13 +18,19 @@ def home():
     return render_template('home.html')
 
 
-# test get info on flask-wtf forms
-@app.route('/charts')
+# route for charts
+# /charts - charts list
+# /charts?chart=<chart_name> - show specified chart
+@app.route('/charts', methods=['GET'])
 @login_required
 def charts():
-    chart_data = get_top_hosts()
-    chart_data2 = get_daily_stat()
-    return render_template('charts.html', data=chart_data, data2=chart_data2)
+    chart_name = request.args.get('chart')
+    if chart_name:
+        chart_data = get_chart_data(chart_name)
+    else:
+        chart_data = None
+    charts_list = get_charts_list()
+    return render_template('charts.html', charts_list=charts_list, chart_data=chart_data)
 
 
 # test get info on flask-wtf forms
@@ -97,9 +103,6 @@ def get_info2():
         begin = time.time()
         total_records = db.messages.find(req).count()
 
-        # multiple choice find or - db.messages.find( { $or: [{"h": 'serv 0'}, {"h":'serv 1'}] } )
-        # multiple choice find in - db.messages.find( { h: { $in: ['serv 0','serv 1']}, p: {$in: [0,1]} })
-        #info = db.messages.find(req).limit(form.records_per_page.data + sk).skip(sk).sort('d', form.sort_direction.data)
         info = db.messages.find(spec=req,
                                 skip=skip_records,
                                 limit=form.records_per_page.data,

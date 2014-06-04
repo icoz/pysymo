@@ -37,8 +37,10 @@ Collection 'cache'
 Collection 'charts'
 -------------------
 
-* type: - chart type - pie, columns, bar, area, line
+* name: - chart name (unique)
+* type: - chart type - pie, column, bar, area, line
 * title: - chart title
+* created: - creation datetime
 * data: - chart data - [['label', value], ['label', value], ]
 
 #For caching

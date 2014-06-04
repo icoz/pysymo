@@ -1,22 +1,51 @@
 {% extends "base.html" %}
 {% block title %}
-    Get info from db
+    Charts
 {% endblock %}
 {% block body %}
     <!--script src="http://www.google.com/jsapi"></script-->
     <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/chartkick.js') }}"></script>
+    <script src="{{ url_for('ck.static', filename='chartkick.js') }}"></script>
 
-    {% pie_chart data with library={"title": {
-                                        "text": "Top hosts"
-                                    },
-                                    "plotOptions": {
-                                        "pie": {
-                                            "showInLegend": true
-                                        }
-                                      }
-                                    }
+    <!-- show chart list -->
+    {% if charts_list %}
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created</th>
+                <th>Display</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for chart in charts_list %}
+                <tr>
+                    <td>{{ chart['title'] }}</td>
+                    <td>{{ chart['created'].strftime(config['DATETIME_FORMAT']) }}</td>
+                    <td><a href="{{ url_for('charts', chart=chart['name']) }}" >Show chart</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <!-- show specified chart -->
+    {% if chart_data %}
+        {% if chart_data['type'] == 'pie' %}
+            {% pie_chart chart_data['data'] with library={"title": {"text": chart_data['title']},
+                                                          "plotOptions": {
+                                                            "pie": {"showInLegend": true}
+                                                          }
+                                                         }
             %}
+        {% elif chart_data['type'] == 'line' %}
+            {% line_chart chart_data['data'] with library={"title": {"text": chart_data['title']},
+                                                          "plotOptions": {
+                                                            "pie": {"showInLegend": true}
+                                                          }
+                                                         }
+            %}
+        {% endif %}
+    {% endif %}
 
-    {% area_chart data2 with library={"title": "Daily stat"} %}
 {% endblock %}

@@ -3,6 +3,7 @@
     Get info from db
 {% endblock %}
 {% block body %}
+    <link href="{{ url_for('static', filename='css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
 
     <div class="panel panel-default">
@@ -95,16 +96,7 @@
                         </div>
                     </div>
                 </div>
-{#
-                <div class="row">
-                    <div class="form-group form-horizontal">
-                        {{ form.current_page.label(class='col-md-1 control-label') }}
-                        <div class="col-md-11">
-                            {{ form.current_page(class="form-control") }}
-                        </div>
-                    </div>
-                </div>
- #}
+
                 {% for error in form.errors %}
                     <span style="color: red;"> <br> [{{ error }}] <br> </span>
                 {% endfor %}
@@ -152,7 +144,7 @@
                         {% endif %}
                         >
                     <td>{{ d['h'] }}</td>
-                    <td>{{ d['d'] }}</td>
+                    <td>{{ d['d'].strftime(config['DATETIME_FORMAT']) }}</td>
                     <td>{{ d['a'] }}</td>
                     <td>{{ d['f'] }}</td>
                     <td>{{ config['MSG_PRIORITY_LIST'][d['p']] }}</td>
@@ -174,6 +166,7 @@
         </div>
     {% endif %}
 
+    <!-- script section AFTER main code to get datetimepicker work-->
     <script type="text/javascript">
         $('#date_from').datetimepicker(
                 {
