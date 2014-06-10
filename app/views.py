@@ -10,12 +10,15 @@ from app.db import db, get_charts_list, get_chart_data
 from app.auth import login_required
 from flask_paginate import Pagination
 
-from flask import request, render_template, session
+from flask import request, render_template, session, redirect, url_for
 
 @app.route('/')
 def home():
     print(session)
-    return render_template('home.html')
+    if session.get('logged_in'):
+        return redirect(url_for('search'))
+    else:
+        return render_template('home.html')
 
 
 # route for charts
