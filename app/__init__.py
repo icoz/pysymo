@@ -27,4 +27,4 @@ file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
 app.logger.addHandler(file_handler)
 
-from app import auth, db, debug, views, forms
+from app import auth, db, views, forms

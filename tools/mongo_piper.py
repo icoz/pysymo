@@ -10,10 +10,7 @@ from datetime import datetime
 from pymongo import MongoClient
 
 from save_to_db import save_to_db
-
-MONGO_HOST = '127.0.0.1'
-MONGO_PORT = 27017
-MONGO_DATABASE = 'syslog'
+from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 

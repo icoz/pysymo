@@ -9,9 +9,7 @@ import sys
 
 from pymongo import MongoClient
 
-MONGO_HOST = '127.0.0.1'
-MONGO_PORT = 27017
-MONGO_DATABASE = 'syslog'
+from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 
 
 def random_record():

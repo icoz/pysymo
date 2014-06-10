@@ -36,13 +36,9 @@
                 </li>
                 <li><a href="{{ url_for('register') }}">Зарегистрироваться</a></li>
           {% else %}
-                <li><a href="{{ url_for('json_servers') }}">Список серверов</a></li>
-                <li><a href="{{ url_for('json_apps') }}">Список приложений</a></li>
-                <li><a href="{{ url_for('get_info') }}">Запрос</a></li>
-                <li><a href="{{ url_for('get_info2') }}">Запрос2</a></li>
+                <li><a href="{{ url_for('search') }}">Запрос</a></li>
                 <li><a href="{{ url_for('charts') }}">Графики</a></li>
-                {# <li><a href="{{ url_for('gen_info', num=10) }}">Сгенерировать данные</a></li> #}
-                <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+                <li><a href="{{ url_for('logout') }}">Выйти ({{ session.username }})</a></li>
           {% endif %}
       </ul>
     </div> <!-- navbar-collapse -->

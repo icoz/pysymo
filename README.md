@@ -11,7 +11,7 @@ Requirements
 ------------
 
 - Python 2/3
-- Python packages: Flask, Flask-WTF, Jinja2, WTForms, pymongo, chartkick, flup
+- Python packages: Flask, Flask-WTF, Jinja2, WTForms, pymongo, chartkick, flup, flask-paginate
 - MongoDB
 - Web-server
 
@@ -24,7 +24,7 @@ Storing is provided by Syslog-ng.
 Installing
 ----------
 
-1. Config MongoDB database. Change MONGO_DATABASE in app/db.py if necessary
+1. Config MongoDB database. Change MONGO_DATABASE in app/db.py, tools/config.py if necessary
 2. Config Syslog-ng. See example in examples/syslog-ng.conf
 2.1. Config AppArmor (if exists). See example in examples/sbin.syslog-ng
 3. Config web-server to run pysymo.fcgi
