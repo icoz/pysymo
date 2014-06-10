@@ -38,6 +38,7 @@
           {% else %}
                 <li><a href="{{ url_for('search') }}">Запрос</a></li>
                 <li><a href="{{ url_for('charts') }}">Графики</a></li>
+                <li><a href="{{ url_for('stat') }}">Статистика</a></li>
                 <li><a href="{{ url_for('logout') }}">Выйти (<b>{{ session.username }}</b>)</a></li>
           {% endif %}
       </ul>

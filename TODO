@@ -11,3 +11,4 @@ Pysymo TODO
 6) Indexes
 7) Usable statistics (db stat - size, messages count)
 8) Error logging: HTTP 404/500, python exception, 'no module named ...'
+9) Hard limit of selected documents: about 1000-3000 documents

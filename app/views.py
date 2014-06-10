@@ -6,11 +6,12 @@ import time
 
 from app import app
 from app.forms import RequestForm
-from app.db import db, get_charts_list, get_chart_data
+from app.db import db, get_charts_list, get_chart_data, get_messages_stat, get_db_stat
 from app.auth import login_required
 from flask_paginate import Pagination
 
 from flask import request, render_template, session, redirect, url_for
+
 
 @app.route('/')
 def home():
@@ -44,8 +45,8 @@ def search():
 
     form = RequestForm.new()
     if form.validate_on_submit():
-        stat = dict()
         req = dict()
+        req_stat = dict()
 
         # HOST
         if form.host.data:
@@ -112,8 +113,8 @@ def search():
 
         end = time.time()
 
-        stat['total_records'] = total_records
-        stat['time_elapsed'] = end-begin
+        req_stat['total_records'] = total_records
+        req_stat['time_elapsed'] = end-begin
 
         pagination = Pagination(page=int(form.current_page.data),
                                 per_page=form.records_per_page.data,
@@ -121,14 +122,21 @@ def search():
                                 bs_version=3,
                                 href='javascript:change_page({0})')
     else:
-        stat = None
+        req_stat = None
         pagination = None
 
     return render_template('search.html',
                            form=form,
                            data=data,
-                           stat=stat,
+                           req_stat=req_stat,
                            pagination=pagination)
+
+
+@app.route('/stat')
+def stat():
+    return render_template('stat.html',
+                           mes_stat=get_messages_stat(),
+                           db_stat=get_db_stat())
 
 
 @app.errorhandler(500)

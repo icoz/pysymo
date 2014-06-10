@@ -158,11 +158,11 @@
         {#            </form>#}
     {% endif %}
 
-    {% if stat %}
+    {% if req_stat %}
         <div>
-            Time elapsed - {{ stat['time_elapsed'] }} seconds
+            Time elapsed - {{ req_stat['time_elapsed'] }} seconds
             <br>
-            Records found - {{ stat['total_records'] }}
+            Records found - {{ req_stat['total_records'] }}
         </div>
     {% endif %}
 

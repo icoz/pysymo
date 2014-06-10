@@ -11,6 +11,9 @@ MONGO_DATABASE = 'syslog'
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
 
+# MESSAGES
+
+
 def get_hosts():
     return db.cache.find_one({'type': 'h'})['value']
 
@@ -21,6 +24,9 @@ def get_applications():
 
 def get_facility():
     return db.cache.find_one({'type': 'f'})['value']
+
+
+# CHARTS
 
 
 # list of available charts from chart cache
@@ -36,4 +42,17 @@ def get_chart_data(chart_name):
     # http://api.mongodb.org/python/current/tutorial.html#a-note-on-unicode-strings
     if res:
         res['data'] = [[i[0].encode('utf8'), i[1]] for i in res['data']]
+    return res
+
+
+# STAT
+
+
+def get_messages_stat():
+    res = db.command('collstats', 'messages')
+    return res
+
+
+def get_db_stat():
+    res = db.command('dbstats')
     return res
