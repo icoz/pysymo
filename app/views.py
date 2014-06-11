@@ -98,7 +98,7 @@ def search():
         print('db-request', req)
 
         # pagination skip records
-        skip_records = (int(form.current_page.data) - 1)*form.records_per_page.data
+        skip_records = (int(form.current_page.data) - 1) * form.records_per_page.data
 
         # statistics
         begin = time.time()
@@ -114,7 +114,7 @@ def search():
         end = time.time()
 
         req_stat['total_records'] = total_records
-        req_stat['time_elapsed'] = end-begin
+        req_stat['time_elapsed'] = end - begin
 
         pagination = Pagination(page=int(form.current_page.data),
                                 per_page=form.records_per_page.data,
@@ -140,6 +140,20 @@ def stat():
 
 
 @app.errorhandler(500)
-def internal_error(exception):
-    app.logger.error('EXCEPTION!')
-    return render_template('500.html')
+def internal_error(exc_info):
+    app.logger.error("""
+            ErrorHandler 500
+            Request:   {method} {path}
+            IP:        {ip}
+            Agent:     {agent_platform} | {agent_browser} {agent_browser_version}
+            Raw Agent: {agent}
+                        """.format(
+        method=request.method,
+        path=request.path,
+        ip=request.remote_addr,
+        agent_platform=request.user_agent.platform,
+        agent_browser=request.user_agent.browser,
+        agent_browser_version=request.user_agent.version,
+        agent=request.user_agent.string
+    ))
+    return render_template('500.html'), 500

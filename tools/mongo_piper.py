@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 __author__ = 'ilya-il'
@@ -27,6 +27,7 @@ try:
         line = line.replace(r"\\", "")
         # 3) non unicode symbols - strip out
         # https://docs.python.org/2/howto/unicode.html#the-unicode-type
+        # FIXME: decode() takes no keyword arguments - on SLES 11 x64, python 2.6.9
         line = line.decode('utf-8', errors='ignore')
 
         data = json.loads(line)

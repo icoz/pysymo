@@ -1,5 +1,5 @@
-Pysymo TODO
-===========
+Pysymo
+======
 
 + -1) CR/LF in source files - shebang string doesn't work on Linux
 + 0) JSON parse and error strings (special symbols and \escape)
