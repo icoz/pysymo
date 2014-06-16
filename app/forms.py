@@ -31,7 +31,7 @@ class RequestForm(Form):
 
     # RECORDS PER PAGE
     records_per_page = SelectField('Records p/p',
-                                   choices=[(i, i) for i in (10, 25, 50, 100, 200, 500, 1000)],
+                                   choices=[(i, i) for i in (10, 25, 50, 100, 500)],
                                    coerce=int,
                                    default=25)
     # SORT DIRECTION - index - MongoDB sort style
