@@ -38,7 +38,7 @@ class RequestForm(Form):
     sort_direction = SelectField('Sort', choices=sort_list, coerce=int, default=-1)
 
     # SEARCH STRING (regexp)
-    search_str = StringField('Search')
+    search_str = StringField('Msg')
 
     # PAGE NUMBER
     # hidden field has coerce=string - this cannot be changed
@@ -53,4 +53,3 @@ class RequestForm(Form):
         form.application.choices = sorted([(j, j) for j in get_applications()])
         form.facility.choices = sorted([(j, j) for j in get_facility()])
         return form
-

@@ -7,7 +7,7 @@
     <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
 
     <div class="panel panel-default">
-        <div class="panel-heading">Запрос данных</div>
+        <div class="panel-heading"><b>Search</b></div>
         <div class="panel-body">
             <form name="searchform" class="form" action="{{ url_for('search') }}" method=post>
                 {{ form.hidden_tag() }}
@@ -101,7 +101,7 @@
                     <span style="color: red;"> <br> [{{ error }}] <br> </span>
                 {% endfor %}
                 <br>
-                <button type="submit" class="btn" onclick="change_page(1)">Получить</button>
+                <button type="submit" class="btn" onclick="change_page(1)">Search</button>
             </form>
         </div>
     </div>
@@ -153,9 +153,6 @@
             {% endfor %}
             </tbody>
         </table>
-        {#            <form action="{{ url_for('get_info') }}" method=post>#}
-        {#            <button type="submit" class="btn">Следующие строки</button>#}
-        {#            </form>#}
     {% endif %}
 
     {% if req_stat %}

@@ -25,34 +25,31 @@ def login_required(func):
 def login():
     if request.method == 'GET':
         session['next'] = None
-        return render_template('login.html')
+        return redirect(url_for('home'))
     if request.method == 'POST':
         r = db['users'].find_one({'user': request.form['username']})
         # user, passwd = ("user", "pass")
-        print(r)
-        print()
         if r is None:
-            flash('Invalid username', 'warning')
+            flash('Invalid username or password', 'warning')
         elif request.form['password'] != r['password']:
-            flash('Invalid password', 'warning')
+            flash('Invalid username or password', 'warning')
         else:
-            print('login ok, setting session')
+            #print('login ok, setting session')
             session['logged_in'] = True
-            print('process 1', session)
+            #print('process 1', session)
             session['username'] = request.form['username']
-            print('process 2', session)
+            #print('process 2', session)
             # TODO store user_id
             session['user_id'] = str(r['_id'])
-            print('before flash')
+            #print('before flash')
             flash("Logged in successfully.", 'success')
-            print('after flash')
+            #print('after flash')
             if session.get('next'):
                 url = session['next']
                 session['next'] = None
                 return redirect(url)
             else:
                 return redirect(url_for('search'))
-                # return redirect(request.args.get("next") or url_for("home"))
     return redirect(url_for('home'))
 
 
@@ -77,9 +74,9 @@ def register():
         if rec is None:
             # TODO: make it safe to save to mongodb
             dbu.insert({'user': user, 'password': password, 'mail': mail})
-            flash('Registered. Sending to login page.', 'success')
+            flash('User registered. You can login now', 'success')
             session['next'] = None
-            return redirect(url_for('login'))
+            return redirect(url_for('home'))
         else:
             flash('Error! Login is not unique!', 'warning')
-    pass
+            return redirect(url_for('register'))

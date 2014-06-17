@@ -26,20 +26,17 @@
           {% if not session.logged_in %}
                 <li class="tabs-right">
                     <form class="navbar-form" action="{{ url_for('login') }}" method=post>
-                        <input name=username type="text" class="form-control" placeholder="Email">
-                        <input name=password type="password" class="form-control" placeholder="Пароль">
-                        {#                                    <label class="checkbox">#}
-                        {#                                        <input type="checkbox"> Запомнить меня#}
-                        {#                                    </label>#}
-                        <button type="submit" class="btn">Войти</button>
+                        <input name=username type="text" class="form-control" placeholder="login">
+                        <input name=password type="password" class="form-control" placeholder="password">
+                        <button type="submit" class="btn">Login</button>
                     </form>
                 </li>
-                <li><a href="{{ url_for('register') }}">Зарегистрироваться</a></li>
+                <li><a href="{{ url_for('register') }}">Register</a></li>
           {% else %}
-                <li><a href="{{ url_for('search') }}">Запрос</a></li>
-                <li><a href="{{ url_for('charts') }}">Графики</a></li>
-                <li><a href="{{ url_for('stat') }}">Статистика</a></li>
-                <li><a href="{{ url_for('logout') }}">Выйти (<b>{{ session.username }}</b>)</a></li>
+                <li><a href="{{ url_for('search') }}">Search</a></li>
+                <li><a href="{{ url_for('charts') }}">Charts</a></li>
+                <li><a href="{{ url_for('stat') }}">Stat</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout (<b>{{ session.username }}</b>)</a></li>
           {% endif %}
       </ul>
     </div> <!-- navbar-collapse -->
@@ -48,7 +45,6 @@
 
 <!-- messages container -->
 <div class="container">
-
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="row-fluid">
@@ -65,7 +61,6 @@
             </div>
         {% endif %}
     {% endwith %}
-
 </div>
 
 

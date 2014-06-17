@@ -3,11 +3,11 @@
     Register new user
 {% endblock %}
 {% block body %}
-    <h2>Registration form</h2>
+    <h2>Registration new user</h2>
     <form class="form" action="{{ url_for('register') }}" method=post>
-        <input name="username" type="text" class="input-small" placeholder="Никнейм">
-        <input name="password" type="password" class="input-small" placeholder="Пароль">
-        <input name="email" type="text" class="input-small" placeholder="Адрес почты">
-        <button type="submit" class="btn">Войти</button>
+        <input name="username" type="text" class="input-small" placeholder="Login">
+        <input name="password" type="password" class="input-small" placeholder="Password">
+        <input name="email" type="text" class="input-small" placeholder="Email">
+        <button type="submit" class="btn">Register</button>
     </form>
 {% endblock %}
