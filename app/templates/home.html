@@ -3,8 +3,9 @@
     Home
 {% endblock %}
 {% block body %}
-    <h2>Hello, world!</h2>
-    {% if session.logged_in %}
-        Hello, {{ session.username }}!
-    {% endif %}
+    <div class="jumbotron">
+        <h1>PySyMo!</h1>
+        <p>PySyMo - is a web-interface for view and analyze syslog data, stored in MongoDB.</p>
+        <p>Supports search, filter, pagination, graphical charts.</p>
+    </div>
 {% endblock %}

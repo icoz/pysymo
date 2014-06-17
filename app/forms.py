@@ -3,13 +3,21 @@
 __author__ = 'ilya-il'
 
 from app.db import get_hosts, get_applications, get_facility
+from flask import flash
 from flask_wtf import Form
-from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, StringField, HiddenField
+from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, \
+    StringField, HiddenField, PasswordField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, 'Include'), (1, 'Exclude')]
 sort_list = [(1, 'ASC'), (-1, 'DESC')]
+
+
+def flash_form_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Field '%s' - %s" % (getattr(form, field).label.text, error), 'warning')
 
 
 class RequestForm(Form):
@@ -53,3 +61,11 @@ class RequestForm(Form):
         form.application.choices = sorted([(j, j) for j in get_applications()])
         form.facility.choices = sorted([(j, j) for j in get_facility()])
         return form
+
+
+class RegistrationForm(Form):
+    username = StringField('Username', [validators.DataRequired()])
+    password = PasswordField('Password', [validators.DataRequired(),
+                                          validators.equal_to('confirm', message='Passwords must match')])
+    confirm = PasswordField('Confirm password', [validators.DataRequired()])
+    email = StringField('Email', [validators.DataRequired()])

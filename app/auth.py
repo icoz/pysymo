@@ -5,6 +5,7 @@ __author__ = 'icoz'
 from functools import wraps
 from app import app
 from app.db import db
+from app.forms import RegistrationForm, flash_form_errors
 from flask import session, request, redirect, url_for, render_template, flash
 
 
@@ -62,21 +63,24 @@ def logout():
 
 @app.route('/register', methods=['GET', "POST"])
 def register():
-    if request.method == "GET":
-        return render_template('register.html')
-    if request.method == 'POST':
-        user = request.form['username']
-        password = request.form['password']
-        mail = request.form['email']
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        user = form.username.data
+        password = form.password.data
+        email = form.email.data
         dbu = db['users']
         # TODO: check on exists
         rec = dbu.find_one({"user": user})
         if rec is None:
             # TODO: make it safe to save to mongodb
-            dbu.insert({'user': user, 'password': password, 'mail': mail})
-            flash('User registered. You can login now', 'success')
+            dbu.insert({'user': user, 'password': password, 'mail': email})
+            flash('User registered. You can login now.', 'success')
             session['next'] = None
             return redirect(url_for('home'))
         else:
             flash('Error! Login is not unique!', 'warning')
             return redirect(url_for('register'))
+    else:
+        flash_form_errors(form)
+        return render_template('register.html', form=form)

@@ -5,7 +5,7 @@ __author__ = 'icoz'
 import time
 
 from app import app
-from app.forms import RequestForm
+from app.forms import RequestForm, flash_form_errors
 from app.db import db, get_charts_list, get_chart_data, get_messages_stat, get_db_stat
 from app.auth import login_required
 from flask_paginate import Pagination
@@ -124,6 +124,7 @@ def search():
     else:
         req_stat = None
         pagination = None
+        flash_form_errors(form)
 
     return render_template('search.html',
                            form=form,
