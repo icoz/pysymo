@@ -5,7 +5,7 @@ __author__ = 'icoz'
 from functools import wraps
 from app import app
 from app.db import db
-from app.forms import RegistrationForm, flash_form_errors
+from app.forms import RegistrationForm, flash_form_errors, LoginForm
 from flask import session, request, redirect, url_for, render_template, flash
 
 
@@ -24,21 +24,19 @@ def login_required(func):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'GET':
-        session['next'] = None
-        return redirect(url_for('home'))
-    if request.method == 'POST':
-        r = db['users'].find_one({'user': request.form['username']})
-        # user, passwd = ("user", "pass")
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        r = db['users'].find_one({'user': form.username.data})
         if r is None:
             flash('Invalid username or password', 'warning')
-        elif request.form['password'] != r['password']:
+        elif form.password.data != r['password']:
             flash('Invalid username or password', 'warning')
         else:
             #print('login ok, setting session')
             session['logged_in'] = True
             #print('process 1', session)
-            session['username'] = request.form['username']
+            session['username'] = form.username.data
             #print('process 2', session)
             # TODO store user_id
             session['user_id'] = str(r['_id'])
@@ -51,7 +49,11 @@ def login():
                 return redirect(url)
             else:
                 return redirect(url_for('search'))
-    return redirect(url_for('home'))
+    else:
+        flash_form_errors(form)
+
+    session['next'] = None
+    return render_template('home.html', form=form)
 
 
 @app.route('/logout')

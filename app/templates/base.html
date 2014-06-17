@@ -33,13 +33,14 @@
               {% if not session.logged_in %}
                     <li class="tabs-right">
                         <form class="navbar-form navbar-right" action="{{ url_for('login') }}" method=post>
+                            {{ form.hidden_tag() }}
                             <div class="form-group">
-                                <input name=username type="text" class="form-control" placeholder="login">
+                                {{ form.username(class="form-control", placeholder="login") }}
                             </div>
                             <div class="form-group">
-                                <input name=password type="password" class="form-control" placeholder="password">
+                                {{ form.password(class="form-control", placeholder="password") }}
                             </div>
-                            <button type="submit" class="btn btn-success">Sign In</button>
+                            <button type="submit" class="btn btn-primary">Sign In</button>
                         </form>
                     </li>
                     <li><a href="{{ url_for('register') }}">Register</a></li>

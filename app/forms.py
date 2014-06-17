@@ -42,6 +42,7 @@ class RequestForm(Form):
                                    choices=[(i, i) for i in (10, 25, 50, 100, 500)],
                                    coerce=int,
                                    default=25)
+
     # SORT DIRECTION - index - MongoDB sort style
     sort_direction = SelectField('Sort', choices=sort_list, coerce=int, default=-1)
 
@@ -69,3 +70,8 @@ class RegistrationForm(Form):
                                           validators.equal_to('confirm', message='Passwords must match')])
     confirm = PasswordField('Confirm password', [validators.DataRequired()])
     email = StringField('Email', [validators.DataRequired()])
+
+
+class LoginForm(Form):
+    username = StringField('Login', [validators.DataRequired()])
+    password = PasswordField('Password', [validators.DataRequired()])

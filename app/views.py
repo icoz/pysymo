@@ -15,12 +15,10 @@ from flask import request, render_template, session, redirect, url_for
 
 @app.route('/')
 def home():
-    print(session)
     if session.get('logged_in'):
         return redirect(url_for('search'))
     else:
-        return render_template('home.html')
-
+        return redirect(url_for('login'))
 
 # route for charts
 # /charts - charts list
@@ -95,7 +93,7 @@ def search():
         if form.search_str.data:
             req['m'] = {'$regex': form.search_str.data}
 
-        print('db-request', req)
+        #print('db-request', req)
 
         # pagination skip records
         skip_records = (int(form.current_page.data) - 1) * form.records_per_page.data
