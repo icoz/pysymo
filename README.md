@@ -11,7 +11,13 @@ Requirements
 ------------
 
 - Python 2/3
-- Python packages: Flask, Flask-WTF, Jinja2, WTForms, pymongo, chartkick, flup, flask-paginate
+- Python packages: 
+    Flask, Flask-WTF, Jinja2, WTForms - flask base 
+    pymongo                           - work with MongoDB, 
+    chartkick                         - create charts
+    flup                              - run pysymo via fcgi
+    flask-paginate                    - output data pagination
+    flask-login                       - user login
 - MongoDB
 - Web-server
 

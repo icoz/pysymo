@@ -103,6 +103,7 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
+        # TODO salt and hash password
         user = User(username=form.username.data,
                     password=form.password.data,
                     email=form.email.data)
