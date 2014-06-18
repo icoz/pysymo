@@ -7,18 +7,19 @@ import time
 from app import app
 from app.forms import RequestForm, flash_form_errors
 from app.db import db, get_charts_list, get_chart_data, get_messages_stat, get_db_stat
-from app.auth import login_required
 from flask_paginate import Pagination
+from flask.ext.login import login_required, current_user
 
-from flask import request, render_template, session, redirect, url_for
+from flask import request, render_template, redirect, url_for
 
 
 @app.route('/')
 def home():
-    if session.get('logged_in'):
+    if current_user.is_authenticated():
         return redirect(url_for('search'))
     else:
         return redirect(url_for('login'))
+
 
 # route for charts
 # /charts - charts list

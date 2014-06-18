@@ -30,7 +30,8 @@
 
     <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-              {% if not session.logged_in %}
+             {# {% if not session.logged_in %} #}
+              {% if not current_user.is_authenticated() %}
                     <li class="tabs-right">
                         <form class="navbar-form navbar-right" action="{{ url_for('login') }}" method=post>
                             {{ form.hidden_tag() }}
@@ -48,7 +49,7 @@
                     <li><a href="{{ url_for('search') }}"><span class="glyphicon glyphicon-search"></span> Search</a></li>
                     <li><a href="{{ url_for('charts') }}"><span class="glyphicon glyphicon-stats"></span> Charts</a></li>
                     <li><a href="{{ url_for('stat') }}"><span class="glyphicon glyphicon-tasks"></span> DB stat</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout (<b>{{ session.username }}</b>)</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout (<b>{{ current_user.username }}</b>)</a></li>
               {% endif %}
           </ul>
     </div><!--/.navbar-collapse -->

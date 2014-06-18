@@ -2,64 +2,99 @@
 
 __author__ = 'icoz'
 
-from functools import wraps
-from app import app
+from app import app, login_manager
 from app.db import db
 from app.forms import RegistrationForm, flash_form_errors, LoginForm
-from flask import session, request, redirect, url_for, render_template, flash
+from flask import redirect, url_for, render_template, flash
+from flask.ext.login import UserMixin, login_user, logout_user, login_required
+from bson.objectid import ObjectId
 
 
-def login_required(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        if session.get('logged_in'):
-            return func(*args, **kwargs)
+class User(UserMixin):
+    def __init__(self, username=None, password=None, email=None):
+        self.username = username
+        self.password = password
+        self.email = email
+        self.id = None
+
+    def save(self):
+        res = db.users.insert({'username': self.username,
+                               'password': self.password,
+                               'email': self.email})
+        # insert() returns document id
+        self.id = res
+        return self.id
+
+    def get_by_username(self, username):
+        res = db.users.find_one({'username': username})
+        if res:
+            self.id = res['_id']
+            self.username = username
+            self.email = res['email']
+            return self
         else:
-            print('url=', request.url)
-            session['next'] = request.url
-            return redirect(url_for('login'), code=302)
+            return None
 
-    return decorated_view
+    def get_by_username_w_password(self, username):
+        res = db.users.find_one({'username': username})
+        if res:
+            self.id = res['_id']
+            self.username = username
+            self.password = res['password']
+            self.email = res['email']
+            return self
+        else:
+            return None
 
+    def get_by_id(self, userid):
+        # !!!
+        # !!! must use ObjectId() to search by _id
+        # !!!
+        res = db.users.find_one({'_id': ObjectId(userid)})
+        if res:
+            self.id = res['_id']
+            self.username = res['username']
+            self.password = res['password']
+            self.email = res['email']
+            return self
+        else:
+            return None
+
+
+@login_manager.user_loader
+def load_user(userid):
+    user = User()
+    return user.get_by_id(userid)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        r = db['users'].find_one({'user': form.username.data})
-        if r is None:
+        user_obj = User()
+        user = user_obj.get_by_username_w_password(form.username.data)
+        if user is None:
             flash('Invalid username or password', 'warning')
-        elif form.password.data != r['password']:
+        # TODO check password!!!
+        elif form.password.data != user.password:
             flash('Invalid username or password', 'warning')
         else:
-            #print('login ok, setting session')
-            session['logged_in'] = True
-            #print('process 1', session)
-            session['username'] = form.username.data
-            #print('process 2', session)
-            # TODO store user_id
-            session['user_id'] = str(r['_id'])
-            #print('before flash')
-            flash("Logged in successfully.", 'success')
-            #print('after flash')
-            if session.get('next'):
-                url = session['next']
-                session['next'] = None
-                return redirect(url)
-            else:
+            if login_user(user):
+                flash("Logged in successfully.", 'success')
                 return redirect(url_for('search'))
+            else:
+                flash("Unable to log you in.", 'warning')
+                return redirect(url_for('home'))
     else:
         flash_form_errors(form)
 
-    session['next'] = None
     return render_template('home.html', form=form)
 
 
 @app.route('/logout')
 @login_required
 def logout():
-    session.clear()
+    logout_user()
     return redirect(url_for('home'))
 
 
@@ -68,21 +103,19 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        user = form.username.data
-        password = form.password.data
-        email = form.email.data
-        dbu = db['users']
-        # TODO: check on exists
-        rec = dbu.find_one({"user": user})
-        if rec is None:
-            # TODO: make it safe to save to mongodb
-            dbu.insert({'user': user, 'password': password, 'mail': email})
-            flash('User registered. You can login now.', 'success')
-            session['next'] = None
-            return redirect(url_for('home'))
+        user = User(username=form.username.data,
+                    password=form.password.data,
+                    email=form.email.data)
+        # save user to db
+        # TODO try/except - duplicate users
+        user.save()
+        # try to login
+        if login_user(user):
+            flash("Logged in successfully.", 'success')
+            return redirect(url_for('search'))
         else:
-            flash('Error! Login is not unique!', 'warning')
-            return redirect(url_for('register'))
+            flash("Unable to log you in.", 'warning')
+            return redirect(url_for('home'))
     else:
         flash_form_errors(form)
         return render_template('register.html', form=form)
