@@ -13,4 +13,8 @@ Pysymo
 8) Error logging: HTTP 404/500, python exception, 'no module named ...'
 9) Hard limit of selected documents: about 1000-3000 documents
 + 10) Login with Flask-Login
-11) db.users unique index by 'username'
++ 11) db.users unique index by 'username'
+12) Piper scripts for other syslog systems (not only for syslog-ng)
+13) Syslog-ng config with built-in MongoDB driver
+14) Maybe use other types on indexes in 'messages' collecton (hashed, ...)
+15) Test on various versions of python (see ex. mongo_piper.py FIX_ME), various systems

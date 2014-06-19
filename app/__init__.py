@@ -22,8 +22,6 @@ app.jinja_env.add_extension("chartkick.ext.charts")
 # add login support
 login_manager = LoginManager()
 login_manager.init_app(app)
-# TODO login view - https://flask-login.readthedocs.org/en/latest/#flask.ext.login.LoginManager.login_view
-#login_manager.login_view = 'login'
 
 # add logging
 # parent log level
