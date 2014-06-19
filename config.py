@@ -7,7 +7,7 @@ import os
 
 # WTF forms
 CSRF_ENABLED = True
-SECRET_KEY = 'sifdj ncs dcq odicn pdscn[os ncpasvaidcjn sajc acbqisbc csbabcdsac valsdcb alsjd bafd ba'
+SECRET_KEY = 'sifdjncs-dcqodicnpdscn[osncpas#vaidcjnsajcacbqisbccsbab-cdsacvalsdcb!alsjdbafdba'
 
 # priority list
 # WARNING! do not change item position in list

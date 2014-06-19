@@ -17,7 +17,7 @@ def top5_hosts():
                                  {"$sort": {"count": -1}},
                                  {"$limit": 5}
                                  ])
-    # data list [['Label', value], }] for chartkick
+    # data list [['Label', value], ] for chartkick
     # add count to hostname - create label for chart
     data = [[i['_id'] + ' - ' + str(i['count']), i['count']] for i in res['result']]
 
@@ -40,7 +40,7 @@ def messages_per_day():
                                              "count": {"$sum": 1}}
                                   }
                                  ])
-    # data list [['Label', value], }] for chartkick
+    # data list [['Label', value], ] for chartkick
     data = [['{0}-{1:02d}-{2:02d}'.format(i["_id"]["y"], i["_id"]["m"], i["_id"]["d"]), i['count']]
             for i in res['result']]
 

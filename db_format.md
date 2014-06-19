@@ -1,8 +1,6 @@
-DB Format
-=========
+# DB Format
 
-Collection 'messages'
----------------------
+## Collection 'messages'
 
 * h = host     (string)
 * f = facility (string)
@@ -11,8 +9,7 @@ Collection 'messages'
 * a = program  (string)
 * m = msg      (string)
 
-Collection 'messages' fields to syslog macro
---------------------------------------------
+## Collection 'messages' fields to syslog macro
 
 Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3.3-guides/en/syslog-ng-ose-v3.3-guide-admin-en/html/reference_macros.html
 
@@ -28,14 +25,12 @@ Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3
                    program name and the pid. In syslog-ng 3.0, the MSG macro became equivalent with the MSGONLY macro.
                    The program name and the pid together are available in the MSGHDR macro.
 
-Collection 'cache'
------------------
+## Collection 'cache'
 
 * type: h/f/a - host, facility, application - UNIQUE
 * value: list of distinct values - ["value1", "value2", ]
 
-Collection 'charts'
--------------------
+## Collection 'charts'
 
 * name: - chart name - UNIQUE
 * type: - chart type - pie, column, bar, area, line
@@ -43,8 +38,7 @@ Collection 'charts'
 * created: - creation datetime
 * data: - chart data - [['label', value], ['label', value], ]
 
-Collection 'users'
-------------------
+## Collection 'users'
 
 * username - UNIQUE
 * password
