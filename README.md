@@ -10,13 +10,13 @@ https://github.com/icoz/pysymo
 
 - Python 2/3
 - Python packages: 
-    Flask, Flask-WTF, Jinja2, WTForms - flask base 
-    pymongo                           - work with MongoDB 
-    chartkick                         - create charts
-    flup                              - run pysymo via fcgi
-    flask-paginate                    - output data pagination
-    flask-login                       - user login
-    pycrypto                          - password protection
+    - Flask, Flask-WTF, Jinja2, WTForms - flask base 
+    - pymongo                           - work with MongoDB 
+    - chartkick                         - create charts
+    - flup                              - run pysymo via fcgi
+    - flask-paginate                    - output data pagination
+    - flask-login                       - user login
+    - pycrypto                          - password protection
 - MongoDB
 - Web-server
 - Linux logging system (syslog-ng, ...)
