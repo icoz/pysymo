@@ -6,7 +6,7 @@ import time
 
 from app import app
 from app.forms import RequestForm, flash_form_errors
-from app.db import db, get_charts_list, get_chart_data, get_messages_stat, get_db_stat
+from app.db import db, get_charts_list, get_chart, get_messages_stat, get_db_stat
 from flask_paginate import Pagination
 from flask.ext.login import login_required, current_user
 
@@ -29,11 +29,11 @@ def home():
 def charts():
     chart_name = request.args.get('chart')
     if chart_name:
-        chart_data = get_chart_data(chart_name)
+        chart = get_chart(chart_name)
     else:
-        chart_data = None
+        chart = None
     charts_list = get_charts_list()
-    return render_template('charts.html', charts_list=charts_list, chart_data=chart_data)
+    return render_template('charts.html', charts_list=charts_list, chart=chart)
 
 
 # test get info on flask-wtf forms

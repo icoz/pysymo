@@ -11,19 +11,42 @@ from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
 
-# TOP 5 HOSTS by messages count
-def top5_hosts():
+# TOP HOSTS by messages count
+def top_hosts():
+    library = {
+        'chart': {
+            'height': 500
+        },
+        'title': {
+            'text': 'Top10 hosts'
+        },
+        'plotOptions': {
+            'pie': {
+                'dataLabels': {
+                    'enabled': 'true',
+                    'format': '<b>{point.name}</b> - {point.y}'
+                }
+            }
+        },
+#        'legend': {
+#            'layout': 'vertical',
+#            'align': 'right',
+#            'verticalAlign': 'middle'
+#        }
+    }
+
     res = db.messages.aggregate([{"$group": {"_id": "$h", "count": {"$sum": 1}}},
                                  {"$sort": {"count": -1}},
-                                 {"$limit": 5}
+                                 {"$limit": 10}
                                  ])
     # data list [['Label', value], ] for chartkick
     # add count to hostname - create label for chart
-    data = [[i['_id'] + ' - ' + str(i['count']), i['count']] for i in res['result']]
+    data = [[i['_id'], i['count']] for i in res['result']]
 
-    db.charts.update({'name': 'top5hosts'},
+    db.charts.update({'name': 'tophosts'},
                      {'$set': {'type': 'pie',
-                               'title': 'Top 5 hosts',
+                               'title': 'Top 10 hosts',
+                               'library': library,
                                'created': datetime.now(),
                                'data': data}},
                      upsert=True)
@@ -31,6 +54,11 @@ def top5_hosts():
 
 # Messages count per day
 def messages_per_day():
+    library = {
+        'title': {
+            'text': 'Messages per day'
+        }
+    }
     res = db.messages.aggregate([{"$project": {"host": "$h",
                                                "y": {"$year": "$d"},
                                                "m": {"$month": "$d"},
@@ -47,13 +75,14 @@ def messages_per_day():
     db.charts.update({'name': 'mesperday'},
                      {'$set': {'type': 'line',
                                'title': 'Messages per day',
+                               'library': library,
                                'created': datetime.now(),
                                'data': data}},
                      upsert=True)
 
 
 def main():
-    top5_hosts()
+    top_hosts()
     messages_per_day()
 
 if __name__ == '__main__':

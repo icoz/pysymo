@@ -35,22 +35,46 @@
     {% endif %}
 
     <!-- show specified chart -->
-    {% if chart_data %}
-        {% if chart_data['type'] == 'pie' %}
-            {% pie_chart chart_data['data'] with library={"title": {"text": chart_data['title']},
-                                                          "plotOptions": {
-                                                            "pie": {"showInLegend": true}
-                                                          }
-                                                         }
-            %}
-        {% elif chart_data['type'] == 'line' %}
-            {% line_chart chart_data['data'] with library={"title": {"text": chart_data['title']},
-                                                          "plotOptions": {
-                                                            "pie": {"showInLegend": true}
-                                                          }
-                                                         }
-            %}
+    {% if chart %}
+        {% if chart['type'] == 'pie' %}
+                {% pie_chart chart['data'] with library=chart['library'] %}
+        {% elif chart['type'] == 'line' %}
+            {% line_chart chart['data'] with library=chart['library'] %}
         {% endif %}
     {% endif %}
+
+<!--div id="chart-test" style="height: 300px; text-align: center; color: #999;
+                      line-height: 300px; font-size: 14px;
+                      font-family: Lucida Grande, Lucida Sans Unicode,
+                      Verdana, Arial, Helvetica, sans-serif;">
+    Loading...
+</div>
+<script>
+//<![CDATA[
+new Chartkick.BarChart(document.getElementById("chart-test"),
+// reverse order on charts: 127.7-52.9, 125.0-50.7
+[{'data': [['Host1', 52.9], ['Host2', 50.7]], 'name': 'err'},
+ {'data': [['Host1', 127.7], ['Host2', 125.9]], 'name': 'warn'}],
+{"library":{
+          "plotOptions": {
+              "bar": {
+                  "showInLegend": true,
+                  "dataLabels": {
+                      "enabled": true
+                  }
+              }
+          },
+          "title": {
+              "text": "Message types by host"
+          },
+          "legend": {
+              "layout": 'vertical',
+              "align": 'right',
+              'verticalAlign': 'middle'
+          }
+         }
+});
+//]]>
+</script-->
 
 {% endblock %}
