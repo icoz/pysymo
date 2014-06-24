@@ -38,11 +38,6 @@ def get_charts_list():
 # get specified chart from chart cache
 def get_chart(chart_name):
     res = db.charts.find_one({'name': chart_name})
-    # FIXME chartkick doesn't support Unicode strings (!!!)
-    # http://api.mongodb.org/python/current/tutorial.html#a-note-on-unicode-strings
-    if res:
-        # FIXME - dirty trick only for data with one series - [['name1', value1], ['name2', value2], ]
-        res['data'] = [[i[0].encode('utf8'), i[1]] for i in res['data']]
     return res
 
 

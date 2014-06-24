@@ -40,6 +40,8 @@
                 {% pie_chart chart['data'] with library=chart['library'] %}
         {% elif chart['type'] == 'line' %}
             {% line_chart chart['data'] with library=chart['library'] %}
+        {% elif chart['type'] == 'bar' %}
+            {% bar_chart chart['data'] with library=chart['library'] %}
         {% endif %}
     {% endif %}
 
@@ -52,11 +54,15 @@
 <script>
 //<![CDATA[
 new Chartkick.BarChart(document.getElementById("chart-test"),
-// reverse order on charts: 127.7-52.9, 125.0-50.7
-[{'data': [['Host1', 52.9], ['Host2', 50.7]], 'name': 'err'},
- {'data': [['Host1', 127.7], ['Host2', 125.9]], 'name': 'warn'}],
+
+[{'data': [['Host1', 77.3], ['Host2', 55.9]], 'name': 'err'},
+ {'data': [['Host1', 127.7], ['Host2', 125.9]], 'name': 'crit'},
+ {'data': [['Host1', 52.9], ['Host2', 50.7]], 'name': 'alert'}],
 {"library":{
-          "plotOptions": {
+        chart: {
+            type: 'bar'
+        },
+        "plotOptions": {
               "bar": {
                   "showInLegend": true,
                   "dataLabels": {
@@ -70,11 +76,20 @@ new Chartkick.BarChart(document.getElementById("chart-test"),
           "legend": {
               "layout": 'vertical',
               "align": 'right',
-              'verticalAlign': 'middle'
+              'verticalAlign': 'middle',
+              'reversed': true
           }
          }
 });
 //]]>
-</script-->
+</script>
+
+<div id="chart-test2" style="height: 300px; text-align: center; color: #999;
+                      line-height: 300px; font-size: 14px;
+                      font-family: Lucida Grande, Lucida Sans Unicode,
+                      Verdana, Arial, Helvetica, sans-serif;">
+    Loading...
+</div>
+<script-->
 
 {% endblock %}

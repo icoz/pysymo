@@ -9,10 +9,10 @@ from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
 if 'messages' not in db.collection_names():
-    # TODO: create TTL or capped collection
     db.create_collection('messages')
     db.messages.ensure_index('h')
-    db.messages.ensure_index([('d', DESCENDING)])
+    # TTL-collection for 31 days
+    db.messages.ensure_index([('d', DESCENDING)], expireAfterSeconds=60*60*24*31)
     db.messages.ensure_index('f')
     db.messages.ensure_index('a')
     db.messages.ensure_index('p')
