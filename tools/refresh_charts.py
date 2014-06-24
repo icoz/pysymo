@@ -123,7 +123,6 @@ def warning_messages_per_host():
     warn_serie = []
 
     for r in res['result']:
-        print r
         if r["_id"]["type"] == 0:
             emerg_serie.append([r["_id"]["host"].encode('utf-8'), r["count"]])
         elif r["_id"]["type"] == 1:

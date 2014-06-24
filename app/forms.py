@@ -54,6 +54,9 @@ class RequestForm(Form):
     # use int() in views to work with
     current_page = HiddenField('CurrentPage', default=1)
 
+    # WATCH (auto refresh page)
+    watch = HiddenField('Watch', default=0)
+
     # select fields with dynamic lists
     @classmethod
     def new(cls):

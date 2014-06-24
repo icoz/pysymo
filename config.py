@@ -16,6 +16,9 @@ MSG_PRIORITY_LIST = ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 
 # datetime format for search form
 DATETIME_FORMAT = '%d.%m.%Y %H:%M:%S'
 
+# watch mode interval in seconds
+WATCH_MODE_REFRESH_INTERVAL = 30
+
 # log file
 basedir = os.path.abspath(os.path.dirname(__file__))
 if sys.platform == 'win32':
