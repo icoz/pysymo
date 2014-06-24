@@ -17,8 +17,8 @@ MSG_PRIORITY_LIST = ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 
 DATETIME_FORMAT = '%d.%m.%Y %H:%M:%S'
 
 # log file
-basedir = os.path.abspath(os.path.dirname(__file__))
 if sys.platform == 'win32':
+    basedir = os.path.abspath(os.path.dirname(__file__))
     PYSYMO_LOG = os.path.join(basedir, 'python.log')
 else:
     PYSYMO_LOG = '/var/log/pysymo/python.log'
