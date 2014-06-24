@@ -1,14 +1,20 @@
-Pysymo TODO
-===========
+Pysymo
+======
 
 + -1) CR/LF in source files - shebang string doesn't work on Linux
 + 0) JSON parse and error strings (special symbols and \escape)
 + 1) Pagination
 + 2) Charts - types, cache data
-3) Script to remove old data from db - older 1 month (configurable) or TTL-collection
-4) Tail button with autorefresh
++ 3) Script to remove old data from db - older 1 month (configurable) or TTL-collection
++ 4) Tail button with autorefresh
 + 5) Config file for tools scripts
-6) Indexes
-7) Usable statistics (db stat - size, messages count)
++ 6) Indexes
++ 7) Usable statistics (db stat - size, messages count)
 8) Error logging: HTTP 404/500, python exception, 'no module named ...'
 9) Hard limit of selected documents: about 1000-3000 documents
++ 10) Login with Flask-Login
++ 11) db.users unique index by 'username'
+12) Piper scripts for other syslog systems (not only for syslog-ng)
+13) Syslog-ng config with built-in MongoDB driver
+14) Maybe use other types on indexes in 'messages' collecton (hashed, ...)
+15) Test on various versions of python (see ex. mongo_piper.py FIX_ME), various systems

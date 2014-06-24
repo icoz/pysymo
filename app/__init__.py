@@ -4,6 +4,7 @@
 __author__ = 'ilya-il'
 
 from flask import Flask, Blueprint
+from flask_login import LoginManager
 import chartkick
 import logging
 from logging.handlers import RotatingFileHandler
@@ -17,6 +18,10 @@ app.register_blueprint(ck)
 
 # add chart support
 app.jinja_env.add_extension("chartkick.ext.charts")
+
+# add login support
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 # add logging
 # parent log level

@@ -35,13 +35,9 @@ def get_charts_list():
     return [i for i in res]
 
 
-# get specified chart data from chart cache
-def get_chart_data(chart_name):
+# get specified chart from chart cache
+def get_chart(chart_name):
     res = db.charts.find_one({'name': chart_name})
-    # chartkick doesn't support Unicode strings (!!!)
-    # http://api.mongodb.org/python/current/tutorial.html#a-note-on-unicode-strings
-    if res:
-        res['data'] = [[i[0].encode('utf8'), i[1]] for i in res['data']]
     return res
 
 

@@ -2,84 +2,147 @@
 
 __author__ = 'icoz'
 
-from functools import wraps
-from app import app
+from app import app, login_manager
 from app.db import db
-from flask import session, request, redirect, url_for, render_template, flash
+from app.forms import RegistrationForm, flash_form_errors, LoginForm
+
+from flask import redirect, url_for, render_template, flash
+from flask.ext.login import UserMixin, login_user, logout_user, login_required
+
+from bson.objectid import ObjectId
+
+from Crypto import Random
+from Crypto.Hash import SHA256
 
 
-def login_required(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        if session.get('logged_in'):
-            return func(*args, **kwargs)
+class User(UserMixin):
+    def __init__(self, username=None, password=None, salt=None, email=None):
+        self.username = username
+        self.password = password
+        self.salt = salt
+        self.email = email
+        self.id = None
+
+    def save(self):
+        user_exist = db.users.find_one({'username': self.username})
+        if not user_exist:
+            res = db.users.insert({'username': self.username,
+                                   'password': self.password,
+                                   'salt': self.salt,
+                                   'email': self.email})
+            # insert() returns document id
+            self.id = res
+            return self.id, 'No error'
         else:
-            print('url=', request.url)
-            session['next'] = request.url
-            return redirect(url_for('login'), code=302)
+            return None, 'Cannot register - user already exists'
 
-    return decorated_view
+    def get_by_username(self, username):
+        res = db.users.find_one({'username': username})
+        if res:
+            self.id = res['_id']
+            self.username = username
+            self.email = res['email']
+            return self
+        else:
+            return None
 
+    def get_by_username_w_password(self, username):
+        res = db.users.find_one({'username': username})
+        if res:
+            self.id = res['_id']
+            self.username = username
+            self.password = res['password']
+            self.salt = res['salt']
+            self.email = res['email']
+            return self
+        else:
+            return None
+
+    def get_by_id(self, userid):
+        # !!!
+        # !!! must use ObjectId() to search by _id
+        # !!!
+        res = db.users.find_one({'_id': ObjectId(userid)})
+        if res:
+            self.id = res['_id']
+            self.username = res['username']
+            self.password = res['password']
+            self.salt = res['salt']
+            self.email = res['email']
+            return self
+        else:
+            return None
+
+    def check_password(self, pwd):
+        pwd_hash = SHA256.new(pwd + self.salt)
+        return pwd_hash.hexdigest() == self.password
+
+    @staticmethod
+    def hash_password(pwd):
+        salt = SHA256.new(Random.get_random_bytes(30))
+        pwd_hash = SHA256.new(pwd + salt.hexdigest())
+        return pwd_hash.hexdigest(), salt.hexdigest()
+
+
+@login_manager.user_loader
+def load_user(userid):
+    user = User()
+    return user.get_by_id(userid)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'GET':
-        session['next'] = None
-        return render_template('login.html')
-    if request.method == 'POST':
-        r = db['users'].find_one({'user': request.form['username']})
-        # user, passwd = ("user", "pass")
-        print(r)
-        print()
-        if r is None:
-            flash('Invalid username', 'warning')
-        elif request.form['password'] != r['password']:
-            flash('Invalid password', 'warning')
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user_obj = User()
+        user = user_obj.get_by_username_w_password(form.username.data)
+        if user is None:
+            flash('Invalid username or password', 'warning')
+        elif not user.check_password(form.password.data):
+            flash('Invalid username or password', 'warning')
         else:
-            print('login ok, setting session')
-            session['logged_in'] = True
-            print('process 1', session)
-            session['username'] = request.form['username']
-            print('process 2', session)
-            # TODO store user_id
-            session['user_id'] = str(r['_id'])
-            print('before flash')
-            flash("Logged in successfully.", 'success')
-            print('after flash')
-            if session.get('next'):
-                url = session['next']
-                session['next'] = None
-                return redirect(url)
-            else:
+            if login_user(user):
+                flash("Logged in successfully.", 'success')
                 return redirect(url_for('search'))
-                # return redirect(request.args.get("next") or url_for("home"))
-    return redirect(url_for('home'))
+            else:
+                flash("Unable to log you in.", 'warning')
+                return redirect(url_for('home'))
+    else:
+        flash_form_errors(form)
+
+    return render_template('home.html', form=form)
 
 
 @app.route('/logout')
 @login_required
 def logout():
-    session.clear()
+    logout_user()
     return redirect(url_for('home'))
 
 
 @app.route('/register', methods=['GET', "POST"])
 def register():
-    if request.method == "GET":
-        return render_template('register.html')
-    if request.method == 'POST':
-        user = request.form['username']
-        password = request.form['password']
-        mail = request.form['email']
-        dbu = db['users']
-        # TODO: check on exists
-        rec = dbu.find_one({"user": user})
-        if rec is None:
-            # TODO: make it safe to save to mongodb
-            dbu.insert({'user': user, 'password': password, 'mail': mail})
-            flash('Registered. Sending to login page.', 'success')
-            session['next'] = None
-            return redirect(url_for('login'))
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        pwd_hash, salt = User.hash_password(form.password.data)
+        user = User(username=form.username.data,
+                    password=pwd_hash,
+                    salt=salt,
+                    email=form.email.data)
+        # save user to db
+        user_id, save_error = user.save()
+        if user_id:
+            # try to login
+            if login_user(user):
+                flash("Logged in successfully.", 'success')
+                return redirect(url_for('search'))
+            else:
+                flash("Unable to log you in.", 'warning')
+                return redirect(url_for('home'))
         else:
-            flash('Error! Login is not unique!', 'warning')
-    pass
+            flash(save_error, 'warning')
+            return redirect(url_for('register'))
+    else:
+        flash_form_errors(form)
+        return render_template('register.html', form=form)

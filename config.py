@@ -7,7 +7,7 @@ import os
 
 # WTF forms
 CSRF_ENABLED = True
-SECRET_KEY = 'sifdj ncs dcq odicn pdscn[os ncpasvaidcjn sajc acbqisbc csbabcdsac valsdcb alsjd bafd ba'
+SECRET_KEY = 'sifdjncs-dcqodicnpdscn[osncpas#vaidcjnsajcacbqisbccsbab-cdsacvalsdcb!alsjdbafdba'
 
 # priority list
 # WARNING! do not change item position in list
@@ -15,6 +15,9 @@ MSG_PRIORITY_LIST = ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 
 
 # datetime format for search form
 DATETIME_FORMAT = '%d.%m.%Y %H:%M:%S'
+
+# watch mode interval in seconds
+WATCH_MODE_REFRESH_INTERVAL = 30
 
 # log file
 if sys.platform == 'win32':

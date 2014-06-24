@@ -5,21 +5,20 @@ __author__ = 'icoz'
 import time
 
 from app import app
-from app.forms import RequestForm
-from app.db import db, get_charts_list, get_chart_data, get_messages_stat, get_db_stat
-from app.auth import login_required
+from app.forms import RequestForm, flash_form_errors
+from app.db import db, get_charts_list, get_chart, get_messages_stat, get_db_stat
 from flask_paginate import Pagination
+from flask.ext.login import login_required, current_user
 
-from flask import request, render_template, session, redirect, url_for
+from flask import request, render_template, redirect, url_for
 
 
 @app.route('/')
 def home():
-    print(session)
-    if session.get('logged_in'):
+    if current_user.is_authenticated():
         return redirect(url_for('search'))
     else:
-        return render_template('home.html')
+        return redirect(url_for('login'))
 
 
 # route for charts
@@ -30,11 +29,11 @@ def home():
 def charts():
     chart_name = request.args.get('chart')
     if chart_name:
-        chart_data = get_chart_data(chart_name)
+        chart = get_chart(chart_name)
     else:
-        chart_data = None
+        chart = None
     charts_list = get_charts_list()
-    return render_template('charts.html', charts_list=charts_list, chart_data=chart_data)
+    return render_template('charts.html', charts_list=charts_list, chart=chart)
 
 
 # test get info on flask-wtf forms
@@ -95,10 +94,10 @@ def search():
         if form.search_str.data:
             req['m'] = {'$regex': form.search_str.data}
 
-        print('db-request', req)
+        #print('db-request', req)
 
         # pagination skip records
-        skip_records = (int(form.current_page.data) - 1)*form.records_per_page.data
+        skip_records = (int(form.current_page.data) - 1) * form.records_per_page.data
 
         # statistics
         begin = time.time()
@@ -114,7 +113,7 @@ def search():
         end = time.time()
 
         req_stat['total_records'] = total_records
-        req_stat['time_elapsed'] = end-begin
+        req_stat['time_elapsed'] = end - begin
 
         pagination = Pagination(page=int(form.current_page.data),
                                 per_page=form.records_per_page.data,
@@ -124,6 +123,7 @@ def search():
     else:
         req_stat = None
         pagination = None
+        flash_form_errors(form)
 
     return render_template('search.html',
                            form=form,
@@ -140,6 +140,20 @@ def stat():
 
 
 @app.errorhandler(500)
-def internal_error(exception):
-    app.logger.error('EXCEPTION!')
-    return render_template('500.html')
+def internal_error(exc_info):
+    app.logger.error("""
+            ErrorHandler 500
+            Request:   {method} {path}
+            IP:        {ip}
+            Agent:     {agent_platform} | {agent_browser} {agent_browser_version}
+            Raw Agent: {agent}
+                        """.format(
+        method=request.method,
+        path=request.path,
+        ip=request.remote_addr,
+        agent_platform=request.user_agent.platform,
+        agent_browser=request.user_agent.browser,
+        agent_browser_version=request.user_agent.version,
+        agent=request.user_agent.string
+    ))
+    return render_template('500.html'), 500

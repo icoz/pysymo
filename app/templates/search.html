@@ -6,8 +6,12 @@
     <link href="{{ url_for('static', filename='css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Запрос данных</div>
+    <div class="panel panel-default panel-primary">
+        {% if form.watch.data == '1' %}
+            <div class="panel-heading"><b>Search - watch mode (autorefresh in {{ config['WATCH_MODE_REFRESH_INTERVAL'] }} seconds)</b></div>
+        {% else %}
+            <div class="panel-heading"><b>Search</b></div>
+        {% endif %}
         <div class="panel-body">
             <form name="searchform" class="form" action="{{ url_for('search') }}" method=post>
                 {{ form.hidden_tag() }}
@@ -96,23 +100,24 @@
                         </div>
                     </div>
                 </div>
-
-                {% for error in form.errors %}
-                    <span style="color: red;"> <br> [{{ error }}] <br> </span>
-                {% endfor %}
                 <br>
-                <button type="submit" class="btn" onclick="change_page(1)">Получить</button>
+                <div class="row text-center">
+                    <button type="submit" class="btn btn-default btn-primary" onclick="do_search()" title="Search records, pagination enabled">Search</button>
+                    <button type="submit" class="btn btn-default btn-primary" onclick="do_watch()" title="Search only first page. Autorefresh in {{ config['WATCH_MODE_REFRESH_INTERVAL'] }} seconds, pagination disabled">Watch</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            {% if pagination %}
-                {{ pagination.links | safe}}
-            {% endif %}
+    {% if form.watch.data == '0' %}
+        <div class="row">
+            <div class="span12 text-center">
+                {% if pagination %}
+                    {{ pagination.links | safe}}
+                {% endif %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 
     <br>
     {% if data %}
@@ -153,20 +158,19 @@
             {% endfor %}
             </tbody>
         </table>
-        {#            <form action="{{ url_for('get_info') }}" method=post>#}
-        {#            <button type="submit" class="btn">Следующие строки</button>#}
-        {#            </form>#}
     {% endif %}
 
-    {% if req_stat %}
-        <div>
-            Time elapsed - {{ req_stat['time_elapsed'] }} seconds
-            <br>
-            Records found - {{ req_stat['total_records'] }}
-        </div>
+    {% if form.watch.data == '0' %}
+        {% if req_stat %}
+            <div>
+                Time elapsed - {{ req_stat['time_elapsed'] }} seconds
+                <br>
+                Records found - {{ req_stat['total_records'] }}
+            </div>
+        {% endif %}
     {% endif %}
 
-    <!-- script section AFTER main code to get datetimepicker work-->
+    <!-- script section AFTER main code to get datetimepicker work -->
     <script type="text/javascript">
         $('#date_from').datetimepicker(
                 {
@@ -187,6 +191,26 @@
         {
           document.searchform.current_page.value = page_num ;
           document.searchform.submit() ;
+        }
+
+        function do_search()
+        {
+            document.searchform.watch.value = 0;
+            change_page(1);
+        }
+
+
+        function do_watch()
+        {
+            // enable Watch mode
+            document.searchform.watch.value = 1;
+            change_page(1);
+        }
+
+        // Watch mode
+        // set timer to reload first page
+        if (document.searchform.watch.value == 1) {
+            setTimeout(function() { change_page(1) }, {{ config['WATCH_MODE_REFRESH_INTERVAL'] * 1000 }});
         }
     </script>
 {% endblock %}

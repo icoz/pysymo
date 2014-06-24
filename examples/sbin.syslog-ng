@@ -40,13 +40,7 @@
   @{CHROOT_BASE}/var/lib/syslog-ng/syslog-ng.persist rw,
   @{CHROOT_BASE}/var/log/** w,
   @{CHROOT_BASE}/var/run/syslog-ng.pid krw,
-  # IL 27.10.2011
-  /mnt/logs/** w,
-  # IL 18.04.2012
-  /var/lib/mysql/mysql.syslog-ng.pipe rw,
-  /bin/bash ix,
-  /usr/bin/mysql ix,
-  # IL 26.05.2014
+  # pysymo
   /srv/www/htdocs/pysymo/tools/** ixr,
   /usr/lib64/python2.6/** rm,
   /usr/local/lib64/python2.6/** rm,
