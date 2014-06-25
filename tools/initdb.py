@@ -20,6 +20,6 @@ if 'messages' not in db.collection_names():
     db.users.ensure_index('username', unique=True)
     db.charts.ensure_index('name', unique=True)
     db.cache.ensure_index('type', unique=True)
-    print("OK: Collections and indexes were created in '{0}' database").format(MONGO_DATABASE)
+    print("OK: Collections and indexes were created in '{0}' database".format(MONGO_DATABASE))
 else:
     print("ERROR: Collection 'messages' already exists")

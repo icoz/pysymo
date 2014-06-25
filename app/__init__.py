@@ -24,12 +24,21 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 # add logging
-# parent log level
-app.logger.setLevel(logging.INFO)
-formatter = logging.Formatter(u'%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s')
+formatter = logging.Formatter('''--------------------------------------------------
+Message type:       %(levelname)s
+Location:           %(pathname)s:%(lineno)d
+Module:             %(module)s
+Function:           %(funcName)s
+Time:               %(asctime)s
+
+Message:
+
+%(message)s
+''')
 file_handler = RotatingFileHandler(app.config['PYSYMO_LOG'], maxBytes=1024 * 1024 * 10, backupCount=20)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
+app.logger.setLevel(logging.INFO)
 app.logger.addHandler(file_handler)
 
 from app import auth, db, views, forms
