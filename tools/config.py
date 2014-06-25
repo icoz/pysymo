@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# config file ONLY for tools scripts
+""" Config file ONLY for tools scripts."""
+
 
 __author__ = 'ilya-il'
 

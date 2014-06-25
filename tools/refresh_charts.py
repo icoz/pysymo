@@ -1,6 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+""" Refresh charts script.
+
+Aggregates data for charts.
+Puts chart data and properties in collection 'charts'
+
+"""
+
+
 __author__ = 'ilya-il'
 
 from pymongo import MongoClient
@@ -8,11 +16,11 @@ from datetime import datetime
 
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 
-db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
-
-# TOP HOSTS by messages count
 def top_hosts():
+    """Top hosts by messages count."""
+    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+
     library = {
         'chart': {
             'height': 500
@@ -47,18 +55,22 @@ def top_hosts():
                                'title': 'Top 10 hosts',
                                'library': library,
                                'created': datetime.now(),
-                               # FIXME - dirty trick - store data as a string to avoid unicode. See encode() above
+                               # FIXME (IL): dirty trick - store data as a string to avoid unicode. See encode() above
                                'data': data.__str__()}},
                      upsert=True)
 
 
 # Messages count per day
 def messages_per_day():
+    """Total messages count per day."""
+    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+
     library = {
         'title': {
             'text': 'Messages per day'
         }
     }
+
     res = db.messages.aggregate([{"$project": {"host": "$h",
                                                "y": {"$year": "$d"},
                                                "m": {"$month": "$d"},
@@ -78,14 +90,19 @@ def messages_per_day():
                                'title': 'Messages per day',
                                'library': library,
                                'created': datetime.now(),
-                               # FIXME - dirty trick - store data as a string to avoid unicode
+                               # FIXME (IL): dirty trick - store data as a string to avoid unicode
                                'data': data.__str__()}},
                      upsert=True)
 
 
-# Warning messages per host
-# Warning messages only - ['emerg', 'alert', 'crit', 'err', 'warn'] - [0-4]
 def warning_messages_per_host():
+    """Warning messages per host.
+
+    Count only warning messages - ['emerg', 'alert', 'crit', 'err', 'warn']
+
+    """
+    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+
     library = {
         'chart': {
             'height': 800
@@ -155,7 +172,7 @@ def warning_messages_per_host():
                                'title': 'Warning messages per host (Top 10)',
                                'library': library,
                                'created': datetime.now(),
-                               # FIXME - dirty trick - store data as a string to avoid unicode. See encode() above
+                               # FIXME (IL): dirty trick - store data as a string to avoid unicode. See encode() above
                                'data': data.__str__()}},
                      upsert=True)
 
