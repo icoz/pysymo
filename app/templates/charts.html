@@ -4,8 +4,8 @@
 {% endblock %}
 {% block body %}
     <!--script src="http://www.google.com/jsapi"></script-->
-    <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
-    <script src="{{ url_for('ck.static', filename='chartkick.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/highcharts/highcharts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/highcharts/drilldown.js') }}"></script>
 
     <!-- show chart list -->
     {% if charts_list %}
@@ -34,62 +34,211 @@
         </div>
     {% endif %}
 
-    <!-- show specified chart -->
     {% if chart %}
-        {% if chart['type'] == 'pie' %}
-                {% pie_chart chart['data'] with library=chart['library'] %}
-        {% elif chart['type'] == 'line' %}
-            {% line_chart chart['data'] with library=chart['library'] %}
-        {% elif chart['type'] == 'bar' %}
-            {% bar_chart chart['data'] with library=chart['library'] %}
-        {% endif %}
+        <div id="hc_container">
+            Loading...
+        </div>
+        <script>
+                // Support python's true/false
+                False = false;
+                True = true;
+                $(function () {
+                    // Create the chart
+                    $('#hc_container').highcharts({{ chart['chart'] | safe }})
+                });
+        </script>
     {% endif %}
 
-<!--div id="chart-test" style="height: 300px; text-align: center; color: #999;
-                      line-height: 300px; font-size: 14px;
-                      font-family: Lucida Grande, Lucida Sans Unicode,
-                      Verdana, Arial, Helvetica, sans-serif;">
-    Loading...
-</div>
-<script>
-//<![CDATA[
-new Chartkick.BarChart(document.getElementById("chart-test"),
+    <!-- NATIVE HIGHCHARTS -->
+    <!--div id="chart_test">
 
-[{'data': [['Host1', 77.3], ['Host2', 55.9]], 'name': 'err'},
- {'data': [['Host1', 127.7], ['Host2', 125.9]], 'name': 'crit'},
- {'data': [['Host1', 52.9], ['Host2', 50.7]], 'name': 'alert'}],
-{"library":{
-        chart: {
-            type: 'bar'
-        },
-        "plotOptions": {
-              "bar": {
-                  "showInLegend": true,
-                  "dataLabels": {
-                      "enabled": true
+    </div>
+    <script>
+        $(function () {
+            // Create the chart
+            $('#chart_test').highcharts({
+                chart: {
+                    type: 'pie',
+                    height: 500
+                },
+                title: {
+                    text: 'Basic drilldown'
+                },
+                xAxis: {
+                    type: 'category'
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                        }
+                    }
+                },
+
+                series: [{
+                    name: 'Things',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Animals',
+                        y: 5,
+                        drilldown: 'animals'
+                    }, {
+                        name: 'Fruits',
+                        y: 2,
+                        drilldown: 'fruits'
+                    }, {
+                        name: 'Cars',
+                        y: 4,
+                        drilldown: 'cars'
+                    }]
+                }],
+                drilldown: {
+                    series: [{
+                        id: 'animals',
+                        data: [
+                            ['Cats', 4],
+                            ['Dogs', 2],
+                            ['Cows', 1],
+                            ['Sheep', 2],
+                            ['Pigs', 1]
+                        ]
+                    }, {
+                        id: 'fruits',
+                        data: [
+                            ['Apples', 4],
+                            ['Oranges', 2]
+                        ]
+                    }, {
+                        id: 'cars',
+                        data: [
+                            ['Toyota', 4],
+                            ['Opel', 2],
+                            ['Volkswagen', 2]
+                        ]
+                    }]
+                }
+            })
+        });
+
+
+    </script-->
+
+<!-- NATIVE HIGHCHARTS -->
+    <!--div id="chart_test1">
+
+    </div>
+    <script>
+        $(function () {
+            // Create the chart
+            $('#chart_test1').highcharts({
+                chart: {
+                    type: 'spline'
+                },
+                title: {
+                    text: 'Messages per day'
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                yAxis: {
+                    title: {
+                        text: 'Number of messages'
+                    },
+                    min : 0
+                },
+
+                xAxis: {
+                    title: {
+                        text: 'Day of months'
+                    },
+                    type: "category",
+                    tickmarkPlacement: 'on'
+                },
+                plotOptions: {
+                    series: {
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                series: [{
+                        name: 'test',
+                        data :
+                           [['06-04', 41996],
+                            ['06-03', 85871],
+                            ['06-02', 78926],
+                            ['05-31', 65181],
+                            ['05-29', 76854],
+                            ['05-28', 78046],
+                            ['05-27', 88120],
+                            ['06-01', 61445],
+                            ['05-30', 80158],
+                            ['05-26', 35427]]
+
+                       }
+                ]
+            })
+        });
+
+
+    </script>
+
+    <div>TEST11</div-->
+    <!-- TEST CHARTKICK -->
+    <!--div id="chart-test" style="height: 300px; text-align: center; color: #999;
+                          line-height: 300px; font-size: 14px;
+                          font-family: Lucida Grande, Lucida Sans Unicode,
+                          Verdana, Arial, Helvetica, sans-serif;">
+        Loading...
+    </div>
+    <script>
+    //<![CDATA[
+    new Chartkick.BarChart(document.getElementById("chart-test"),
+
+    [{'data': [['Host1', 77.3], ['Host2', 55.9]], 'name': 'err'},
+     {'data': [['Host1', 127.7], ['Host2', 125.9]], 'name': 'crit'},
+     {'data': [['Host1', 52.9], ['Host2', 50.7]], 'name': 'alert'}],
+    {"library":{
+            chart: {
+                type: 'bar'
+            },
+            "plotOptions": {
+                  "bar": {
+                      "showInLegend": true,
+                      "dataLabels": {
+                          "enabled": true
+                      }
                   }
+              },
+              "title": {
+                  "text": "Message types by host"
+              },
+              "legend": {
+                  "layout": 'vertical',
+                  "align": 'right',
+                  'verticalAlign': 'middle',
+                  'reversed': true
               }
-          },
-          "title": {
-              "text": "Message types by host"
-          },
-          "legend": {
-              "layout": 'vertical',
-              "align": 'right',
-              'verticalAlign': 'middle',
-              'reversed': true
-          }
-         }
-});
-//]]>
-</script>
+             }
+    });
+    //]]>
+    </script>
 
-<div id="chart-test2" style="height: 300px; text-align: center; color: #999;
-                      line-height: 300px; font-size: 14px;
-                      font-family: Lucida Grande, Lucida Sans Unicode,
-                      Verdana, Arial, Helvetica, sans-serif;">
-    Loading...
-</div>
-<script-->
+    <div id="chart-test2" style="height: 300px; text-align: center; color: #999;
+                          line-height: 300px; font-size: 14px;
+                          font-family: Lucida Grande, Lucida Sans Unicode,
+                          Verdana, Arial, Helvetica, sans-serif;">
+        Loading...
+    </div>
+    <script-->
 
 {% endblock %}

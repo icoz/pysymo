@@ -3,21 +3,13 @@
 
 __author__ = 'ilya-il'
 
-from flask import Flask, Blueprint
+from flask import Flask
 from flask_login import LoginManager
-import chartkick
 import logging
 from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.config.from_object('config')
-
-# Blueprint magic
-ck = Blueprint('ck', __name__, static_folder=chartkick.js(), static_url_path='/ck/static')
-app.register_blueprint(ck)
-
-# add chart support
-app.jinja_env.add_extension("chartkick.ext.charts")
 
 # add login support
 login_manager = LoginManager()
