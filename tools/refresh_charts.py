@@ -11,7 +11,7 @@ Puts chart data and properties in collection 'charts'
 
 __author__ = 'ilya-il'
 
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 from datetime import datetime
 
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE, MSG_PRIORITY_LIST
@@ -38,15 +38,15 @@ def top_hosts():
         # {<host>: {'id: <host>, 'data': [], 'name': 'messages'}, }
         drilldown[i['_id']] = {'id': '{0}'.format(i['_id']), 'data': [], 'name': 'messages'}
 
-
     # Hosts and priority
-    # FIXME (IL): sort data by host ASC and count DESC
     res = db.messages.aggregate([{"$match": {"h": {"$in": host_list}}
                                   },
-                                 {"$group": {"_id": {"h": "$h", "p": "$p"}, "count": {"$sum": 1}}}
+                                 {"$group": {"_id": {"h": "$h", "p": "$p"}, "count": {"$sum": 1}}},
+                                 {"$sort": {"count": DESCENDING}}
                                  ])
     for i in res['result']:
         # fill data for specified host
+        # data for host will be sorted DESC because of db query sort
         # drilldown[<host>]<'data'>.append([MSG_PRIORITY_LIST[<priority>], <count>])
         drilldown[i['_id']['h']]['data'].append([MSG_PRIORITY_LIST[i['_id']['p']], i['count']])
 
@@ -58,7 +58,7 @@ def top_hosts():
         'series': {
             'dataLabels': {
                 'enabled': True,
-                'format': '<b>{point.name}</b> - {point.y}'
+                'format': '{point.name} - {point.y}'
             }
         }
     }
@@ -92,8 +92,8 @@ def messages_per_day():
                                   },
                                  {"$sort": {"_id": 1}},
                                  ])
-    # data list [['Label', value], ] - ['dd.mm.yyyy', value]
-    data = [['{0:02d}.{1:02d}.{2}'.format(i["_id"]["d"], i["_id"]["m"], i["_id"]["y"]),
+    # data list [['Label', value], ] - ['dd.mm', value]
+    data = [['{0:02d}.{1:02d}'.format(i["_id"]["d"], i["_id"]["m"]),
              i['count']]
             for i in res['result']]
 
@@ -109,16 +109,13 @@ def messages_per_day():
         'min': 0
     }
     chart['xAxis'] = {
-        'title': {
-            'text': 'Days'
-        },
         'type': 'category',
         'tickmarkPlacement': 'on'
     }
     chart['plotOptions'] = {
         'series': {
             'dataLabels': {
-                'enabled': True
+                'enabled': False
             }
         }
     }
