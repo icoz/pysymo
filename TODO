@@ -17,6 +17,10 @@ Pysymo
 12) Piper scripts for other syslog systems (not only for syslog-ng)
 13) Syslog-ng config with built-in MongoDB driver
 14) Maybe use other types on indexes in 'messages' collecton (hashed, ...)
-15) Test on various versions of python (see ex. mongo_piper.py FIX_ME), various systems
+15) TEST - on various versions of python (see ex. mongo_piper.py FIX_ME), various systems
 16) Check/format source according to PEP8, PEP257
-17) Python class to create native Highcharts charts
+-/+ 17) Python class to create native Highcharts charts - native highchart.js
+18) Live charts, autorefresh
+19) Links from chart to search with parameters
+20) TEST - on various resolution screens
+21) i18n

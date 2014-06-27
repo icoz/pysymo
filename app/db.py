@@ -46,9 +46,31 @@ def get_chart(chart_name):
 
 def get_messages_stat():
     res = db.command('collstats', 'messages')
+    # FIXME (IL): ',d' - only for python >= 2.7
+    #stat = list()
+    #stat.append(['ns', res['ns']])
+    #stat.append(['count', format(res['count'], ',d')])
+    #stat.append(['size', format(res['size'], ',d')])
+    #stat.append(['storageSize', format(res['storageSize'], ',d')])
+    #stat.append(['totalIndexSize', format(res['totalIndexSize'], ',d')])
+    #stat.append(['lastExtentSize', format(res['lastExtentSize'], ',d')])
+    #stat.append(['avgObjSize', format(res['avgObjSize'], ',d')])
+    #stat.append(['indexSizes', res['indexSizes']])
+
     return res
 
 
 def get_db_stat():
     res = db.command('dbstats')
+    # FIXME (IL): ',d' - only for python >= 2.7
+    #stat = list()
+    #stat.append(['db', res['db']])
+    #stat.append(['fileSize', format(res['fileSize'], ',d')])
+    #stat.append(['storageSize', format(res['storageSize'], ',d')])
+    #stat.append(['dataSize', format(res['dataSize'], ',d')])
+    #stat.append(['indexSize', format(res['indexSize'], ',d')])
+    #stat.append(['objects', format(res['objects'], ',d')])
+    #stat.append(['avgObjSize', format(res['avgObjSize'], ',f')])
+    #stat.append(['collections', res['collections']])
+
     return res

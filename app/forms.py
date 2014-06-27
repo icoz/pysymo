@@ -68,11 +68,14 @@ class RequestForm(Form):
 
 
 class RegistrationForm(Form):
-    username = StringField('Username', [validators.DataRequired()])
+    username = StringField('Username', [validators.DataRequired(),
+                                        validators.Length(min=3)])
     password = PasswordField('Password', [validators.DataRequired(),
-                                          validators.equal_to('confirm', message='Passwords must match')])
+                                          validators.equal_to('confirm', message='Passwords must match'),
+                                          validators.Length(min=6, max=20)])
     confirm = PasswordField('Confirm password', [validators.DataRequired()])
-    email = StringField('Email', [validators.DataRequired()])
+    email = StringField('Email', [validators.DataRequired(),
+                                  validators.Length(min=4)])
 
 
 class LoginForm(Form):
