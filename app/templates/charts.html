@@ -41,9 +41,10 @@
                 // Support python's true/false
                 False = false;
                 True = true;
+                var chart;
                 $(function () {
                     // Create the chart
-                    $('#hc_container').highcharts({{ chart['chart'] | safe }})
+                    chart = new Highcharts.Chart({{ chart['chart'] | safe }})
                 });
         </script>
     {% endif %}

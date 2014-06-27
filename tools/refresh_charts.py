@@ -35,8 +35,8 @@ def top_hosts():
         # use format() to avoid unicode strings
         # [{'name': <host>, 'drilldown': <host>, 'y': <count>}, ]
         main_series.append({'name': '{0}'.format(i['_id']), 'y': i['count'], 'drilldown': '{0}'.format(i['_id'])})
-        # {<host>: {'id: <host>, 'data': [], 'name': 'messages'}, }
-        drilldown[i['_id']] = {'id': '{0}'.format(i['_id']), 'data': [], 'name': 'messages'}
+        # {<host>: {'id: <host>, 'data': [], 'name': <host>}, }
+        drilldown[i['_id']] = {'id': '{0}'.format(i['_id']), 'data': [], 'name': '{0}'.format(i['_id'])}
 
     # Hosts and priority
     res = db.messages.aggregate([{"$match": {"h": {"$in": host_list}}
@@ -47,27 +47,35 @@ def top_hosts():
     for i in res['result']:
         # fill data for specified host
         # data for host will be sorted DESC because of db query sort
-        # drilldown[<host>]<'data'>.append([MSG_PRIORITY_LIST[<priority>], <count>])
+        # drilldown[<host>]['data'].append([MSG_PRIORITY_LIST[<priority>], <count>])
         drilldown[i['_id']['h']]['data'].append([MSG_PRIORITY_LIST[i['_id']['p']], i['count']])
 
     chart = dict()
-    chart['chart'] = {'type': 'pie', 'height': 500}
+    chart['chart'] = {
+        'type': 'pie',
+        'height': 500,
+        'renderTo': 'hc_container'
+    }
     chart['title'] = {'text': 'Top 10 hosts'}
     chart['legend'] = {'enabled': False}
     chart['plotOptions'] = {
         'series': {
             'dataLabels': {
                 'enabled': True,
-                'format': '{point.name} - {point.y}'
+                'format': '{point.name} - <b>{point.y}</b>'
             }
         }
     }
     chart['series'] = [{
-        'name': 'Hosts',
+        'name': 'All messages',
         'data': main_series
     }]
     chart['drilldown'] = {
         'series': [drilldown[i] for i in drilldown]
+    }
+    chart['tooltip'] = {
+        'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
+        'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
     }
 
     db.charts.update({'name': 'tophosts'},
@@ -99,7 +107,10 @@ def messages_per_day():
 
     chart = dict()
 
-    chart['chart'] = {'type': 'spline'}
+    chart['chart'] = {
+        'type': 'spline',
+        'renderTo': 'hc_container'
+    }
     chart['title'] = {'text': 'Messages per day'}
     chart['legend'] = {'enabled': False}
     chart['yAxis'] = {

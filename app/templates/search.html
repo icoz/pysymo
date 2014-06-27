@@ -109,6 +109,7 @@
         </div>
     </div>
 
+    <!-- PAGINATION -->
     {% if form.watch.data == '0' %}
         <div class="row">
             <div class="span12 text-center">
@@ -119,6 +120,7 @@
         </div>
     {% endif %}
 
+    <!-- DATA TABLE -->
     <br>
     {% if data %}
         <table class="table table-bordered table-striped">
@@ -160,9 +162,21 @@
         </table>
     {% endif %}
 
+    <!-- PAGINATION2 -->
+    {% if form.watch.data == '0' %}
+        <div class="row">
+            <div class="span12 text-center">
+                {% if pagination %}
+                    {{ pagination.links | safe}}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- QUERY STAT -->
     {% if form.watch.data == '0' %}
         {% if req_stat %}
-            <div>
+            <div class="text-right">
                 Time elapsed - {{ req_stat['time_elapsed'] }} seconds
                 <br>
                 Records found - {{ req_stat['total_records'] }}
