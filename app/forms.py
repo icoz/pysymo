@@ -2,7 +2,7 @@
 
 __author__ = 'ilya-il'
 
-from app.db import get_hosts, get_applications, get_facility
+from app.db import db_get_hosts, db_get_applications, db_get_facility
 from flask import flash
 from flask_wtf import Form
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, \
@@ -61,9 +61,9 @@ class RequestForm(Form):
     @classmethod
     def new(cls):
         form = cls()
-        form.host.choices = sorted([(j, j) for j in get_hosts()])
-        form.application.choices = sorted([(j, j) for j in get_applications()])
-        form.facility.choices = sorted([(j, j) for j in get_facility()])
+        form.host.choices = sorted([(j, j) for j in db_get_hosts()])
+        form.application.choices = sorted([(j, j) for j in db_get_applications()])
+        form.facility.choices = sorted([(j, j) for j in db_get_facility()])
         return form
 
 

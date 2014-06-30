@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% block title %}
-    Get info from db
-{% endblock %}
+        {% if form.watch.data == '1' %}
+            Watch
+        {% else %}
+            Search
+        {% endif %}{% endblock %}
 {% block body %}
     <link href="{{ url_for('static', filename='css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
     <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
@@ -9,14 +12,14 @@
     <div class="panel panel-default panel-primary">
         {% if form.watch.data == '1' %}
             <div class="panel-heading panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseSearch">
+                <a data-toggle="collapse" href="#collapseSearch">
                     <b>Search - watch mode (autorefresh in {{ config['WATCH_MODE_REFRESH_INTERVAL'] }} seconds)</b>
                 </a>
             </div>
             <div id="collapseSearch" class="panel-collapse collapse">
         {% else %}
             <div class="panel-heading panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseSearch">
+                    <a data-toggle="collapse" href="#collapseSearch">
                         <b>Search</b>
                     </a>
             </div>
