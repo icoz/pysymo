@@ -6,7 +6,7 @@ from app.db import db_get_hosts, db_get_applications, db_get_facility
 from flask import flash
 from flask_wtf import Form
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, \
-    StringField, HiddenField, PasswordField
+    StringField, HiddenField, PasswordField, BooleanField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
@@ -81,3 +81,4 @@ class RegistrationForm(Form):
 class LoginForm(Form):
     username = StringField('Login', [validators.DataRequired()])
     password = PasswordField('Password', [validators.DataRequired()])
+    remember_me = BooleanField('Remember me', default=False)

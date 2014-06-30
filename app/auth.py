@@ -101,7 +101,7 @@ def login():
         elif not user.check_password(form.password.data):
             flash('Invalid username or password', 'warning')
         else:
-            if login_user(user):
+            if login_user(user, remember=form.remember_me.data):
                 flash("Logged in successfully.", 'success')
                 return redirect(url_for('search'))
             else:

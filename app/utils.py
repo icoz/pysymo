@@ -8,12 +8,12 @@ import sys
 SIZES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
 
 
-def get_formatted_bytes(bytes):
+def get_formatted_bytes(value):
     """Format value of bytes to KB/MB/etc."""
-    if bytes > 0:
-        i = int(log(bytes, 2)//10)
-        value = round(bytes/pow(1024, i), 2)
-        return '{0:g} {1}'.format(value, SIZES[i])
+    if value > 0:
+        i = int(log(value, 2)//10)
+        res = round(value/pow(1024, i), 2)
+        return '{0:g} {1}'.format(res, SIZES[i])
     else:
         return 'Value error!'
 

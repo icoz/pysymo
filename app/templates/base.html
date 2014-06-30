@@ -41,6 +41,10 @@
                             <div class="form-group">
                                 {{ form.password(class="form-control", placeholder="password") }}
                             </div>
+                            <div class="form-group checkbox">
+                                {{ form.remember_me }}
+                                {{ form.remember_me.label(style="color:#999") }}
+                            </div>
                             <button type="submit" class="btn btn-primary">Sign In</button>
                         </form>
                     </li>
@@ -49,7 +53,7 @@
                     <li><a href="{{ url_for('search') }}"><span class="glyphicon glyphicon-search"></span> Search</a></li>
                     <li><a href="{{ url_for('charts') }}"><span class="glyphicon glyphicon-stats"></span> Charts</a></li>
                     <li><a href="{{ url_for('stat') }}"><span class="glyphicon glyphicon-tasks"></span> DB stat</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout (<b>{{ current_user.username }}</b>)</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout (<span class="glyphicon glyphicon-user"></span><b> {{ current_user.username }}</b>)</a></li>
               {% endif %}
           </ul>
     </div><!--/.navbar-collapse -->

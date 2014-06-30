@@ -4,7 +4,7 @@ __author__ = 'icoz'
 
 from pymongo import MongoClient
 
-from utils import get_formatted_bytes, get_formatted_thousand_sep
+from app.utils import get_formatted_bytes, get_formatted_thousand_sep
 
 MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017
@@ -58,7 +58,6 @@ def db_get_db_stat():
     stat.append(['avgObjSize', get_formatted_thousand_sep(res['avgObjSize'])])
     stat.append(['collections', res['collections']])
 
-    print stat
     return stat
 
 
