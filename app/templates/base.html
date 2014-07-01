@@ -25,7 +25,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">PySyMo</a>
+      <a class="navbar-brand" href="{{ url_for('home') }}">PySyMo</a>
     </div>
 
     <div class="navbar-collapse collapse">
@@ -33,17 +33,17 @@
              {# {% if not session.logged_in %} #}
               {% if not current_user.is_authenticated() %}
                     <li class="tabs-right">
-                        <form class="navbar-form navbar-right" action="{{ url_for('login') }}" method=post>
-                            {{ form.hidden_tag() }}
+                        <form class="navbar-form navbar-right" action="{{ url_for('login') }}" method=post id="login_form">
+                            {{ login_form.hidden_tag() }}
                             <div class="form-group">
-                                {{ form.username(class="form-control", placeholder="login") }}
+                                {{ login_form.username(class="form-control", placeholder="login") }}
                             </div>
                             <div class="form-group">
-                                {{ form.password(class="form-control", placeholder="password") }}
+                                {{ login_form.password(class="form-control", placeholder="password") }}
                             </div>
                             <div class="form-group checkbox">
-                                {{ form.remember_me }}
-                                {{ form.remember_me.label(style="color:#999") }}
+                                {{ login_form.remember_me }}
+                                {{ login_form.remember_me.label(style="color:#999") }}
                             </div>
                             <button type="submit" class="btn btn-primary">Sign In</button>
                         </form>

@@ -8,23 +8,23 @@
             <div class="panel panel-default panel-primary">
                 <div class="panel-heading panel-title"><b>Register new user</b></div>
                 <div class="panel-body">
-                    <form class="form" action="{{ url_for('register') }}" method=post>
-                        {{ form.hidden_tag() }}
+                    <form class="form" action="{{ url_for('register') }}" method=post id="reg_form">
+                        {{ reg_form.hidden_tag() }}
                         <div class="form-group">
-                            {{ form.username.label }}
-                            {{ form.username(class="form-control") }}
+                            {{ reg_form.username.label }}
+                            {{ reg_form.username(class="form-control") }}
                         </div>
                         <div class="form-group">
-                            {{ form.password.label }}
-                            {{ form.password(class="form-control") }}
+                            {{ reg_form.password.label }}
+                            {{ reg_form.password(class="form-control") }}
                         </div>
                         <div class="form-group">
-                            {{ form.confirm.label }}
-                            {{ form.confirm(class="form-control") }}
+                            {{ reg_form.confirm.label }}
+                            {{ reg_form.confirm(class="form-control") }}
                         </div>
                         <div class="form-group">
-                            {{ form.email.label }}
-                            {{ form.email(class="form-control") }}
+                            {{ reg_form.email.label }}
+                            {{ reg_form.email(class="form-control") }}
                         </div>
                         <button type="submit" class="btn btn-default btn-primary pull-right">Register</button>
                     </form>

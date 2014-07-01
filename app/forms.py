@@ -38,7 +38,7 @@ class RequestForm(Form):
     date_to = DateTimeField('To', [validators.optional()], format=DATETIME_FORMAT)
 
     # RECORDS PER PAGE
-    records_per_page = SelectField('Records p/p',
+    records_per_page = SelectField('Records',
                                    choices=[(i, i) for i in (10, 25, 50, 100, 500)],
                                    coerce=int,
                                    default=25)
@@ -68,6 +68,7 @@ class RequestForm(Form):
 
 
 class RegistrationForm(Form):
+    # FIXME (IL) - 'username' - same field as in LoginForm. If registration fails username restored in both forms
     username = StringField('Username', [validators.DataRequired(),
                                         validators.Length(min=3)])
     password = PasswordField('Password', [validators.DataRequired(),

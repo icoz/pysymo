@@ -61,22 +61,21 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
                             <div class="form-group form-horizontal">
                                 {{ form.date_from.label(class='col-md-1 control-label') }}
-                                <div class="col-md-5">
+                                <div class="col-md-2">
                                     {{ form.date_from(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-horizontal">
-                                {{ form.records_per_page.label(class='col-md-3 control-label') }}
+
                                 <div class="col-md-3">
+                                    &nbsp;
+                                </div>
+
+                                {{ form.records_per_page.label(class='col-md-1 control-label') }}
+                                <div class="col-md-2">
                                     {{ form.records_per_page(class="form-control") }}
                                 </div>
                             </div>
-                        </div>
                     </div>
 
                     <div class="row">
@@ -84,22 +83,21 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
                             <div class="form-group form-horizontal">
                                 {{ form.date_to.label(class='col-md-1 control-label') }}
-                                <div class="col-md-5">
+                                <div class="col-md-2">
                                     {{ form.date_to(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-horizontal">
-                                {{ form.sort_direction.label(class='col-md-2 control-label') }}
-                                <div class="col-md-4">
+
+                                <div class="col-md-3">
+                                    &nbsp;
+                                </div>
+
+                                {{ form.sort_direction.label(class='col-md-1 control-label') }}
+                                <div class="col-md-2">
                                     {{ form.sort_direction(class="form-control") }}
                                 </div>
                             </div>
-                        </div>
                     </div>
 
                     <div class="row">

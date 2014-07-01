@@ -110,7 +110,7 @@ def login():
     else:
         flash_form_errors(form)
 
-    return render_template('home.html', form=form)
+    return render_template('home.html', login_form=form)
 
 
 @app.route('/logout')
@@ -122,14 +122,15 @@ def logout():
 
 @app.route('/register', methods=['GET', "POST"])
 def register():
-    form = RegistrationForm()
+    reg_form = RegistrationForm()
+    login_form = LoginForm()
 
-    if form.validate_on_submit():
-        pwd_hash, salt = User.hash_password(form.password.data)
-        user = User(username=form.username.data,
+    if reg_form.validate_on_submit():
+        pwd_hash, salt = User.hash_password(reg_form.password.data)
+        user = User(username=reg_form.username.data,
                     password=pwd_hash,
                     salt=salt,
-                    email=form.email.data)
+                    email=reg_form.email.data)
         # save user to db
         user_id, save_error = user.save()
         if user_id:
@@ -144,5 +145,5 @@ def register():
             flash(save_error, 'warning')
             return redirect(url_for('register'))
     else:
-        flash_form_errors(form)
-        return render_template('register.html', form=form)
+        flash_form_errors(reg_form)
+        return render_template('register.html', reg_form=reg_form, login_form=login_form)
