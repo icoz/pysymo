@@ -30,7 +30,6 @@
 
     <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-             {# {% if not session.logged_in %} #}
               {% if not current_user.is_authenticated() %}
                     <li class="tabs-right">
                         <form class="navbar-form navbar-right" action="{{ url_for('login') }}" method=post id="login_form">
@@ -46,9 +45,11 @@
                                 {{ login_form.remember_me.label(style="color:#999") }}
                             </div>
                             <button type="submit" class="btn btn-primary">Sign In</button>
+                            {% if config['REGISTRATION_ENABLED'] %}
+                                <a href="{{ url_for('register') }}" class="btn btn-primary" role="button">Register</a>
+                            {% endif %}
                         </form>
                     </li>
-                    <li><a href="{{ url_for('register') }}">Register</a></li>
               {% else %}
                     <li><a href="{{ url_for('search') }}"><span class="glyphicon glyphicon-search"></span> Search</a></li>
                     <li><a href="{{ url_for('charts') }}"><span class="glyphicon glyphicon-stats"></span> Charts</a></li>

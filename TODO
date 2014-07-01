@@ -25,3 +25,6 @@ Pysymo
 20) TEST - on various resolution screens
 21) i18n
 22) LDAP auth
++ 23) Config - Enable/disable registration
+24) Standard messages explanation, ex. %ASA-2-106017
+25) Data export
