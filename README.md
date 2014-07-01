@@ -61,3 +61,5 @@ Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. T
 Syslog protocol RFC - http://tools.ietf.org/html/rfc5424
 
 Sylog-ng OSE - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3.3-guides/en/syslog-ng-ose-v3.3-guide-admin-en/html/index.html
+
+Bootstrap theme - http://bootswatch.com/spacelab/

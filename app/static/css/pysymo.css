@@ -1,7 +1,12 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 70px;
-  padding-bottom: 20px;
+    padding-top: 70px;
+    padding-bottom: 20px;
+    color: #333;
+}
+
+.form-control {
+    color: #333;
 }
 
 /* icons in panel */
