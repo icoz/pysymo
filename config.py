@@ -22,6 +22,9 @@ WATCH_MODE_REFRESH_INTERVAL = 30
 # allow registration
 REGISTRATION_ENABLED = True
 
+# pysymo version
+PYSYMO_VERSION = 0.1
+
 # log file
 basedir = os.path.abspath(os.path.dirname(__file__))
 if sys.platform == 'win32':

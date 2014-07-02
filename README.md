@@ -1,8 +1,6 @@
 # README for pysymo
 
-Version 0.1
-
-Syslog mongodb analyzer
+PySyMo is a web-interface for view and analyze syslog data, stored in MongoDB.
 
 https://github.com/icoz/pysymo
 

@@ -5,7 +5,10 @@
 {% block body %}
     <div class="jumbotron alert-info">
         <h1>PySyMo!</h1>
-        <p>PySyMo - is a web-interface for view and analyze syslog data, stored in MongoDB.</p>
+        <br>
+        <p>PySyMo is a web-interface for view and analyze syslog data, stored in MongoDB.</p>
         <p>Supports search, filter, pagination, graphical charts.</p>
+        <p>Available on <a href="https://github.com/icoz/pysymo" target="_blank">GitHub</a></p>
+        <p>Version - {{ config['PYSYMO_VERSION'] }}</p>
     </div>
 {% endblock %}
