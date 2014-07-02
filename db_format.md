@@ -20,10 +20,7 @@ Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3
 * a - $PROGRAM   - The name of the program sending the message.
                    Note that the content of the $PROGRAM variable may not be completely trusted as it is provided
                    by the client program that constructed the message.
-* m - $MSG       - Text contents of the log message without the program name and pid.
-                   Note that this has changed in syslog-ng version 3.0; in earlier versions this macro included the
-                   program name and the pid. In syslog-ng 3.0, the MSG macro became equivalent with the MSGONLY macro.
-                   The program name and the pid together are available in the MSGHDR macro.
+* m - $MSGONLY   - Text contents of the log message without the program name and pid.
 
 ## Collection 'cache'
 
@@ -33,10 +30,9 @@ Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3
 ## Collection 'charts'
 
 * name: - chart name - UNIQUE
-* type: - chart type - pie, column, bar, area, line
 * title: - chart title
 * created: - creation datetime
-* data: - chart data - [['label', value], ['label', value], ]
+* chart: - chart string (as it should be in Highcharts.Chart(<chart>))
 
 ## Collection 'users'
 

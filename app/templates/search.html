@@ -31,25 +31,25 @@
                     {{ form.hidden_tag() }}
                     <div class="row">
                         <div class="col-md-3">
-                            {{ form.host.label }}
+                            {{ form.host.label }} <b>({{ form.host.choices.__len__() }})</b>
                             {{ form.host_ie(class="list-unstyled") }}
                             {{ form.host(size=10, class="form-control") }}
                         </div>
 
                         <div class="col-md-3">
-                            {{ form.application.label }}
+                            {{ form.application.label }} <b>({{ form.application.choices.__len__() }})</b>
                             {{ form.application_ie(class="list-unstyled") }}
                             {{ form.application(size=10, class="form-control") }}
                         </div>
 
                         <div class="col-md-3">
-                            {{ form.facility.label }}
+                            {{ form.facility.label }} <b>({{ form.facility.choices.__len__() }})</b>
                             {{ form.facility_ie(class="list-unstyled") }}
                             {{ form.facility(size=10, class="form-control") }}
                         </div>
 
                         <div class="col-md-3">
-                            {{ form.priority.label }}
+                            {{ form.priority.label }} <b>({{ form.priority.choices.__len__() }})</b>
                             {{ form.priority_ie(class="list-unstyled") }}
                             {{ form.priority(size=10, class="form-control") }}
                         </div>
