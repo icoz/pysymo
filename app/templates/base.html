@@ -46,7 +46,7 @@
                                 {{ login_form.remember_me.label(style="color:#DDD") }}
                             </div>
                             <button type="submit" class="btn btn-primary">Sign In</button>
-                            {% if config['REGISTRATION_ENABLED'] %}
+                            {% if config['REGISTRATION_ENABLED'] and config['AUTH_TYPE'] == 'plain' %}
                                 <a href="{{ url_for('register') }}" class="btn btn-primary" role="button">Register</a>
                             {% endif %}
                         </form>

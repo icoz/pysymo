@@ -14,6 +14,7 @@ https://github.com/icoz/pysymo
     - flask-paginate                    - output data pagination
     - flask-login                       - user login
     - pycrypto                          - password protection
+    - python-ldap                       - LDAP authentication
 - MongoDB
 - Web-server
 - Linux logging system (syslog-ng, ...)
@@ -30,15 +31,30 @@ Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. T
 
 ## Installation
 
-1. Install requirements
-2. Config MongoDB database
-    - Change MONGO_DATABASE in *app/db.py*, *tools/config.py* if necessary
-    - Init database using *tools/initdb.py*
-3. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*
-4. Config logging system to store in MongoDB. See example for syslog-ng 2.x in *examples/syslog-ng.conf*
-5. Config web-server to run pysymo.fcgi. See example for lighttpd in *examples/fastcgi.conf* 
-6. Set permissions for logging directory (see config['PYSYMO_LOG']) to web-server
-7. Config crontab to run periodic tasks: *refresh_cache.py*, *refresh_charts.py*
+1. Install requirements.
+2. Config MongoDB database.
+    - Change MONGO_DATABASE in *app/db.py*, *tools/config.py* if necessary.
+    - Init database using *tools/initdb.py*.
+3. Config LDAP in *config.py* if necessary.
+4. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*.
+5. Config logging system to store in MongoDB. See example for syslog-ng 2.x in *examples/syslog-ng.conf*.
+6. Config web-server to run pysymo.fcgi. See example for lighttpd in *examples/fastcgi.conf* .
+7. Set permissions for logging directory (see config['PYSYMO_LOG']) to web-server.
+8. Config crontab to run periodic tasks: *refresh_cache.py*, *refresh_charts.py*.
+
+## Authentication types
+
+- plain - user and password stored in MongoDB. Registration needed and must be enabled.
+- ldap - user and password stored in LDAP. No registration needed.
+
+## LDAP
+
+If you want to use LDAP to authenticate users, you need to config some parameters in *config.py*.
+ 
+- LDAP_SERVER = 'ldap://[ldap_server]' (ex: 'ldap://ldap.office.mycompany.com')
+- LDAP_SEARCH_BASE = '[organisation]' (ex: 'o=myorganisation')
+- LDAP_SERVICE_USER = '[service_user_dn]' (ex: 'cn=pysymoauth,ou=myunit,o=myorganisation')
+- LDAP_SERVICE_PASSWORD = '[password]'
 
 ## Directories and files
 
@@ -47,9 +63,9 @@ Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. T
 - /tools/ - tools scripts
     - config.py - config for scripts
     - initdb.py - db init script, creates collections and indexes. Use once during installation.
-    - refresh_cache.py - caching script, creates lists of hosts, facilities displayed in web-interface. Use in crontab
-    - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab
-    - syslog-ng_piper.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x
+    - refresh_cache.py - caching script, creates lists of hosts, facilities displayed in web-interface. Use in crontab.
+    - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab.
+    - syslog-ng_piper.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x.
 - config.py - main config
 - pysymo.fcgi - run pysymo with web-server
 - run.py - run pysymo standalone on localhost

@@ -55,8 +55,15 @@ def top_hosts():
         'type': 'pie',
         'height': 500,
         'renderTo': 'hc_container'
+        # FIXME (IL) - dict's elements are strings -> events don't work => remove quotes!
+#        'events': {
+#                'drilldown': 'function(e) { chart.setTitle(null, {text: e.point.name + " (all messages)"}); }',
+#                'drillup': 'function(e) { chart.setTitle(null, {text: "All data"}); }'
+#        }
     }
+
     chart['title'] = {'text': 'Top 10 hosts'}
+    chart['subtitle'] = {'text': 'All data'}
     chart['legend'] = {'enabled': False}
     chart['plotOptions'] = {
         'series': {
@@ -67,7 +74,7 @@ def top_hosts():
         }
     }
     chart['series'] = [{
-        'name': 'All messages',
+        'name': 'All data',
         'data': main_series
     }]
     chart['drilldown'] = {
@@ -79,7 +86,7 @@ def top_hosts():
     }
 
     db.charts.update({'name': 'tophosts'},
-                     {'$set': {'title': 'Top 10 hosts',
+                     {'$set': {'title': 'Top 10 hosts (all data)',
                                'created': datetime.now(),
                                # save as str() to avoid unicode
                                'chart': chart.__str__()}},

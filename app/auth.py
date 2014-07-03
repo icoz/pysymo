@@ -14,8 +14,84 @@ from bson.objectid import ObjectId
 from Crypto import Random
 from Crypto.Hash import SHA256
 
+import ldap
 
-class User(UserMixin):
+
+class UserLDAP(UserMixin):
+    """LDAP authenticated user."""
+    def __init__(self, username=None, email=None):
+        self.id = None
+        self.username = username
+        self.username1 = username
+        self.email = email
+
+    def get_by_username_w_password(self, username, pwd):
+        """Check user exists in LDAP and auth him."""
+        try:
+            conn = ldap.initialize(app.config['LDAP_SERVER'])
+            conn.protocol_version = 3
+            conn.simple_bind_s(app.config['LDAP_SERVICE_USER'], app.config['LDAP_SERVICE_PASSWORD'])
+            # search for user, username is 'cn' - unique for LDAP
+            res = conn.search_s(app.config['LDAP_SEARCH_BASE'],
+                                ldap.SCOPE_SUBTREE,
+                                'cn={0}'.format(username),
+                                ['cn', 'mail'])
+
+            if not res:
+                # user not found
+                return None, 'Invalid username or password.'
+
+            # res format - [(<user_dn>, {<properties>})]
+            user_dn = res[0][0]
+
+            # try to auth with user password
+            conn.simple_bind_s(user_dn, pwd)
+
+            # auth ok
+            self.id = res[0][1].get('cn')[0]
+            self.username = res[0][1].get('cn')[0]
+            if res[0][1].get('mail'):
+                self.email = res[0][1].get('mail')[0]
+            else:
+                self.email = None
+            conn.unbind_s()
+
+            return self, 'No error'
+        except ldap.LDAPError, e:
+            return None, e.message
+
+    def get_by_id(self, user_id):
+        """Get user by userid. For user_loader callback."""
+        try:
+            conn = ldap.initialize(app.config['LDAP_SERVER'])
+            conn.protocol_version = 3
+            conn.simple_bind_s(app.config['LDAP_SERVICE_USER'], app.config['LDAP_SERVICE_PASSWORD'])
+            # search for user, username is 'cn' - unique for LDAP
+            res = conn.search_s(app.config['LDAP_SEARCH_BASE'],
+                                ldap.SCOPE_SUBTREE,
+                                'cn={0}'.format(user_id),
+                                ['cn', 'mail'])
+
+            if not res:
+                # user not found
+                return None
+
+            # res format - [(<user_dn>, {<properties>})]
+            self.id = res[0][1].get('cn')[0]
+            self.username = res[0][1].get('cn')[0]
+            if res[0][1].get('mail'):
+                self.email = res[0][1].get('mail')[0]
+            else:
+                self.email = None
+
+            conn.unbind_s()
+
+            return self
+        except ldap.LDAPError:
+            return None
+
+
+class UserPlain(UserMixin):
     """Plain authenticated user stored in MongoDB."""
     def __init__(self, username=None, password=None, email=None):
         self.username = username
@@ -54,16 +130,16 @@ class User(UserMixin):
             # check user password
             # pwd - plain text password from user input
             if self.__check_password(pwd):
-                return self
+                return self, 'No error'
             else:
-                return None
+                return None, 'Invalid username or password.'
         else:
-            return None
+            return None, 'Invalid username or password.'
 
-    def get_by_id(self, userid):
+    def get_by_id(self, user_id):
         """Get user by userid. For user_loader callback."""
         # !!! must use ObjectId() to search by _id
-        res = db.users.find_one({'_id': ObjectId(userid)})
+        res = db.users.find_one({'_id': ObjectId(user_id)})
         if res:
             self.id = res['_id']
             self.username = res['username']
@@ -86,19 +162,32 @@ class User(UserMixin):
 
 @login_manager.user_loader
 def load_user(user_id):
-    user = User()
+    if app.config['AUTH_TYPE'] == 'ldap':
+        user = UserLDAP()
+    elif app.config['AUTH_TYPE'] == 'plain':
+        user = UserPlain()
+    else:
+        return None
     return user.get_by_id(user_id)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user_obj = User()
+        if app.config['AUTH_TYPE'] == 'ldap':
+            user_obj = UserLDAP()
+        elif app.config['AUTH_TYPE'] == 'plain':
+            user_obj = UserPlain()
+        else:
+            flash('Unknown authentication type.', 'warning')
+            return render_template('home.html', login_form=form)
+
         # find user and check password
-        user = user_obj.get_by_username_w_password(form.username.data, form.password.data)
+        user, error = user_obj.get_by_username_w_password(form.username.data, form.password.data)
         if user is None:
-            flash('Invalid username or password', 'warning')
+            flash(error, 'warning')
         else:
             if login_user(user, remember=form.remember_me.data):
                 flash("Logged in successfully.", 'success')
@@ -121,14 +210,14 @@ def logout():
 
 @app.route('/register', methods=['GET', "POST"])
 def register():
-    if app.config['REGISTRATION_ENABLED']:
+    if app.config['REGISTRATION_ENABLED'] and app.config['AUTH_TYPE'] == 'plain':
         reg_form = RegistrationForm()
         login_form = LoginForm()
 
         if reg_form.validate_on_submit():
-            user = User(username=reg_form.username.data,
-                        password=reg_form.password.data,
-                        email=reg_form.email.data)
+            user = UserPlain(username=reg_form.username.data,
+                             password=reg_form.password.data,
+                             email=reg_form.email.data)
             # save user to db
             user_id, save_error = user.save()
             if user_id:
