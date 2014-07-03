@@ -6,11 +6,11 @@ import time
 
 from app import app
 from app.forms import RequestForm, flash_form_errors
-from app.db import db, get_charts_list, get_chart, get_messages_stat, get_db_stat
+from app.db import db, db_get_charts_list, db_get_chart, db_get_messages_stat, db_get_db_stat
 from flask_paginate import Pagination
 from flask.ext.login import login_required, current_user
 
-from flask import request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for, flash
 
 
 @app.route('/')
@@ -29,10 +29,10 @@ def home():
 def charts():
     chart_name = request.args.get('chart')
     if chart_name:
-        chart = get_chart(chart_name)
+        chart = db_get_chart(chart_name)
     else:
         chart = None
-    charts_list = get_charts_list()
+    charts_list = db_get_charts_list()
     return render_template('charts.html', charts_list=charts_list, chart=chart)
 
 
@@ -135,19 +135,29 @@ def search():
 @app.route('/stat')
 def stat():
     return render_template('stat.html',
-                           mes_stat=get_messages_stat(),
-                           db_stat=get_db_stat())
+                           mes_stat=db_get_messages_stat(),
+                           db_stat=db_get_db_stat())
+
+
+@app.errorhandler(401)
+def page_not_found(e):
+    flash('401 - Unauthorized', 'danger')
+    return redirect(url_for('login'))
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    flash('404 - Page not found', 'danger')
+    return redirect(url_for('home'))
 
 
 @app.errorhandler(500)
-def internal_error(exc_info):
-    app.logger.error("""
-            ErrorHandler 500
-            Request:   {method} {path}
-            IP:        {ip}
-            Agent:     {agent_platform} | {agent_browser} {agent_browser_version}
-            Raw Agent: {agent}
-                        """.format(
+def internal_error(e):
+    app.logger.error("""    ErrorHandler 500
+    Request:   {method} {path}
+    IP:        {ip}
+    Agent:     {agent_platform} | {agent_browser} {agent_browser_version}
+    Raw Agent: {agent}""".format(
         method=request.method,
         path=request.path,
         ip=request.remote_addr,
@@ -157,3 +167,5 @@ def internal_error(exc_info):
         agent=request.user_agent.string
     ))
     return render_template('500.html'), 500
+
+

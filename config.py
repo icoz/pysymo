@@ -19,6 +19,9 @@ DATETIME_FORMAT = '%d.%m.%Y %H:%M:%S'
 # watch mode interval in seconds
 WATCH_MODE_REFRESH_INTERVAL = 30
 
+# allow registration
+REGISTRATION_ENABLED = True
+
 # log file
 if sys.platform == 'win32':
     basedir = os.path.abspath(os.path.dirname(__file__))

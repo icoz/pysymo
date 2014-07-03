@@ -2,11 +2,11 @@
 
 __author__ = 'ilya-il'
 
-from app.db import get_hosts, get_applications, get_facility
+from app.db import db_get_hosts, db_get_applications, db_get_facility
 from flask import flash
 from flask_wtf import Form
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, \
-    StringField, HiddenField, PasswordField
+    StringField, HiddenField, PasswordField, BooleanField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
@@ -38,7 +38,7 @@ class RequestForm(Form):
     date_to = DateTimeField('To', [validators.optional()], format=DATETIME_FORMAT)
 
     # RECORDS PER PAGE
-    records_per_page = SelectField('Records p/p',
+    records_per_page = SelectField('Records',
                                    choices=[(i, i) for i in (10, 25, 50, 100, 500)],
                                    coerce=int,
                                    default=25)
@@ -61,20 +61,25 @@ class RequestForm(Form):
     @classmethod
     def new(cls):
         form = cls()
-        form.host.choices = sorted([(j, j) for j in get_hosts()])
-        form.application.choices = sorted([(j, j) for j in get_applications()])
-        form.facility.choices = sorted([(j, j) for j in get_facility()])
+        form.host.choices = sorted([(j, j) for j in db_get_hosts()])
+        form.application.choices = sorted([(j, j) for j in db_get_applications()])
+        form.facility.choices = sorted([(j, j) for j in db_get_facility()])
         return form
 
 
 class RegistrationForm(Form):
-    username = StringField('Username', [validators.DataRequired()])
+    # FIXME (IL) - 'username' - same field as in LoginForm. If registration fails username restored in both forms
+    username = StringField('Username', [validators.DataRequired(),
+                                        validators.Length(min=3)])
     password = PasswordField('Password', [validators.DataRequired(),
-                                          validators.equal_to('confirm', message='Passwords must match')])
+                                          validators.equal_to('confirm', message='Passwords must match'),
+                                          validators.Length(min=6, max=20)])
     confirm = PasswordField('Confirm password', [validators.DataRequired()])
-    email = StringField('Email', [validators.DataRequired()])
+    email = StringField('Email', [validators.DataRequired(),
+                                  validators.Length(min=4)])
 
 
 class LoginForm(Form):
     username = StringField('Login', [validators.DataRequired()])
     password = PasswordField('Password', [validators.DataRequired()])
+    remember_me = BooleanField('Remember me', default=False)

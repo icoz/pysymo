@@ -101,7 +101,7 @@ def login():
         elif not user.check_password(form.password.data):
             flash('Invalid username or password', 'warning')
         else:
-            if login_user(user):
+            if login_user(user, remember=form.remember_me.data):
                 flash("Logged in successfully.", 'success')
                 return redirect(url_for('search'))
             else:
@@ -110,7 +110,7 @@ def login():
     else:
         flash_form_errors(form)
 
-    return render_template('home.html', form=form)
+    return render_template('home.html', login_form=form)
 
 
 @app.route('/logout')
@@ -122,27 +122,31 @@ def logout():
 
 @app.route('/register', methods=['GET', "POST"])
 def register():
-    form = RegistrationForm()
+    if app.config['REGISTRATION_ENABLED']:
+        reg_form = RegistrationForm()
+        login_form = LoginForm()
 
-    if form.validate_on_submit():
-        pwd_hash, salt = User.hash_password(form.password.data)
-        user = User(username=form.username.data,
-                    password=pwd_hash,
-                    salt=salt,
-                    email=form.email.data)
-        # save user to db
-        user_id, save_error = user.save()
-        if user_id:
-            # try to login
-            if login_user(user):
-                flash("Logged in successfully.", 'success')
-                return redirect(url_for('search'))
+        if reg_form.validate_on_submit():
+            pwd_hash, salt = User.hash_password(reg_form.password.data)
+            user = User(username=reg_form.username.data,
+                        password=pwd_hash,
+                        salt=salt,
+                        email=reg_form.email.data)
+            # save user to db
+            user_id, save_error = user.save()
+            if user_id:
+                # try to login
+                if login_user(user):
+                    flash("Logged in successfully.", 'success')
+                    return redirect(url_for('search'))
+                else:
+                    flash("Unable to log you in.", 'warning')
+                    return redirect(url_for('home'))
             else:
-                flash("Unable to log you in.", 'warning')
-                return redirect(url_for('home'))
+                flash(save_error, 'warning')
+                return redirect(url_for('register'))
         else:
-            flash(save_error, 'warning')
-            return redirect(url_for('register'))
+            flash_form_errors(reg_form)
+            return render_template('register.html', reg_form=reg_form, login_form=login_form)
     else:
-        flash_form_errors(form)
-        return render_template('register.html', form=form)
+        return redirect(url_for('home'))

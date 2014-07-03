@@ -1,56 +1,70 @@
 {% extends "base.html" %}
 {% block title %}
-    Stat
+    DB stat
 {% endblock %}
 
 {% block body %}
-    {% if db_stat %}
-        <div class="panel panel-default panel-primary">
-        <div class="panel-heading"><b>DB stat</b></div>
-            <div class="panel-body">
+    <div class="panel-group" id="accordion">
+        {% if db_stat %}
+            <div class="panel panel-default panel-primary">
+                <div class="panel-heading panel-title">
+                    <a data-toggle="collapse" data-target="#collapseOne" href="#collapseOne">
+                        <b>DB</b>
+                    </a>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">
 
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for key in db_stat %}
-                        <tr>
-                            <td>{{ key }}</td>
-                            <td>{{ db_stat[key]}}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in db_stat %}
+                                <tr>
+                                    <td>{{ i[0] }}</td>
+                                    <td>{{ i[1] }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
 
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
 
-    {% if mes_stat %}
-        <div class="panel panel-default panel-primary">
-        <div class="panel-heading"><b>Messages stat</b></div>
-            <div class="panel-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for key in mes_stat %}
-                        <tr>
-                            <td>{{ key }}</td>
-                            <td>{{ mes_stat[key]}}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+        {% if mes_stat %}
+            <div class="panel panel-default panel-primary">
+                <div class="panel-heading panel-title">
+                    <a data-toggle="collapse" data-target="#collapseTwo" href="#collapseTwo" class="collapsed">
+                        <b>Messages</b>
+                    </a>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in mes_stat %}
+                                <tr>
+                                    <td>{{ i[0] }}</td>
+                                    <td>{{ i[1]}}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock %}

@@ -10,11 +10,21 @@ Pysymo
 + 5) Config file for tools scripts
 + 6) Indexes
 + 7) Usable statistics (db stat - size, messages count)
-8) Error logging: HTTP 404/500, python exception, 'no module named ...'
-9) Hard limit of selected documents: about 1000-3000 documents
++ 8) Error logging: HTTP 404/500, python exception, 'no module named ...'
+- 9) Hard limit of selected documents: about 1000-3000 documents
 + 10) Login with Flask-Login
 + 11) db.users unique index by 'username'
 12) Piper scripts for other syslog systems (not only for syslog-ng)
 13) Syslog-ng config with built-in MongoDB driver
-14) Maybe use other types on indexes in 'messages' collecton (hashed, ...)
-15) Test on various versions of python (see ex. mongo_piper.py FIX_ME), various systems
+14) Maybe use other types on indexes in 'messages' collection (hashed, ...)
+15) TEST - on various versions of python (see ex. mongo_piper.py FIX_ME), various systems
+16) Check/format source according to PEP8, PEP257
+-/+ 17) Python class to create native Highcharts charts - native highchart.js
+18) Live charts, autorefresh
+19) Links from chart to search with parameters
+20) TEST - on various resolution screens
+21) i18n
+22) LDAP auth
++ 23) Config - Enable/disable registration
+24) Standard messages explanation, ex. %ASA-2-106017
+25) Data export

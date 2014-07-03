@@ -3,93 +3,50 @@
     Charts
 {% endblock %}
 {% block body %}
-    <!--script src="http://www.google.com/jsapi"></script-->
-    <script src="{{ url_for('static', filename='js/highcharts.js') }}"></script>
-    <script src="{{ url_for('ck.static', filename='chartkick.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/highcharts/highcharts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/highcharts/drilldown.js') }}"></script>
 
     <!-- show chart list -->
     {% if charts_list %}
         <div class="panel panel-default panel-primary">
-        <div class="panel-heading"><b>Charts</b></div>
-            <div class="panel-body">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Created</th>
-                        <th>Display</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for chart in charts_list %}
+            <div class="panel-heading panel-title"><b>Charts</b></div>
+                <div class="panel-body">
+                    <table class="table table-bordered table-striped">
+                        <thead>
                         <tr>
-                            <td>{{ chart['title'] }}</td>
-                            <td>{{ chart['created'].strftime(config['DATETIME_FORMAT']) }}</td>
-                            <td><a href="{{ url_for('charts', chart=chart['name']) }}" >Show chart</a></td>
+                            <th>Title</th>
+                            <th>Created</th>
+                            <th>Display</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-        </div>
+                        </thead>
+                        <tbody>
+                        {% for chart in charts_list %}
+                            <tr>
+                                <td>{{ chart['title'] }}</td>
+                                <td>{{ chart['created'].strftime(config['DATETIME_FORMAT']) }}</td>
+                                <td><a href="{{ url_for('charts', chart=chart['name']) }}" >Show chart</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
         </div>
     {% endif %}
 
-    <!-- show specified chart -->
     {% if chart %}
-        {% if chart['type'] == 'pie' %}
-                {% pie_chart chart['data'] with library=chart['library'] %}
-        {% elif chart['type'] == 'line' %}
-            {% line_chart chart['data'] with library=chart['library'] %}
-        {% elif chart['type'] == 'bar' %}
-            {% bar_chart chart['data'] with library=chart['library'] %}
-        {% endif %}
+        <div id="hc_container">
+            Loading...
+        </div>
+        <script>
+                // Support python's true/false
+                False = false;
+                True = true;
+                var chart;
+                $(function () {
+                    // Create the chart
+                    chart = new Highcharts.Chart({{ chart['chart'] | safe }})
+                });
+        </script>
     {% endif %}
-
-<!--div id="chart-test" style="height: 300px; text-align: center; color: #999;
-                      line-height: 300px; font-size: 14px;
-                      font-family: Lucida Grande, Lucida Sans Unicode,
-                      Verdana, Arial, Helvetica, sans-serif;">
-    Loading...
-</div>
-<script>
-//<![CDATA[
-new Chartkick.BarChart(document.getElementById("chart-test"),
-
-[{'data': [['Host1', 77.3], ['Host2', 55.9]], 'name': 'err'},
- {'data': [['Host1', 127.7], ['Host2', 125.9]], 'name': 'crit'},
- {'data': [['Host1', 52.9], ['Host2', 50.7]], 'name': 'alert'}],
-{"library":{
-        chart: {
-            type: 'bar'
-        },
-        "plotOptions": {
-              "bar": {
-                  "showInLegend": true,
-                  "dataLabels": {
-                      "enabled": true
-                  }
-              }
-          },
-          "title": {
-              "text": "Message types by host"
-          },
-          "legend": {
-              "layout": 'vertical',
-              "align": 'right',
-              'verticalAlign': 'middle',
-              'reversed': true
-          }
-         }
-});
-//]]>
-</script>
-
-<div id="chart-test2" style="height: 300px; text-align: center; color: #999;
-                      line-height: 300px; font-size: 14px;
-                      font-family: Lucida Grande, Lucida Sans Unicode,
-                      Verdana, Arial, Helvetica, sans-serif;">
-    Loading...
-</div>
-<script-->
 
 {% endblock %}
