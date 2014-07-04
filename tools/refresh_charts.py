@@ -50,39 +50,52 @@ def top_hosts():
         # drilldown[<host>]['data'].append([MSG_PRIORITY_LIST[<priority>], <count>])
         drilldown[i['_id']['h']]['data'].append([MSG_PRIORITY_LIST[i['_id']['p']], i['count']])
 
-    chart = dict()
-    chart['chart'] = {
-        'type': 'pie',
-        'height': 500,
-        'renderTo': 'hc_container'
-    }
-    chart['title'] = {'text': 'Top 10 hosts'}
-    chart['legend'] = {'enabled': False}
-    chart['plotOptions'] = {
-        'series': {
-            'dataLabels': {
-                'enabled': True,
-                'format': '{point.name} - <b>{point.y}</b>'
+    # create chart as a string - because event functions cannot be stored in dict() as an object
+    chart = """{
+        chart: {
+            type: 'pie',
+            height: 500,
+            renderTo: 'hc_container',
+            events: {
+                drilldown: function(e) { chart.setTitle(null, {text: e.point.name + ' (all messages)'}); },
+                drillup: function(e) { chart.setTitle(null, {text: 'All data'}); }
             }
+        },
+        title: {
+            text : 'Top 10 hosts'
+        },
+        subtitle: {
+            text: 'All data'
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name} - <b>{point.y}</b>'
+                }
+            }
+        },
+        series: [{
+            name: 'All data',
+            data: """ + main_series.__str__() + """
+        }],
+        drilldown: {
+            series: """ + [drilldown[i] for i in drilldown].__str__() + """
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
         }
-    }
-    chart['series'] = [{
-        'name': 'All messages',
-        'data': main_series
-    }]
-    chart['drilldown'] = {
-        'series': [drilldown[i] for i in drilldown]
-    }
-    chart['tooltip'] = {
-        'headerFormat': '<span style="font-size:11px">{series.name}</span><br>',
-        'pointFormat': '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b><br/>'
-    }
+    }"""
 
     db.charts.update({'name': 'tophosts'},
-                     {'$set': {'title': 'Top 10 hosts',
+                     {'$set': {'title': 'Top 10 hosts (all data)',
                                'created': datetime.now(),
                                # save as str() to avoid unicode
-                               'chart': chart.__str__()}},
+                               'chart': chart}},
                      upsert=True)
 
 
@@ -105,41 +118,45 @@ def messages_per_day():
              i['count']]
             for i in res['result']]
 
-    chart = dict()
-
-    chart['chart'] = {
-        'type': 'spline',
-        'renderTo': 'hc_container'
-    }
-    chart['title'] = {'text': 'Messages per day'}
-    chart['legend'] = {'enabled': False}
-    chart['yAxis'] = {
-        'title': {
-            'text': 'Number of messages'
+    chart = """{
+        chart: {
+            type: 'spline',
+            renderTo: 'hc_container'
         },
-        'min': 0
-    }
-    chart['xAxis'] = {
-        'type': 'category',
-        'tickmarkPlacement': 'on'
-    }
-    chart['plotOptions'] = {
-        'series': {
-            'dataLabels': {
-                'enabled': False
+        title: {
+            text: 'Messages per day'
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: false
+                }
             }
-        }
-    }
-    chart['series'] = [{
-        'name': 'messages',
-        'data': data
-    }]
+        },
+        yAxis: {
+            title: {
+                text: 'Number of messages'
+            },
+            min: 0
+        },
+        xAxis: {
+            type: 'category',
+            tickmarkPlacement: 'on'
+        },
+        series: [{
+            name: 'messages',
+            data: """ + data.__str__() + """
+        }]
+    }"""
 
     db.charts.update({'name': 'mesperday'},
                      {'$set': {'title': 'Messages per day',
                                'created': datetime.now(),
                                # save as str() to avoid unicode
-                               'chart': chart.__str__()
+                               'chart': chart
                                }
                       },
                      upsert=True)

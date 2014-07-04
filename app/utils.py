@@ -10,7 +10,7 @@ SIZES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
 
 def get_formatted_bytes(value):
     """Format value of bytes to KB-YB."""
-    if (value > 1) and (isinstance(value, int) or isinstance(value, long)):
+    if (value >= 1) and (isinstance(value, int) or isinstance(value, long)):
         i = int(log(value, 2)//10)
         if i <= 8:
             res = round(value/pow(1024, i), 2)

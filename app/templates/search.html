@@ -12,7 +12,7 @@
     <div class="panel panel-default panel-primary">
         {% if form.watch.data == '1' %}
             <div class="panel-heading panel-title">
-                <a data-toggle="collapse" href="#collapseSearch">
+                <a data-toggle="collapse" href="#collapseSearch" class="collapsed">
                     <b>Search - watch mode (autorefresh in {{ config['WATCH_MODE_REFRESH_INTERVAL'] }} seconds)</b>
                 </a>
             </div>
@@ -31,25 +31,25 @@
                     {{ form.hidden_tag() }}
                     <div class="row">
                         <div class="col-md-3">
-                            {{ form.host.label }}
+                            {{ form.host.label }} <b>({{ form.host.choices.__len__() }})</b>
                             {{ form.host_ie(class="list-unstyled") }}
                             {{ form.host(size=10, class="form-control") }}
                         </div>
 
                         <div class="col-md-3">
-                            {{ form.application.label }}
+                            {{ form.application.label }} <b>({{ form.application.choices.__len__() }})</b>
                             {{ form.application_ie(class="list-unstyled") }}
                             {{ form.application(size=10, class="form-control") }}
                         </div>
 
                         <div class="col-md-3">
-                            {{ form.facility.label }}
+                            {{ form.facility.label }} <b>({{ form.facility.choices.__len__() }})</b>
                             {{ form.facility_ie(class="list-unstyled") }}
                             {{ form.facility(size=10, class="form-control") }}
                         </div>
 
                         <div class="col-md-3">
-                            {{ form.priority.label }}
+                            {{ form.priority.label }} <b>({{ form.priority.choices.__len__() }})</b>
                             {{ form.priority_ie(class="list-unstyled") }}
                             {{ form.priority(size=10, class="form-control") }}
                         </div>
@@ -201,14 +201,16 @@
     <script type="text/javascript">
         $('#date_from').datetimepicker(
                 {
-                    lang: 'ru',
+                    lang: 'en',
+                    dayOfWeekStart: 1,
                     step: 15,
                     format: 'd.m.Y H:i:s'
                 }
         );
         $('#date_to').datetimepicker(
                 {
-                    lang: 'ru',
+                    lang: 'en',
+                    dayOfWeekStart: 1,
                     step: 15,
                     format: 'd.m.Y H:i:s'
                 }

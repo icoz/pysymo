@@ -133,10 +133,16 @@ def search():
 
 
 @app.route('/stat')
+@login_required
 def stat():
     return render_template('stat.html',
                            mes_stat=db_get_messages_stat(),
                            db_stat=db_get_db_stat())
+
+@app.route('/about')
+@login_required
+def about():
+    return render_template('about.html')
 
 
 @app.errorhandler(401)

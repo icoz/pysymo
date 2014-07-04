@@ -35,8 +35,11 @@ def main():
             line = line.replace(r"\\", "")
             # 3) non unicode symbols - strip out
             # https://docs.python.org/2/howto/unicode.html#the-unicode-type
-            # FIXME (IL): error - decode() takes no keyword arguments - on SLES 11 x64, python 2.6.9
-            line = line.decode('utf-8', errors='ignore')
+            # decode() takes no keyword arguments - on python 2.6.9
+            if sys.version_info >= (2, 7):
+                line = line.decode('utf-8', errors='ignore')
+            else:
+                line = line.decode('utf-8', 'ignore')
 
             data = json.loads(line)
 

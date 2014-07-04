@@ -50,7 +50,8 @@ def db_get_db_stat():
 
     stat = list()
     stat.append(['db', res['db']])
-    stat.append(['fileSize', get_formatted_bytes(res['fileSize'])])
+    # fileSize is float on SLES 11 x64, python 2.6.9 - convert to long
+    stat.append(['fileSize', get_formatted_bytes(long(res['fileSize']))])
     stat.append(['storageSize', get_formatted_bytes(res['storageSize'])])
     stat.append(['dataSize', get_formatted_bytes(res['dataSize'])])
     stat.append(['indexSize', get_formatted_bytes(res['indexSize'])])

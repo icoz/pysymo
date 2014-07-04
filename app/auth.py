@@ -14,18 +14,98 @@ from bson.objectid import ObjectId
 from Crypto import Random
 from Crypto.Hash import SHA256
 
+import ldap
 
-class User(UserMixin):
-    def __init__(self, username=None, password=None, salt=None, email=None):
+
+class UserLDAP(UserMixin):
+    """LDAP authenticated user."""
+    def __init__(self, username=None, email=None):
+        self.id = None
+        self.username = username
+        self.username1 = username
+        self.email = email
+
+    def get_by_username_w_password(self, username, pwd):
+        """Check user exists in LDAP and auth him."""
+        try:
+            conn = ldap.initialize(app.config['LDAP_SERVER'])
+            conn.protocol_version = 3
+            conn.simple_bind_s(app.config['LDAP_SERVICE_USER'], app.config['LDAP_SERVICE_PASSWORD'])
+            # search for user, username is 'cn' - unique for LDAP
+            res = conn.search_s(app.config['LDAP_SEARCH_BASE'],
+                                ldap.SCOPE_SUBTREE,
+                                'cn={0}'.format(username),
+                                ['cn', 'mail'])
+
+            if not res:
+                # user not found
+                return None, 'Invalid username or password.'
+
+            # res format - [(<user_dn>, {<properties>})]
+            user_dn = res[0][0]
+
+            # try to auth with user password
+            conn.simple_bind_s(user_dn, pwd)
+
+            # auth ok
+            self.id = res[0][1].get('cn')[0]
+            self.username = res[0][1].get('cn')[0]
+            if res[0][1].get('mail'):
+                self.email = res[0][1].get('mail')[0]
+            else:
+                self.email = None
+            conn.unbind_s()
+
+            return self, 'No error'
+        except ldap.LDAPError, e:
+            return None, e.message
+
+    def get_by_id(self, user_id):
+        """Get user by userid. For user_loader callback."""
+        try:
+            conn = ldap.initialize(app.config['LDAP_SERVER'])
+            conn.protocol_version = 3
+            conn.simple_bind_s(app.config['LDAP_SERVICE_USER'], app.config['LDAP_SERVICE_PASSWORD'])
+            # search for user, username is 'cn' - unique for LDAP
+            res = conn.search_s(app.config['LDAP_SEARCH_BASE'],
+                                ldap.SCOPE_SUBTREE,
+                                'cn={0}'.format(user_id),
+                                ['cn', 'mail'])
+
+            if not res:
+                # user not found
+                return None
+
+            # res format - [(<user_dn>, {<properties>})]
+            self.id = res[0][1].get('cn')[0]
+            self.username = res[0][1].get('cn')[0]
+            if res[0][1].get('mail'):
+                self.email = res[0][1].get('mail')[0]
+            else:
+                self.email = None
+
+            conn.unbind_s()
+
+            return self
+        except ldap.LDAPError:
+            return None
+
+
+class UserPlain(UserMixin):
+    """Plain authenticated user stored in MongoDB."""
+    def __init__(self, username=None, password=None, email=None):
         self.username = username
         self.password = password
-        self.salt = salt
+        self.salt = None
         self.email = email
         self.id = None
 
     def save(self):
+        """Save user in MongoDB."""
         user_exist = db.users.find_one({'username': self.username})
         if not user_exist:
+            # hash and salt password
+            self.__hash_password()
             res = db.users.insert({'username': self.username,
                                    'password': self.password,
                                    'salt': self.salt,
@@ -34,35 +114,32 @@ class User(UserMixin):
             self.id = res
             return self.id, 'No error'
         else:
-            return None, 'Cannot register - user already exists'
+            return None, 'Cannot save - user already exists'
 
-    def get_by_username(self, username):
+    def get_by_username_w_password(self, username, pwd):
+        """Find user by name and check password."""
         res = db.users.find_one({'username': username})
         if res:
             self.id = res['_id']
             self.username = username
-            self.email = res['email']
-            return self
-        else:
-            return None
-
-    def get_by_username_w_password(self, username):
-        res = db.users.find_one({'username': username})
-        if res:
-            self.id = res['_id']
-            self.username = username
+            # hashed and salted password
             self.password = res['password']
             self.salt = res['salt']
             self.email = res['email']
-            return self
-        else:
-            return None
 
-    def get_by_id(self, userid):
-        # !!!
+            # check user password
+            # pwd - plain text password from user input
+            if self.__check_password(pwd):
+                return self, 'No error'
+            else:
+                return None, 'Invalid username or password.'
+        else:
+            return None, 'Invalid username or password.'
+
+    def get_by_id(self, user_id):
+        """Get user by userid. For user_loader callback."""
         # !!! must use ObjectId() to search by _id
-        # !!!
-        res = db.users.find_one({'_id': ObjectId(userid)})
+        res = db.users.find_one({'_id': ObjectId(user_id)})
         if res:
             self.id = res['_id']
             self.username = res['username']
@@ -73,33 +150,44 @@ class User(UserMixin):
         else:
             return None
 
-    def check_password(self, pwd):
-        pwd_hash = SHA256.new(pwd + self.salt)
-        return pwd_hash.hexdigest() == self.password
+    def __check_password(self, pwd):
+        """Check password."""
+        return SHA256.new(pwd + self.salt).hexdigest() == self.password
 
-    @staticmethod
-    def hash_password(pwd):
-        salt = SHA256.new(Random.get_random_bytes(30))
-        pwd_hash = SHA256.new(pwd + salt.hexdigest())
-        return pwd_hash.hexdigest(), salt.hexdigest()
+    def __hash_password(self):
+        """Generate salt and hash password."""
+        self.salt = SHA256.new(Random.get_random_bytes(30)).hexdigest()
+        self.password = SHA256.new(self.password + self.salt).hexdigest()
 
 
 @login_manager.user_loader
-def load_user(userid):
-    user = User()
-    return user.get_by_id(userid)
+def load_user(user_id):
+    if app.config['AUTH_TYPE'] == 'ldap':
+        user = UserLDAP()
+    elif app.config['AUTH_TYPE'] == 'plain':
+        user = UserPlain()
+    else:
+        return None
+    return user.get_by_id(user_id)
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        user_obj = User()
-        user = user_obj.get_by_username_w_password(form.username.data)
+        if app.config['AUTH_TYPE'] == 'ldap':
+            user_obj = UserLDAP()
+        elif app.config['AUTH_TYPE'] == 'plain':
+            user_obj = UserPlain()
+        else:
+            flash('Unknown authentication type.', 'warning')
+            return render_template('home.html', login_form=form)
+
+        # find user and check password
+        user, error = user_obj.get_by_username_w_password(form.username.data, form.password.data)
         if user is None:
-            flash('Invalid username or password', 'warning')
-        elif not user.check_password(form.password.data):
-            flash('Invalid username or password', 'warning')
+            flash(error, 'warning')
         else:
             if login_user(user, remember=form.remember_me.data):
                 flash("Logged in successfully.", 'success')
@@ -122,16 +210,14 @@ def logout():
 
 @app.route('/register', methods=['GET', "POST"])
 def register():
-    if app.config['REGISTRATION_ENABLED']:
+    if app.config['REGISTRATION_ENABLED'] and app.config['AUTH_TYPE'] == 'plain':
         reg_form = RegistrationForm()
         login_form = LoginForm()
 
         if reg_form.validate_on_submit():
-            pwd_hash, salt = User.hash_password(reg_form.password.data)
-            user = User(username=reg_form.username.data,
-                        password=pwd_hash,
-                        salt=salt,
-                        email=reg_form.email.data)
+            user = UserPlain(username=reg_form.username.data,
+                             password=reg_form.password.data,
+                             email=reg_form.email.data)
             # save user to db
             user_id, save_error = user.save()
             if user_id:
