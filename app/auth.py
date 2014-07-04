@@ -6,7 +6,7 @@ from app import app, login_manager
 from app.db import db
 from app.forms import RegistrationForm, flash_form_errors, LoginForm
 
-from flask import redirect, url_for, render_template, flash
+from flask import redirect, url_for, render_template, flash, request
 from flask.ext.login import UserMixin, login_user, logout_user, login_required
 
 from bson.objectid import ObjectId
@@ -14,7 +14,8 @@ from bson.objectid import ObjectId
 from Crypto import Random
 from Crypto.Hash import SHA256
 
-import ldap
+if app.config['AUTH_TYPE'] == 'ldap':
+    import ldap
 
 
 class UserLDAP(UserMixin):
@@ -57,7 +58,7 @@ class UserLDAP(UserMixin):
             conn.unbind_s()
 
             return self, 'No error'
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             return None, e.message
 
     def get_by_id(self, user_id):
@@ -152,12 +153,12 @@ class UserPlain(UserMixin):
 
     def __check_password(self, pwd):
         """Check password."""
-        return SHA256.new(pwd + self.salt).hexdigest() == self.password
+        return SHA256.new((pwd + self.salt).encode()).hexdigest() == self.password
 
     def __hash_password(self):
         """Generate salt and hash password."""
         self.salt = SHA256.new(Random.get_random_bytes(30)).hexdigest()
-        self.password = SHA256.new(self.password + self.salt).hexdigest()
+        self.password = SHA256.new((self.password + self.salt).encode()).hexdigest()
 
 
 @login_manager.user_loader

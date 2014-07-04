@@ -3,6 +3,7 @@
 __author__ = 'icoz'
 
 from pymongo import MongoClient
+from math import floor
 
 from app.utils import get_formatted_bytes, get_formatted_thousand_sep
 
@@ -51,7 +52,7 @@ def db_get_db_stat():
     stat = list()
     stat.append(['db', res['db']])
     # fileSize is float on SLES 11 x64, python 2.6.9 - convert to long
-    stat.append(['fileSize', get_formatted_bytes(long(res['fileSize']))])
+    stat.append(['fileSize', get_formatted_bytes(floor(res['fileSize']))])
     stat.append(['storageSize', get_formatted_bytes(res['storageSize'])])
     stat.append(['dataSize', get_formatted_bytes(res['dataSize'])])
     stat.append(['indexSize', get_formatted_bytes(res['indexSize'])])
