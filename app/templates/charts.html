@@ -31,6 +31,10 @@
                     </table>
             </div>
         </div>
+    {% else %}
+        <div class="alert alert-info">
+            No charts available! Run <i>tools/refresh_charts.py</i> to create.
+        </div>
     {% endif %}
 
     {% if chart %}

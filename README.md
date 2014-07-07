@@ -6,12 +6,12 @@ https://github.com/icoz/pysymo
 
 ## Requirements
 
-- Python 2/3
+- Python => 2.6
 - Python packages: 
     - Flask, Flask-WTF, Jinja2, WTForms - flask base 
     - pymongo                           - work with MongoDB 
     - flup                              - run pysymo via fcgi
-    - flask-paginate                    - output data pagination
+    - flask-paginate (> 0.2)            - output data pagination
     - flask-login                       - user login
     - pycrypto                          - password protection
     - python-ldap                       - LDAP authentication

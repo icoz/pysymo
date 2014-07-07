@@ -3,7 +3,7 @@
 __author__ = 'icoz'
 
 from pymongo import MongoClient
-from math import floor
+from math import trunc
 
 from app.utils import get_formatted_bytes, get_formatted_thousand_sep
 
@@ -18,15 +18,27 @@ db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
 
 
 def db_get_hosts():
-    return db.cache.find_one({'type': 'h'})['value']
+    res = db.cache.find_one({'type': 'h'})
+    if res:
+        return res['value']
+    else:
+        return []
 
 
 def db_get_applications():
-    return db.cache.find_one({'type': 'a'})['value']
+    res = db.cache.find_one({'type': 'a'})
+    if res:
+        return res['value']
+    else:
+        return []
 
 
 def db_get_facility():
-    return db.cache.find_one({'type': 'f'})['value']
+    res = db.cache.find_one({'type': 'f'})
+    if res:
+        return res['value']
+    else:
+        return []
 
 
 # CHARTS
@@ -50,15 +62,15 @@ def db_get_db_stat():
     res = db.command('dbstats')
 
     stat = list()
-    stat.append(['db', res['db']])
-    # fileSize is float on SLES 11 x64, python 2.6.9 - convert to long
-    stat.append(['fileSize', get_formatted_bytes(floor(res['fileSize']))])
-    stat.append(['storageSize', get_formatted_bytes(res['storageSize'])])
-    stat.append(['dataSize', get_formatted_bytes(res['dataSize'])])
-    stat.append(['indexSize', get_formatted_bytes(res['indexSize'])])
-    stat.append(['objects', get_formatted_thousand_sep(res['objects'])])
-    stat.append(['avgObjSize', get_formatted_thousand_sep(res['avgObjSize'])])
-    stat.append(['collections', res['collections']])
+    stat.append(['db', res.get('db')])
+    # fileSize is float on SLES 11 x64, python 2.6.9 - trunc
+    stat.append(['fileSize', get_formatted_bytes(trunc(res.get('fileSize')))])
+    stat.append(['storageSize', get_formatted_bytes(res.get('storageSize'))])
+    stat.append(['dataSize', get_formatted_bytes(res.get('dataSize'))])
+    stat.append(['indexSize', get_formatted_bytes(res.get('indexSize'))])
+    stat.append(['objects', get_formatted_thousand_sep(res.get('objects'))])
+    stat.append(['avgObjSize', get_formatted_thousand_sep(res.get('avgObjSize'))])
+    stat.append(['collections', res.get('collections')])
 
     return stat
 
@@ -67,13 +79,13 @@ def db_get_messages_stat():
     res = db.command('collstats', 'messages')
 
     stat = list()
-    stat.append(['ns', res['ns']])
-    stat.append(['count', get_formatted_thousand_sep(res['count'])])
-    stat.append(['size', get_formatted_bytes(res['size'])])
-    stat.append(['storageSize', get_formatted_bytes(res['storageSize'])])
-    stat.append(['totalIndexSize', get_formatted_bytes(res['totalIndexSize'])])
-    stat.append(['lastExtentSize', get_formatted_bytes(res['lastExtentSize'])])
-    stat.append(['avgObjSize', res['avgObjSize']])
-    stat.append(['indexSizes', res['indexSizes']])
+    stat.append(['ns', res.get('ns')])
+    stat.append(['count', get_formatted_thousand_sep(res.get('count'))])
+    stat.append(['size', get_formatted_bytes(res.get('size'))])
+    stat.append(['storageSize', get_formatted_bytes(res.get('storageSize'))])
+    stat.append(['totalIndexSize', get_formatted_bytes(res.get('totalIndexSize'))])
+    stat.append(['lastExtentSize', get_formatted_bytes(res.get('lastExtentSize'))])
+    stat.append(['avgObjSize', res.get('avgObjSize')])
+    stat.append(['indexSizes', res.get('indexSizes')])
 
     return stat

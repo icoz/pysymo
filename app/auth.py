@@ -6,7 +6,7 @@ from app import app, login_manager
 from app.db import db
 from app.forms import RegistrationForm, flash_form_errors, LoginForm
 
-from flask import redirect, url_for, render_template, flash, request
+from flask import redirect, url_for, render_template, flash
 from flask.ext.login import UserMixin, login_user, logout_user, login_required
 
 from bson.objectid import ObjectId
