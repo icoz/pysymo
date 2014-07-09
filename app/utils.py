@@ -2,7 +2,7 @@
 
 __author__ = 'ilya-il'
 
-from math import log, pow
+from math import log, pow, trunc
 import sys
 
 SIZES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
@@ -10,6 +10,10 @@ SIZES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
 
 def get_formatted_bytes(value):
     """Format value of bytes to KB-YB."""
+    # some values from mongostat are float
+    if isinstance(value, float):
+        value = trunc(value)
+
     if value == 0:
         return '0 B'
     elif (value >= 1) and (isinstance(value, int) or isinstance(value, long)):
