@@ -60,12 +60,14 @@ def db_get_chart(chart_name):
 
 def db_get_db_stat():
     res = db.command('dbstats')
+    print(res)
 
     stat = list()
     stat.append(['db', res.get('db')])
     # fileSize is float on SLES 11 x64, python 2.6.9 - trunc
     stat.append(['fileSize', get_formatted_bytes(trunc(res.get('fileSize')))])
-    stat.append(['storageSize', get_formatted_bytes(res.get('storageSize'))])
+    # storageSize is fucking float too!
+    stat.append(['storageSize', get_formatted_bytes(trunc(res.get('storageSize')))])
     stat.append(['dataSize', get_formatted_bytes(res.get('dataSize'))])
     stat.append(['indexSize', get_formatted_bytes(res.get('indexSize'))])
     stat.append(['objects', get_formatted_thousand_sep(res.get('objects'))])
@@ -82,7 +84,7 @@ def db_get_messages_stat():
     stat.append(['ns', res.get('ns')])
     stat.append(['count', get_formatted_thousand_sep(res.get('count'))])
     stat.append(['size', get_formatted_bytes(res.get('size'))])
-    stat.append(['storageSize', get_formatted_bytes(res.get('storageSize'))])
+    stat.append(['storageSize', get_formatted_bytes(trunc(res.get('storageSize')))])
     stat.append(['totalIndexSize', get_formatted_bytes(res.get('totalIndexSize'))])
     stat.append(['lastExtentSize', get_formatted_bytes(res.get('lastExtentSize'))])
     stat.append(['avgObjSize', res.get('avgObjSize')])
