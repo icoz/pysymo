@@ -21,7 +21,7 @@ Pysymo
 16) Check/format source according to PEP8, PEP257
 -/+ 17) Python class to create native Highcharts charts - native highchart.js
 18) Live charts, autorefresh
-19) Links from chart to search with parameters
++19) Links from chart to search with parameters
 20) TEST - on various resolution screens
 21) i18n
 + 22) LDAP auth

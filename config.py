@@ -15,7 +15,7 @@ SECRET_KEY = 'sifdjncs-dcqodicnpdscn[osncpas#vaidcjnsajcacbqisbccsbab-cdsacvalsd
 
 # priority list
 # WARNING! do not change item position in list
-MSG_PRIORITY_LIST = ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')
+MSG_PRIORITY_LIST = ['emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug']
 
 # datetime format for search form
 DATETIME_FORMAT = '%d.%m.%Y %H:%M:%S'

@@ -75,6 +75,17 @@ def top_hosts():
                 dataLabels: {
                     enabled: true,
                     format: '{point.name} - <b>{point.y}</b>'
+                },
+                point: {
+                    events: {
+                        click: function(e) {
+                            // will work only for drilldown data
+                            if (this.name) {
+                                // redirect to search form. search with parameters from chart
+                                psm_post_search({host: this.series.name, priority: MSG_PRIORITY_LIST.indexOf(this.name)});
+                            }
+                        }
+                    }
                 }
             }
         },

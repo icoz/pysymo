@@ -42,12 +42,40 @@
             Loading...
         </div>
         <script>
-                var chart;
-                $(function () {
-                    // Create the chart
-                    chart = new Highcharts.Chart({{ chart['chart'] | safe }})
-                });
+            function psm_post_search(search_params) {
+                // create search form
+                var search_form = document.createElement('form');
+                search_form.method='post';
+                search_form.action = '{{ url_for('search') }}';
+                search_form.target = '_blank';
+
+                // hidden parameters
+                search_params.csrf_token = "{{ csrf_token() }}";
+                search_params.watch = 0;
+                search_params.current_page = 1;
+
+                // add parameters to form
+                for (var k in search_params) {
+                    if (!search_params.hasOwnProperty(k)) continue;
+                    var input = document.createElement('input');
+                    input.setAttribute('name', k);
+                    input.setAttribute('value', search_params[k]);
+                    search_form.appendChild(input);
+                }
+
+                document.body.appendChild(search_form) ;
+                search_form.submit() ;
+                document.body.removeChild(search_form) ;
+            }
+
+            var chart;
+            // list to decode priority from text to number
+            var MSG_PRIORITY_LIST = {{ config['MSG_PRIORITY_LIST'] | safe }};
+
+            $(function () {
+                // Create chart
+                chart = new Highcharts.Chart({{ chart['chart'] | safe }})
+            });
         </script>
     {% endif %}
-
 {% endblock %}
