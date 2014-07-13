@@ -38,4 +38,4 @@ file_handler.setFormatter(formatter)
 app.logger.setLevel(logging.INFO)
 app.logger.addHandler(file_handler)
 
-from app import auth, db, views, forms
+from app import auth, db, views, forms, rest_api

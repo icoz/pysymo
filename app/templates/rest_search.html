@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% block title %}
+        {% if form.watch.data == '1' %}
+            Watch
+        {% else %}
+            Search
+        {% endif %}{% endblock %}
+{% block body %}
+    <link href="{{ url_for('static', filename='css/jquery.datetimepicker.css') }}" rel="stylesheet" media="screen">
+    <script src="{{ url_for('static', filename='js/jquery.datetimepicker.js') }}"></script>
+
+    <div class="panel panel-default panel-primary">
+        {% if form.watch.data == '1' %}
+            <div class="panel-heading panel-title">
+                <a data-toggle="collapse" href="#collapseSearch" class="collapsed">
+                    <b>Search - watch mode (autorefresh in {{ config['WATCH_MODE_REFRESH_INTERVAL'] }} seconds)</b>
+                </a>
+            </div>
+            <div id="collapseSearch" class="panel-collapse collapse">
+        {% else %}
+            <div class="panel-heading panel-title">
+                    <a data-toggle="collapse" href="#collapseSearch">
+                        <b>Search</b>
+                    </a>
+            </div>
+            <div id="collapseSearch" class="panel-collapse collapse in">
+        {% endif %}
+
+            <div class="panel-body">
+                <form name="searchform" class="form" action="{{ url_for('search') }}" method=post>
+                    {{ form.hidden_tag() }}
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form.host.label }} <b>({{ form.host.choices.__len__() }})</b>
+                            {{ form.host_ie(class="list-unstyled") }}
+                            {{ form.host(size=10, class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.application.label }} <b>({{ form.application.choices.__len__() }})</b>
+                            {{ form.application_ie(class="list-unstyled") }}
+                            {{ form.application(size=10, class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.facility.label }} <b>({{ form.facility.choices.__len__() }})</b>
+                            {{ form.facility_ie(class="list-unstyled") }}
+                            {{ form.facility(size=10, class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.priority.label }} <b>({{ form.priority.choices.__len__() }})</b>
+                            {{ form.priority_ie(class="list-unstyled") }}
+                            {{ form.priority(size=10, class="form-control") }}
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        &nbsp;
+                    </div>
+
+                    <div class="row">
+                            <div class="form-group form-horizontal">
+                                {{ form.date_from.label(class='col-md-1 control-label') }}
+                                <div class="col-md-2">
+                                    {{ form.date_from(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
+                                </div>
+
+                                <div class="col-md-3">
+                                    &nbsp;
+                                </div>
+
+                                {{ form.records_per_page.label(class='col-md-1 control-label') }}
+                                <div class="col-md-2">
+                                    {{ form.records_per_page(class="form-control") }}
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="row">
+                        &nbsp;
+                    </div>
+
+                    <div class="row">
+                            <div class="form-group form-horizontal">
+                                {{ form.date_to.label(class='col-md-1 control-label') }}
+                                <div class="col-md-2">
+                                    {{ form.date_to(class="form-control", placeholder=config['DATETIME_FORMAT']) }}
+                                </div>
+
+                                <div class="col-md-3">
+                                    &nbsp;
+                                </div>
+
+                                {{ form.sort_direction.label(class='col-md-1 control-label') }}
+                                <div class="col-md-2">
+                                    {{ form.sort_direction(class="form-control") }}
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="row">
+                        &nbsp;
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group form-horizontal">
+                            {{ form.search_str.label(class='col-md-1 control-label') }}
+                            <div class="col-md-11">
+                                {{ form.search_str(class="form-control", placeholder='RegEx') }}
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row text-center">
+                        <button type="submit" class="btn btn-default btn-primary" onclick="do_search()" title="Search records, pagination enabled">Search</button>
+                        <button type="submit" class="btn btn-default btn-primary" onclick="do_watch()" title="Search only first page. Autorefresh in {{ config['WATCH_MODE_REFRESH_INTERVAL'] }} seconds, pagination disabled">Watch</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGINATION -->
+    {% if form.watch.data == '0' %}
+        <div class="row">
+            <div class="span12 text-center">
+                {% if pagination %}
+                    {{ pagination.links | safe}}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- DATA TABLE -->
+    <br>
+    {% if data %}
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Host</th>
+                <th>Date/time</th>
+                <th>Application</th>
+                <th>Facility</th>
+                <th>Priority</th>
+                <th>Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for d in data %}
+                <tr
+                        {% if 0 <= d['p'] < 4 %}
+                            class="danger"
+                        {% endif %}
+                        {% if d['p'] == 4 %}
+                            class="warning"
+                        {% endif %}
+                        {% if d['p'] == 5 or d['p'] == 6 %}
+                            class="info"
+                        {% endif %}
+                        {% if d['p'] == 7 %}
+                            class="success"
+                        {% endif %}
+                        >
+                    <td>{{ d['h'] }}</td>
+                    <td>{{ d['d'].strftime(config['DATETIME_FORMAT']) }}</td>
+                    <td>{{ d['a'] }}</td>
+                    <td>{{ d['f'] }}</td>
+                    <td>{{ config['MSG_PRIORITY_LIST'][d['p']] }}</td>
+                    <td>{{ d['m'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <!-- PAGINATION2 -->
+    {% if form.watch.data == '0' %}
+        <div class="row">
+            <div class="span12 text-center">
+                {% if pagination %}
+                    {{ pagination.links | safe}}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- QUERY STAT -->
+    {% if form.watch.data == '0' %}
+        {% if req_stat %}
+            <div class="text-right">
+                Time elapsed - {{ req_stat['time_elapsed'] }} seconds
+                <br>
+                Records found - {{ req_stat['total_records'] }}
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <!-- script section AFTER main code to get datetimepicker work -->
+    <script type="text/javascript">
+        $('#date_from').datetimepicker(
+                {
+                    lang: 'en',
+                    dayOfWeekStart: 1,
+                    step: 15,
+                    format: 'd.m.Y H:i:s'
+                }
+        );
+        $('#date_to').datetimepicker(
+                {
+                    lang: 'en',
+                    dayOfWeekStart: 1,
+                    step: 15,
+                    format: 'd.m.Y H:i:s'
+                }
+        );
+
+        function change_page ( page_num ) {
+          document.searchform.current_page.value = page_num ;
+          document.searchform.submit() ;
+        }
+
+        function do_search() {
+            document.searchform.watch.value = 0;
+            change_page(1);
+        }
+
+        function do_watch() {
+            // enable Watch mode
+            document.searchform.watch.value = 1;
+            change_page(1);
+        }
+
+        // Watch mode
+        // set timer to reload first page
+        if (document.searchform.watch.value == 1) {
+            setTimeout(function() { change_page(1) }, {{ config['WATCH_MODE_REFRESH_INTERVAL'] * 1000 }});
+        }
+    </script>
+{% endblock %}
