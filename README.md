@@ -1,12 +1,12 @@
 # README for pysymo
 
-PySyMo is a web-interface for view and analyze syslog data, stored in MongoDB.
+PySyMo is a web-interface for view and analyze syslog data stored in MongoDB.
 
 https://github.com/icoz/pysymo
 
 ## Requirements
 
-- Python => 2.6
+- Python >= 2.6
 - Python packages: 
     - Flask, Flask-WTF, Jinja2, WTForms - flask base 
     - pymongo                           - work with MongoDB 
@@ -35,6 +35,7 @@ Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. T
 2. Config MongoDB database.
     - Change MONGO_DATABASE in *app/db.py*, *tools/config.py* if necessary.
     - Init database using *tools/initdb.py*.
+    - Init MEDB (message explanation database) using *tools/init_medb.py*
 3. Config LDAP in *config.py* if necessary.
 4. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*.
 5. Config logging system to store in MongoDB. See example for syslog-ng 2.x in *examples/syslog-ng.conf*.
@@ -56,14 +57,30 @@ If you want to use LDAP to authenticate users, you need to config some parameter
 - LDAP_SERVICE_USER = '[service_user_dn]' (ex: 'cn=pysymoauth,ou=myunit,o=myorganisation')
 - LDAP_SERVICE_PASSWORD = '[password]'
 
+## MEDB
+
+Some syslog messages includes message code (vendor specific), that can be explained in detail. MEDB consists codes
+and descriptions, currently only for Cisco.
+ 
+MEDB.txt file format:
+ 
+    ([message id], [short description], [long description], [action])
+
+See Cisco ASA message codes: http://www.cisco.com/c/en/us/td/docs/security/asa/syslog-guide/syslogs/logmsgs.html
+ 
+
 ## Directories and files
 
 - /app/ - flask app
+- /data/ - various datafiles
 - /examples/ - configuration examples
 - /tools/ - tools scripts
-    - config.py - config for scripts
-    - initdb.py - db init script, creates collections and indexes. Use once during installation.
-    - refresh_cache.py - caching script, creates lists of hosts, facilities displayed in web-interface. Use in crontab.
+    - config.py - config for tools scripts
+    - fill_db.py - fill database with random records. For debug use only.
+    - init_db.py - db init script, creates collections and indexes. Use once during installation.
+    - init_medb.py - medb init script, creates collection 'medb' and fills it with *data/medb.txt* file.
+    - refresh_cache.py - caching script, creates lists of hosts, applications, facilities displayed in web-interface. 
+                         Use in crontab.
     - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab.
     - syslog-ng_piper.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x.
 - config.py - main config

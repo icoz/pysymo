@@ -19,3 +19,13 @@ body {
 .panel-heading a.collapsed:after {
     content: "\e080";
 }
+
+.popover {
+    max-width: 800px;
+    padding: 0;
+}
+
+.popover-title {
+    font-weight: bold;
+}
+

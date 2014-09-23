@@ -40,7 +40,9 @@
   @{CHROOT_BASE}/var/lib/syslog-ng/syslog-ng.persist rw,
   @{CHROOT_BASE}/var/log/** w,
   @{CHROOT_BASE}/var/run/syslog-ng.pid krw,
-  # pysymo
+
+  ########## PYSYMO ##########
+
   /srv/www/htdocs/pysymo/tools/** ixr,
   /usr/lib64/python2.6/** rm,
   /usr/local/lib64/python2.6/** rm,

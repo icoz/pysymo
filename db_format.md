@@ -24,15 +24,15 @@ Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3
 
 ## Collection 'cache'
 
-* type: h/f/a - host, facility, application - UNIQUE
-* value: list of distinct values - ["value1", "value2", ]
+* type  - h/f/a - host, facility, application - UNIQUE
+* value - list of distinct values - ["value1", "value2", ]
 
 ## Collection 'charts'
 
-* name: - chart name - UNIQUE
-* title: - chart title
-* created: - creation datetime
-* chart: - chart string (as it should be in Highcharts.Chart(<chart>))
+* name    - chart name - UNIQUE
+* title   - chart title
+* created - creation datetime
+* chart   - chart string (as it should be in Highcharts.Chart(<chart>))
 
 ## Collection 'users'
 
@@ -40,3 +40,10 @@ Reference - http://www.balabit.com/sites/default/files/documents/syslog-ng-ose-3
 * password
 * salt
 * email
+
+## Collection 'medb'
+
+* id: - message id - UNIQUE
+* m:  - message 
+* e:  - explanation
+* a:  - recommended action

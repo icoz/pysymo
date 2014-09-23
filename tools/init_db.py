@@ -3,7 +3,7 @@
 
 """ Init database script
 
-Creates collections and indexed.
+Creates collections and indexes.
 
 """
 
