@@ -7,6 +7,8 @@ import time
 from app import app
 from app.forms import RequestForm, flash_form_errors
 from app.db import db, db_get_charts_list, db_get_chart, db_get_messages_stat, db_get_db_stat
+from app.functions import medb_parse_msg
+
 from flask_paginate import Pagination
 from flask.ext.login import login_required, current_user
 
@@ -109,6 +111,14 @@ def search():
                                 sort=[('d', form.sort_direction.data)])
 
         data = [i for i in info]
+
+        # if MEDB enabled, process messages
+        if app.config['MEDB_ENABLED'] == 1:
+            for i in range(len(data)):
+                t = medb_parse_msg(data[i]['m'])
+                #print parsed_msg
+                if t:
+                    data[i]['m'] = t + ' ' + data[i]['m']
 
         end = time.time()
 

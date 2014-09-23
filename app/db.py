@@ -88,3 +88,10 @@ def db_get_messages_stat():
     stat.append(['indexSizes', res.get('indexSizes')])
 
     return stat
+
+
+# MEDB
+
+def db_get_medb_entry(medb_id):
+    res = db.medb.find_one({'id': medb_id})
+    return res

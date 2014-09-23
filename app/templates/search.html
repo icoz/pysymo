@@ -168,7 +168,7 @@
                     <td>{{ d['a'] }}</td>
                     <td>{{ d['f'] }}</td>
                     <td>{{ config['MSG_PRIORITY_LIST'][d['p']] }}</td>
-                    <td>{{ d['m'] }}</td>
+                    <td>{{ d['m'] | safe }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -199,6 +199,18 @@
 
     <!-- script section AFTER main code to get datetimepicker work -->
     <script type="text/javascript">
+
+        // MEDB popup message
+        $(".medb").popover({
+            placement: 'bottom',
+            trigger: 'hover',
+            html: true,
+            template: '<div class="popover panel panel-default panel-primary">' +
+                      '<div class="arrow"></div>' +
+                      '<div class="popover-title panel-heading panel-title"></div>' +
+                      '<div class="popover-content panel-body"></div></div>'
+        });
+
         $('#date_from').datetimepicker(
                 {
                     lang: 'en',
