@@ -35,7 +35,8 @@ Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. T
 2. Config MongoDB database.
     - Change MONGO_DATABASE in *app/db.py*, *tools/config.py* if necessary.
     - Init database using *tools/initdb.py*.
-    - Init MEDB (message explanation database) using *tools/init_medb.py*
+    - Unzip *data/medb.zip* file.
+    - Init MEDB (message explanation database) using *tools/init_medb.py*.
 3. Config LDAP in *config.py* if necessary.
 4. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*.
 5. Config logging system to store in MongoDB. See example for syslog-ng 2.x in *examples/syslog-ng.conf*.
