@@ -12,6 +12,8 @@ __author__ = 'ilya-il'
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 from ast import literal_eval
+from subprocess import call
+from os import remove
 
 
 def main():
@@ -24,13 +26,17 @@ def main():
         print("OK: Collection 'medb' and indexes were created in '{0}' database".format(MONGO_DATABASE))
         print("OK: Now load medb into '{0}' database".format(MONGO_DATABASE))
 
-        f = open('../data/medb.txt', 'r')
+        # unzip
+        call(['unzip', '../data/medb.zip'])
+
+        f = open('medb.txt', 'r')
         for line in f:
             # convert string into tuple
             t = literal_eval(line)
             db.medb.insert({'id': t[0], 'm': t[1], 'e': t[2], 'a': t[3]})
         f.close()
 
+        remove('medb.txt')
         print('OK: MEDB loaded.')
     else:
         print("ERROR: Collection 'medb' already exists")

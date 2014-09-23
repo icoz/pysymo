@@ -21,7 +21,7 @@ https://github.com/icoz/pysymo
 
 ## Summary
 
-Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. There are two main things:
+Pysymo is a web-interface for view and analyze syslog data stored in MongoDB. There are two main things:
  
 - Store syslog data in MongoDB. Different distributions use different logging system (SUSE - syslog-ng, 
   Arch - journald, Ubuntu - rsyslog). So you need a way to write to MongoDB from your syslog system 
@@ -35,7 +35,6 @@ Pysymo is a web-interface for view and analyze syslog data, stored in MongoDB. T
 2. Config MongoDB database.
     - Change MONGO_DATABASE in *app/db.py*, *tools/config.py* if necessary.
     - Init database using *tools/initdb.py*.
-    - Unzip *data/medb.zip* file.
     - Init MEDB (message explanation database) using *tools/init_medb.py*.
 3. Config LDAP in *config.py* if necessary.
 4. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*.
@@ -68,7 +67,6 @@ MEDB.txt file format:
     ([message id], [short description], [long description], [action])
 
 See Cisco ASA message codes: http://www.cisco.com/c/en/us/td/docs/security/asa/syslog-guide/syslogs/logmsgs.html
- 
 
 ## Directories and files
 
@@ -79,7 +77,7 @@ See Cisco ASA message codes: http://www.cisco.com/c/en/us/td/docs/security/asa/s
     - config.py - config for tools scripts
     - fill_db.py - fill database with random records. For debug use only.
     - init_db.py - db init script, creates collections and indexes. Use once during installation.
-    - init_medb.py - medb init script, creates collection 'medb' and fills it with *data/medb.txt* file.
+    - init_medb.py - medb init script, creates collection 'medb' and fills it with *data/medb.zip* file.
     - refresh_cache.py - caching script, creates lists of hosts, applications, facilities displayed in web-interface. 
                          Use in crontab.
     - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab.
