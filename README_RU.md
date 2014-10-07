@@ -1,7 +1,7 @@
 # README for pysymo
 
-PySyMo (Python+Syslog+Mongodb) - это простой и приятный веб-интерфейс для просмотра и анализа журналов, аналогичный проекту [phpsyslog-ng](https://code.google.com/p/php-syslog-ng/), только использующий mongodb в качестве базы данных и python в качестве языка программирования.
-Главная цель проекта - возможность быстро (значительно быстрее, чем в phpsyslog-ng) получать необходимые данные из централизованного журнала (syslog-ng), куда сохраняются данные с большого количества машин.
+PySyMo (Python+Syslog+Mongodb) - это простой и приятный веб-интерфейс для просмотра и анализа журналов, аналогичный проекту [php-syslog-ng](https://code.google.com/p/php-syslog-ng/), но использующий mongodb в качестве базы данных и python в качестве языка программирования.
+Главная цель проекта - возможность быстро (значительно быстрее, чем в php-syslog-ng) получать необходимые данные из централизованного журнала (syslog-ng), куда сохраняются данные с большого количества машин.
 
 https://github.com/icoz/pysymo
 
@@ -25,30 +25,31 @@ https://github.com/icoz/pysymo
 Pysymo - веб-интерфейс для просмотра записей журналов, хранящихся в mongodb, с возможностью настройки фильтров по дате, времени, хосту, приложению, приоритету сообщения, тексту сообщения
 
 Данные журналов сохраняются в mongodb. После чего по cron проводится их предварительная обработка. В дальнейшем эти данные можно быстро и просто просматривать и анализировать, применяя различные фильтры.
-На текущий момент реализован сбор информации из syslog-ng, хранение и обработка данных в mongodb (вопросы настройки отказоустойчивой монги - за рамками данного проекта), серверная и клиентская части для просмотра журналов. Присутствует аутентификация пользователей: plain и ldap.
+На текущий момент реализован сбор информации из syslog-ng, хранение и обработка данных в mongodb (вопросы настройки отказоустойчивой mongodb - за рамками данного проекта), серверная и клиентская части для просмотра журналов. Присутствует аутентификация пользователей: plain и ldap.
 Pysymo использует Flask, так что в качестве веб-сервера вы можете использовать всё, на чем Flask может запуститься.
 
-## Installation
+## Установка
 
-1. Install requirements.
-2. Config MongoDB database.
-    - Change MONGO_DATABASE in *app/db.py*, *tools/config.py* if necessary.
-    - Init database using *tools/initdb.py*.
-3. Config LDAP in *config.py* if necessary.
-4. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*.
-5. Config logging system to store in MongoDB. See example for syslog-ng 2.x in *examples/syslog-ng.conf*.
-6. Config web-server to run pysymo.fcgi. See example for lighttpd in *examples/fastcgi.conf* .
-7. Set permissions for logging directory (see config['PYSYMO_LOG']) to web-server.
-8. Config crontab to run periodic tasks: *refresh_cache.py*, *refresh_charts.py*.
+1. Установите требуемый софт и пакеты python.
+2. Настройте базу данных MongoDB.
+    - Измените MONGO_DATABASE в *app/db.py*, *tools/config.py* если необходимо.
+    - Инициализируейте базу данных используя *tools/initdb.py*.
+    - Инициализируйте MEDB (базу данных с описанием сообщений) используя *tools/init_medb.py*.
+3. Настройте LDAP в *config.py* если необходимо.
+4. Настройте AppArmor (если он есть). Смотрите пример в *examples/sbin.syslog-ng*.
+5. Настройте систему логирования (syslog-ng, rsyslog и т.п.) на сохранение данных в MongoDB. Смотрите пример для syslog-ng 2.x в *examples/syslog-ng.conf*.
+6. Настройте веб-сервер для запуска pysymo.fcgi. Смотрите пример для lighttpd in *examples/fastcgi.conf* .
+7. Настройте директорию для логов (смотрите config['PYSYMO_LOG']) и права на нее для веб-сервера.
+8. Настройте crontab для выполнения периодических задач: *refresh_cache.py*, *refresh_charts.py*.
 
-## Authentication types
+## Типы аутентификации
 
-- plain - user and password stored in MongoDB. Registration needed and must be enabled.
-- ldap - user and password stored in LDAP. No registration needed.
+- plain - логин и пароль хранятся в MongoDB. Регистрация необходима и должна быть включена.
+- ldap - логин и пароль хранятся в LDAP. Регистрация не требуется.
 
 ## LDAP
 
-If you want to use LDAP to authenticate users, you need to config some parameters in *config.py*.
+Для использования LDAP настройте параметры в *config.py*.
  
 - LDAP_SERVER = 'ldap://[ldap_server]' (ex: 'ldap://ldap.office.mycompany.com')
 - LDAP_SEARCH_BASE = '[organisation]' (ex: 'o=myorganisation')
@@ -58,10 +59,12 @@ If you want to use LDAP to authenticate users, you need to config some parameter
 ## Описание структуры файлов и папок проекта
 
 - /app/ - приложение flask
+- /data/ - файлы с данными
 - /examples/ - примеры настройки
 - /tools/ - вспомогательные скрипты
     - config.py - настройки для скриптов
     - initdb.py - инициализация БД, создание коллекций и индексов. Используется однократно при установке.
+    - init_medb.py - инициализация MEDB (база данных с описанием сообщений), создание коллекции 'medb' и заполнение данными из *data/medb.zip* file. Используется однократно при установке.
     - refresh_cache.py - скрипт создания кешей, списков хостов и т.п., используемых в веб-интерфейсе. Рекомендуется включить в crontab.
     - refresh_charts.py - скрипт, выполняющий предобработку данных, для последующего использования в отрисовке диаграмм. Рекомендуется включить в crontab.
     - syslog-ng_piper.py - скрипт сохранения данных с центрального syslog-ng в MongoDB. Требуется syslog-ng 2.x.

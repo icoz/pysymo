@@ -40,7 +40,7 @@ Pysymo is a web-interface for view and analyze syslog data stored in MongoDB. Th
 4. Config AppArmor (if exists). See example in *examples/sbin.syslog-ng*.
 5. Config logging system to store in MongoDB. See example for syslog-ng 2.x in *examples/syslog-ng.conf*.
 6. Config web-server to run pysymo.fcgi. See example for lighttpd in *examples/fastcgi.conf* .
-7. Set permissions for logging directory (see config['PYSYMO_LOG']) to web-server.
+7. Config logging (see config['PYSYMO_LOG']) directory and set permissions to web-server.
 8. Config crontab to run periodic tasks: *refresh_cache.py*, *refresh_charts.py*.
 
 ## Authentication types
@@ -77,7 +77,7 @@ See Cisco ASA message codes: http://www.cisco.com/c/en/us/td/docs/security/asa/s
     - config.py - config for tools scripts
     - fill_db.py - fill database with random records. For debug use only.
     - init_db.py - db init script, creates collections and indexes. Use once during installation.
-    - init_medb.py - medb init script, creates collection 'medb' and fills it with *data/medb.zip* file.
+    - init_medb.py - medb init script, creates collection 'medb' and fills it with *data/medb.zip* file. Use once during installation.
     - refresh_cache.py - caching script, creates lists of hosts, applications, facilities displayed in web-interface. 
                          Use in crontab.
     - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab.
