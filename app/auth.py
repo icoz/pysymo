@@ -8,6 +8,7 @@ from app.forms import RegistrationForm, flash_form_errors, LoginForm
 
 from flask import redirect, url_for, render_template, flash
 from flask.ext.login import UserMixin, login_user, logout_user, login_required
+from flask.ext.babel import gettext
 
 from bson.objectid import ObjectId
 
@@ -182,7 +183,7 @@ def login():
         elif app.config['AUTH_TYPE'] == 'plain':
             user_obj = UserPlain()
         else:
-            flash('Unknown authentication type.', 'warning')
+            flash(gettext('Unknown authentication type.'), 'warning')
             return render_template('home.html', login_form=form)
 
         # find user and check password
@@ -191,7 +192,7 @@ def login():
             flash(error, 'warning')
         else:
             if login_user(user, remember=form.remember_me.data):
-                flash("Logged in successfully.", 'success')
+                flash('Logged in successfully.', 'success')
                 return redirect(url_for('search'))
             else:
                 flash("Unable to log you in.", 'warning')
@@ -224,10 +225,10 @@ def register():
             if user_id:
                 # try to login
                 if login_user(user):
-                    flash("Logged in successfully.", 'success')
+                    flash('Logged in successfully.', 'success')
                     return redirect(url_for('search'))
                 else:
-                    flash("Unable to log you in.", 'warning')
+                    flash('Unable to log you in.', 'warning')
                     return redirect(url_for('home'))
             else:
                 flash(save_error, 'warning')

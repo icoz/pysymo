@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>500 - Invernal server error</title>
+    <title>500 - {{ _('Internal server error') }}</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
     <link href="{{ url_for('static', filename='css/pysymo.css') }}" rel="stylesheet" media="screen">
 </head>
 <body>
     <div class="container">
         <div class="jumbotron alert-info">
-            <h1>Oops!</h1>
-            <p>An unexpected error has occurred!</p>
-            <p>The administrator has been notified. Sorry for the inconvenience!</p>
+            <h1>{{ _('Oops!') }}</h1>
+            <p>{{ _('Something went wrong!') }}</p>
+            <p>{{ _('The administrator has been notified. Sorry for the inconvenience!') }}</p>
         </div>
     </div>
 </body>

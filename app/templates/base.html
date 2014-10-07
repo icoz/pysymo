@@ -45,18 +45,18 @@
                                 {{ login_form.remember_me }}
                                 {{ login_form.remember_me.label(style="color:#DDD") }}
                             </div>
-                            <button type="submit" class="btn btn-primary">Sign In</button>
+                            <button type="submit" class="btn btn-primary">{{ _('Sign In') }}</button>
                             {% if config['REGISTRATION_ENABLED'] and config['AUTH_TYPE'] == 'plain' %}
-                                <a href="{{ url_for('register') }}" class="btn btn-primary" role="button">Register</a>
+                                <a href="{{ url_for('register') }}" class="btn btn-primary" role="button">{{ _('Register') }}</a>
                             {% endif %}
                         </form>
                     </li>
               {% else %}
-                    <li><a href="{{ url_for('search') }}"><span class="glyphicon glyphicon-search"></span> Search</a></li>
-                    <li><a href="{{ url_for('charts') }}"><span class="glyphicon glyphicon-stats"></span> Charts</a></li>
-                    <li><a href="{{ url_for('stat') }}"><span class="glyphicon glyphicon-tasks"></span> DB stat</a></li>
-                    <li><a href="{{ url_for('about') }}"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-                    <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-off"></span> Logout (<b>{{ current_user.username }}</b>)</a></li>
+                    <li><a href="{{ url_for('search') }}"><span class="glyphicon glyphicon-search"></span> {{ _('Search') }}</a></li>
+                    <li><a href="{{ url_for('charts') }}"><span class="glyphicon glyphicon-stats"></span> {{ _('Charts') }}</a></li>
+                    <li><a href="{{ url_for('stat') }}"><span class="glyphicon glyphicon-tasks"></span> {{ _('DB stat') }}</a></li>
+                    <li><a href="{{ url_for('about') }}"><span class="glyphicon glyphicon-info-sign"></span> {{ _('About') }}</a></li>
+                    <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-off"></span> {{ _('Logout') }} (<b>{{ current_user.username }}</b>)</a></li>
               {% endif %}
           </ul>
     </div><!--/.navbar-collapse -->

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    About
+    {{ _('About') }}
 {% endblock %}
 {% block body %}
     <div class="panel-group" id="accordion">
@@ -9,15 +9,15 @@
         <div class="panel panel-default panel-primary">
             <div class="panel-heading panel-title">
                 <a data-toggle="collapse" data-target="#collapseOne" href="#collapseOne">
-                    <b>What's this?</b>
+                    <b>{{ _("What's this?") }}</b>
                 </a>
             </div>
             <div id="collapseOne" class="panel-collapse collapse in">
                 <div class="panel-body">
-                    <p>PySyMo is a web-interface for view and analyze syslog data stored in MongoDB.</p>
-                    <p>Supports search, filter, pagination, graphical charts.</p>
-                    <p>Available on <a href="https://github.com/icoz/pysymo" target="_blank">GitHub</a></p>
-                    <p>Version - {{ config['PYSYMO_VERSION'] }}</p>
+                    <p>{{ _('PySyMo is a web-interface for view and analyze syslog data stored in MongoDB.') }}</p>
+                    <p>{{ _('Supports search, filter, pagination, graphical charts.') }}</p>
+                    <p>{{ _('Available on') }} <a href="https://github.com/icoz/pysymo" target="_blank">GitHub</a></p>
+                    <p>{{ _('Version') }} - {{ config['PYSYMO_VERSION'] }}</p>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="panel panel-default panel-primary">
             <div class="panel-heading panel-title">
                 <a data-toggle="collapse" data-target="#collapseTwo" href="#collapseTwo">
-                    <b>Powered by</b>
+                    <b>{{ _('Powered by') }}</b>
                 </a>
             </div>
             <div id="collapseTwo" class="panel-collapse collapse in">
@@ -53,7 +53,7 @@
         <div class="panel panel-default panel-primary">
             <div class="panel-heading panel-title">
                 <a data-toggle="collapse" data-target="#collapseThree" href="#collapseThree">
-                    <b>Maintained by</b>
+                    <b>{{ _('Maintained by') }}</b>
                 </a>
             </div>
             <div id="collapseThree" class="panel-collapse collapse in">
@@ -77,7 +77,7 @@
         <div class="panel panel-default panel-primary">
             <div class="panel-heading panel-title">
                 <a data-toggle="collapse" data-target="#collapseTen" href="#collapseTen" class="collapsed">
-                    <b>Under GPL v2</b>
+                    <b>{{ _('Under GPL v2') }}</b>
                 </a>
             </div>
             <div id="collapseTen" class="panel-collapse collapse">

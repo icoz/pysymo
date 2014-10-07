@@ -5,6 +5,7 @@ __author__ = 'ilya-il'
 
 from flask import Flask
 from flask_login import LoginManager
+from flask.ext.babel import Babel
 from flask_wtf.csrf import CsrfProtect
 import logging
 from logging.handlers import RotatingFileHandler
@@ -19,6 +20,9 @@ csrf.init_app(app)
 # add login support
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# L10n
+babel = Babel(app)
 
 # add logging
 formatter = logging.Formatter('''--------------------------------------------------

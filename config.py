@@ -31,6 +31,11 @@ if sys.platform == 'win32':
 else:
     PYSYMO_LOG = '/var/log/pysymo/python.log'
 
+# L10n
+LANGUAGES = {
+    'en': 'English',
+    'ru': 'Russian'
+}
 
 # ==================================================
 #               USER EDITABLE SECTION

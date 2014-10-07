@@ -4,13 +4,14 @@ __author__ = 'icoz'
 
 import time
 
-from app import app
+from app import app, babel
 from app.forms import RequestForm, flash_form_errors
 from app.db import db, db_get_charts_list, db_get_chart, db_get_messages_stat, db_get_db_stat
 from app.functions import medb_parse_msg
 
 from flask_paginate import Pagination
 from flask.ext.login import login_required, current_user
+from flask.ext.babel import gettext
 
 from flask import request, render_template, redirect, url_for, flash
 
@@ -149,10 +150,16 @@ def stat():
                            mes_stat=db_get_messages_stat(),
                            db_stat=db_get_db_stat())
 
+
 @app.route('/about')
 @login_required
 def about():
     return render_template('about.html')
+
+
+@babel.localeselector
+def get_locale():
+    return request.accept_languages.best_match(app.config['LANGUAGES'].keys())
 
 
 @app.errorhandler(401)

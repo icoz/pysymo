@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    DB stat
+    {{ _('DB stat') }}
 {% endblock %}
 
 {% block body %}
@@ -9,7 +9,7 @@
             <div class="panel panel-default panel-primary">
                 <div class="panel-heading panel-title">
                     <a data-toggle="collapse" data-target="#collapseOne" href="#collapseOne">
-                        <b>DB</b>
+                        <b>{{ _('DB') }}</b>
                     </a>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in">
@@ -18,8 +18,8 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Value</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Value') }}</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,7 +41,7 @@
             <div class="panel panel-default panel-primary">
                 <div class="panel-heading panel-title">
                     <a data-toggle="collapse" data-target="#collapseTwo" href="#collapseTwo" class="collapsed">
-                        <b>Messages</b>
+                        <b>{{ _('Messages') }}</b>
                     </a>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse">
@@ -49,8 +49,8 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Value</th>
+                                <th>{{ _('Name') }}</th>
+                                <th>{{ _('Value') }}</th>
                             </tr>
                             </thead>
                             <tbody>
