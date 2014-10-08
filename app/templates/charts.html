@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}
-    Charts
+    {{ _('Charts') }}
 {% endblock %}
 {% block body %}
     <script src="{{ url_for('static', filename='js/highcharts/highcharts.js') }}"></script>
@@ -9,14 +9,14 @@
     <!-- show chart list -->
     {% if charts_list %}
         <div class="panel panel-default panel-primary">
-            <div class="panel-heading panel-title"><b>Charts</b></div>
+            <div class="panel-heading panel-title"><b>{{ _('Charts') }}</b></div>
                 <div class="panel-body">
                     <table class="table table-bordered table-striped">
                         <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Created</th>
-                            <th>Display</th>
+                            <th>{{ _('Title') }}</th>
+                            <th>{{ _('Created') }}</th>
+                            <th>{{ _('Display') }}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -24,7 +24,7 @@
                             <tr>
                                 <td>{{ chart['title'] }}</td>
                                 <td>{{ chart['created'].strftime(config['DATETIME_FORMAT']) }}</td>
-                                <td><a href="{{ url_for('charts', chart=chart['name']) }}" >Show chart</a></td>
+                                <td><a href="{{ url_for('charts', chart=chart['name']) }}" >{{ _('Show chart') }}</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -32,8 +32,9 @@
             </div>
         </div>
     {% else %}
-        <div class="alert alert-info">
-            No charts available! Run <i>tools/refresh_charts.py</i> to create.
+        <div class="alert alert-warning">
+            <span class="glyphicon glyphicon-warning-sign" style="font-size: 24px; vertical-align: bottom">&nbsp;</span>
+            {{ _('No charts available! Run <i>tools/refresh_charts.py</i> to create.') }}
         </div>
     {% endif %}
 

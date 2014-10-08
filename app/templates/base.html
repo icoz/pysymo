@@ -73,7 +73,14 @@
                         {% for category, message in messages %}
                             <div class="alert alert-{{ category }}">
                                 <a class="close" data-dismiss="alert" href="#">&times;</a>
-                                <h4>{{ category }}</h4> {{ message }}
+                                {% if category == 'danger' %}
+                                    <span class="glyphicon glyphicon-exclamation-sign" style="font-size: 24px; vertical-align: bottom">&nbsp;</span>
+                                {% elif category == 'warning' %}
+                                    <span class="glyphicon glyphicon-warning-sign" style="font-size: 24px; vertical-align: bottom">&nbsp;</span>
+                                {% elif category == 'success' %}
+                                    <span class="glyphicon glyphicon-info-sign" style="font-size: 24px; vertical-align: bottom">&nbsp;</span>
+                                {% endif %}
+                                {{ message }}
                             </div>
                         {% endfor %}
                     </div>

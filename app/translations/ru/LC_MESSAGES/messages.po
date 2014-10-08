@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PySyMo\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-10-07 17:22+0400\n"
-"PO-Revision-Date: 2014-10-07 17:23+0400\n"
+"POT-Creation-Date: 2014-10-08 11:46+0400\n"
+"PO-Revision-Date: 2014-10-08 11:47+0400\n"
 "Last-Translator: Ilya IL\n"
 "Language-Team: ru <https://github.com/icoz/pysymo>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
@@ -37,19 +37,19 @@ msgstr "Исключить"
 msgid "Field '%(field)s' - %(errtext)s"
 msgstr "Поле '%(field)s' - %(errtext)s"
 
-#: app/forms.py:28 app/templates/search.html:143
+#: app/forms.py:28 app/templates/search.html:145
 msgid "Host"
 msgstr "Хост"
 
-#: app/forms.py:31 app/templates/search.html:145
+#: app/forms.py:31 app/templates/search.html:147
 msgid "Application"
 msgstr "Приложение"
 
-#: app/forms.py:34 app/templates/search.html:146
+#: app/forms.py:34 app/templates/search.html:148
 msgid "Facility"
 msgstr "Объект"
 
-#: app/forms.py:37 app/templates/search.html:147
+#: app/forms.py:37 app/templates/search.html:149
 msgid "Priority"
 msgstr "Приоритет"
 
@@ -62,7 +62,7 @@ msgid "To"
 msgstr "Дата по"
 
 #: app/forms.py:43
-msgid "Records"
+msgid "Records per page"
 msgstr "Записей на стр."
 
 #: app/forms.py:49
@@ -100,6 +100,14 @@ msgstr "Логин"
 #: app/forms.py:87
 msgid "Remember me"
 msgstr "Запомнить меня"
+
+#: app/views.py:167
+msgid "401 - Unauthorized"
+msgstr "401 - Неавторизован"
+
+#: app/views.py:173
+msgid "404 - Page not found"
+msgstr "404 - Страница не найдена"
 
 #: app/templates/500.html:4
 msgid "Internal server error"
@@ -147,7 +155,7 @@ msgstr "Версия"
 
 #: app/templates/about.html:29
 msgid "Powered by"
-msgstr "Работает на"
+msgstr "Работает"
 
 #: app/templates/about.html:56
 msgid "Maintained by"
@@ -166,11 +174,12 @@ msgid "Register"
 msgstr "Регистрация"
 
 #: app/templates/base.html:55 app/templates/search.html:6
-#: app/templates/search.html:24 app/templates/search.html:118
+#: app/templates/search.html:25 app/templates/search.html:119
 msgid "Search"
 msgstr "Поиск"
 
-#: app/templates/base.html:56
+#: app/templates/base.html:56 app/templates/charts.html:3
+#: app/templates/charts.html:12
 msgid "Charts"
 msgstr "Графики"
 
@@ -182,6 +191,28 @@ msgstr "Статистика БД"
 msgid "Logout"
 msgstr "Выход"
 
+#: app/templates/charts.html:17
+msgid "Title"
+msgstr "Название"
+
+#: app/templates/charts.html:18
+msgid "Created"
+msgstr "Время создания"
+
+#: app/templates/charts.html:19
+msgid "Display"
+msgstr "Показать"
+
+#: app/templates/charts.html:27
+msgid "Show chart"
+msgstr "Показать график"
+
+#: app/templates/charts.html:37
+msgid "No charts available! Run <i>tools/refresh_charts.py</i> to create."
+msgstr ""
+"Графики не найдены! Запустите <i>tools/refresh_charts.py</i> чтобы создать "
+"их."
+
 #: app/templates/home.html:3
 msgid "Home"
 msgstr "Главная"
@@ -190,19 +221,19 @@ msgstr "Главная"
 msgid "Register new user"
 msgstr "Регистрация нового пользователя"
 
-#: app/templates/search.html:4 app/templates/search.html:119
+#: app/templates/search.html:4 app/templates/search.html:121
 msgid "Watch"
 msgstr "Слежение"
 
-#: app/templates/search.html:118
+#: app/templates/search.html:119
 msgid "Search records, pagination enabled"
 msgstr "Поиск записей, постраничный просмотр включен"
 
-#: app/templates/search.html:144
+#: app/templates/search.html:146
 msgid "Date/time"
 msgstr "Дата/время"
 
-#: app/templates/search.html:148
+#: app/templates/search.html:150
 msgid "Message"
 msgstr "Сообщение"
 
@@ -224,3 +255,6 @@ msgstr "Сообщения"
 
 #~ msgid "Search - watch mode, autorefresh in %(art)s seconds"
 #~ msgstr "Поиск - режим слежения, автообновление каждые %(art)s секунд"
+
+#~ msgid "Records"
+#~ msgstr "Записей на стр."

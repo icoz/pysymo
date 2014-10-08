@@ -164,13 +164,13 @@ def get_locale():
 
 @app.errorhandler(401)
 def page_not_found(e):
-    flash('401 - Unauthorized', 'danger')
+    flash(gettext('401 - Unauthorized'), 'danger')
     return redirect(url_for('login'))
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    flash('404 - Page not found', 'danger')
+    flash(gettext('404 - Page not found'), 'danger')
     return redirect(url_for('home'))
 
 

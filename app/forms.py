@@ -40,7 +40,7 @@ class RequestForm(Form):
     date_to = DateTimeField(lazy_gettext('To'), [validators.optional()], format=DATETIME_FORMAT)
 
     # RECORDS PER PAGE
-    records_per_page = SelectField(lazy_gettext('Records'),
+    records_per_page = SelectField(lazy_gettext('Records per page'),
                                    choices=[(i, i) for i in (10, 25, 50, 100, 500)],
                                    coerce=int,
                                    default=25)
