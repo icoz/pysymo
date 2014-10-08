@@ -20,16 +20,21 @@ body {
     content: "\e080";
 }
 
+/* width of MEDB popover */
 .popover {
     max-width: 800px;
     padding: 0;
 }
-
+/* title of MEDB popover */
 .popover-title {
     font-weight: bold;
 }
 
+/* left align search form labels */
 .form-horizontal .control-label {
     text-align: left;
 }
-
+/* fix right hang of login form*/
+.navbar-form.navbar-right:last-child {
+    margin-right: 0;
+}
