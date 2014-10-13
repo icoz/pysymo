@@ -10,30 +10,36 @@ from datetime import datetime
 
 line = sys.stdin.readline()
 if line:
-#    print(line)
-#    print('')
+    print(line)
+    print('')
 
     # TEST - 1.txt - remove escape characters \'
-    # replace \' to '
-#    line = line.replace(r"\'", "'")
-    # replace \\ to empty string
-#    line = line.replace(r"\\", "")
+    # 1) # replace \' to '
+    line = line.replace(r"\'", "'")
+
+    # TEST
+    # 2) replace \\ to empty string
+    line = line.replace(r"\\", "")
+
+    print(line)
+    print('')
 
     # TEST - non unicode symbols - strip out
+    # 3) non unicode symbols - strip out
     # https://docs.python.org/2/howto/unicode.html#the-unicode-type
-#    line = line.decode('utf-8', 'ignore')
+    # decode() takes no keyword arguments - on python 2.6.9
+    if sys.version_info >= (2, 7):
+        line = line.decode('utf-8', errors='ignore')
+    else:
+        line = line.decode('utf-8', 'ignore')
 
-#    print(line)
-#    print('')
-
-#    print str2.decode('string_escape')
-    # TEST - 2.txt - UnicodeDecodeError: 'utf8' codec can't decode byte 0xc8 in position 237: invalid continuation byte
-    #line = line.decode('latin-1')
-    #print(line)
+    print(line)
+    print('')
 
     # JSON LOAD
     try:
         data = json.loads(line)
+        print(data)
     except Exception, e:
         exc_type, exc_value, exc_traceback = sys.exc_info()
         print('==============================')
