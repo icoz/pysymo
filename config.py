@@ -29,7 +29,7 @@ if sys.platform == 'win32':
     basedir = os.path.abspath(os.path.dirname(__file__))
     PYSYMO_LOG = os.path.join(basedir, 'python.log')
 else:
-    PYSYMO_LOG = '/var/log/pysymo/python.log'
+    PYSYMO_LOG = os.environ.get('PYSYMO_LOG') or '/var/log/pysymo/python.log'
 
 # L10n
 LANGUAGES = {
