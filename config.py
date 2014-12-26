@@ -51,10 +51,10 @@ REGISTRATION_ENABLED = True
 AUTH_TYPE = 'plain'
 
 # LDAP
-LDAP_SERVER = 'ldap://[ldap_server]'
-LDAP_SEARCH_BASE = '[organisation]'
-LDAP_SERVICE_USER = '[service_user_dn]'
-LDAP_SERVICE_PASSWORD = '[password]'
+LDAP_SERVER = os.environ.get('PYSYMO_LDAP_SERVER') or 'ldap://[ldap_server]'
+LDAP_SEARCH_BASE = os.environ.get('PYSYMO_LDAP_BASE') or '[organisation]'
+LDAP_SERVICE_USER = os.environ.get('PYSYMO_LDAP_USER') or '[service_user_dn]'
+LDAP_SERVICE_PASSWORD = os.environ.get('PYSYMO_LDAP_PASSWORD') or '[password]'
 
 # MEDB - message explanation database
 MEDB_ENABLED = 1
