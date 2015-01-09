@@ -1,6 +1,9 @@
 NAME = pysymo
 VERSION = 0.1
 
+# DOCKER_BUILD_OPTS = --pull
+DOCKER_BUILD_OPTS = 
+
 .PHONY: all build test tag_latest release ssh
 
 all: build
@@ -8,19 +11,19 @@ all: build
 build: build_web build_init build_refresh_cache build_refresh_charts
 
 build_init:
-	docker build --rm --pull -t $(NAME)_init:$(VERSION) Dockerfiles/init
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_init:$(VERSION) Dockerfiles/init
 
 build_web:
-	docker build --rm --pull -t $(NAME)_web:$(VERSION) Dockerfiles/web
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_web:$(VERSION) Dockerfiles/web
 
 build_fill_db:
-	docker build --rm --pull -t $(NAME)_fill_db:$(VERSION) Dockerfiles/fill_db
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_fill_db:$(VERSION) Dockerfiles/fill_db
 build_refresh_cache:
-	docker build --rm --pull -t $(NAME)_refresh_cache:$(VERSION) Dockerfiles/refresh_cache
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_refresh_cache:$(VERSION) Dockerfiles/refresh_cache
 build_refresh_charts:
-	docker build --rm --pull -t $(NAME)_refresh_charts:$(VERSION) Dockerfiles/refresh_charts
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_refresh_charts:$(VERSION) Dockerfiles/refresh_charts
 build_dev:
-	docker build --rm --pull -t $(NAME)_dev:$(VERSION) Dockerfiles/dev
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_dev:$(VERSION) Dockerfiles/dev
 
 tag_latest:
 	# docker tag $(NAME)_dev:$(VERSION) $(NAME)_dev:latest
