@@ -1,5 +1,6 @@
 NAME = pysymo
 VERSION = 0.1
+REPO = localhost:5000
 
 # DOCKER_BUILD_OPTS = --pull
 DOCKER_BUILD_OPTS = 
@@ -27,15 +28,21 @@ build_dev:
 
 tag_latest:
 	# docker tag $(NAME)_dev:$(VERSION) $(NAME)_dev:latest
-	docker tag $(NAME)_web:$(VERSION) $(NAME)_web:latest
-	docker tag $(NAME)_init:$(VERSION) $(NAME)_init:latest
-	docker tag $(NAME)_fill_db:$(VERSION) $(NAME)_fill_db:latest
-	docker tag $(NAME)_refresh_charts:$(VERSION) $(NAME)_refresh_charts:latest
-	docker tag $(NAME)_refresh_cache:$(VERSION) $(NAME)_refresh_cache:latest
+	docker tag -f $(NAME)_web:$(VERSION) $(REPO)/$(NAME)_web:latest
+	docker tag -f $(NAME)_init:$(VERSION) $(REPO)/$(NAME)_init:latest
+	docker tag -f $(NAME)_fill_db:$(VERSION) $(REPO)/$(NAME)_fill_db:latest
+	docker tag -f $(NAME)_refresh_charts:$(VERSION) $(REPO)/$(NAME)_refresh_charts:latest
+	docker tag -f $(NAME)_refresh_cache:$(VERSION) $(REPO)/$(NAME)_refresh_cache:latest
 	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
+upload:
+	docker push $(REPO)/$(NAME)_web:latest
+	docker push $(REPO)/$(NAME)_init:latest
+	docker push $(REPO)/$(NAME)_fill_db:latest
+	docker push $(REPO)/$(NAME)_refresh_charts:latest
+	docker push $(REPO)/$(NAME)_refresh_cache:latest
 
 run: build build_fill_db
-	docker run -d --rm --name pysymo_mongo_test mongo
+	docker run -d --name pysymo_mongo_test mongo && sleep 10
 	docker run -d --name pysymo_web_test --link pysymo_mongo_test:db pysymo_web:$(VERSION)
 	docker run --rm -it --link pysymo_mongo_test:db pysymo_init:$(VERSION)
 	docker run --rm -it --link pysymo_mongo_test:db pysymo_fill_db:$(VERSION) 10000
