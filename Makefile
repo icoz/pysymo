@@ -1,51 +1,40 @@
-NAME = dockerbase/syslog-ng
-VERSION = 1.1
+NAME = pysymo
+VERSION = 0.1
 
 .PHONY: all build test tag_latest release ssh
 
 all: build
 
-build:
-	docker build -t $(NAME):$(VERSION) --rm .
+build: build_web build_init build_refresh_cache build_refresh_charts
 
-test:
-	#env NAME=$(NAME) VERSION=$(VERSION) ./test/runner.sh
-	docker run -it --rm $(NAME):$(VERSION) echo hello world!
+build_init:
+	docker build --rm --pull -t $(NAME)_init:$(VERSION) Dockerfiles/init
 
-run:
-	docker run --name $(subst /,-,$(NAME)) --restart=always -t --cidfile cidfile -d $(NAME):$(VERSION) /sbin/runit
+build_web:
+	docker build --rm --pull -t $(NAME)_web:$(VERSION) Dockerfiles/web
 
-start:
-	docker start `cat cidfile`
-
-stop:
-	docker stop -t 10 `cat cidfile`
-
-rm:
-	docker rm `cat cidfile`
-	rm -fr cidfile
-
-version:
-	docker run -it --rm $(NAME):$(VERSION) sh -c " lsb_release -d ; git --version ; ssh -V " | tee COMPONENTS
-	dos2unix COMPONENTS
-	sed -i -e 's/^/    /' COMPONENTS
-	sed -i -e '/^### Components & Versions/q' README.md
-	echo >> README.md
-	cat COMPONENTS >> README.md
-	rm COMPONENTS
+build_fill_db:
+	docker build --rm --pull -t $(NAME)_fill_db:$(VERSION) Dockerfiles/fill_db
+build_refresh_cache:
+	docker build --rm --pull -t $(NAME)_refresh_cache:$(VERSION) Dockerfiles/refresh_cache
+build_refresh_charts:
+	docker build --rm --pull -t $(NAME)_refresh_charts:$(VERSION) Dockerfiles/refresh_charts
+build_dev:
+	docker build --rm --pull -t $(NAME)_dev:$(VERSION) Dockerfiles/dev
 
 tag_latest:
-	docker tag $(NAME):$(VERSION) $(NAME):latest
+	# docker tag $(NAME)_dev:$(VERSION) $(NAME)_dev:latest
+	docker tag $(NAME)_web:$(VERSION) $(NAME)_web:latest
+	docker tag $(NAME)_init:$(VERSION) $(NAME)_init:latest
+	docker tag $(NAME)_fill_db:$(VERSION) $(NAME)_fill_db:latest
+	docker tag $(NAME)_refresh_charts:$(VERSION) $(NAME)_refresh_charts:latest
+	docker tag $(NAME)_refresh_cache:$(VERSION) $(NAME)_refresh_cache:latest
 	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
 
-release: test tag_latest
-	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
-	#@if ! head -n 1 Changelog.md | grep -q 'release date'; then echo 'Please note the release date in Changelog.md.' && false; fi
-	docker push $(NAME)
-	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
-
-enter:
-	@ID=$$(docker ps | grep -F "$(NAME):$(VERSION)" | awk '{ print $$1 }') && \
-                if test "$$ID" = ""; then echo "Container is not running."; exit 1; fi && \
-                PID=$$(docker inspect --format {{.State.Pid}} $$ID) && \
-                SHELL=/bin/bash sudo -E build/bin/nsenter --target $$PID --mount --uts --ipc --net --pid
+run: build build_fill_db
+	docker run -d --rm --name pysymo_mongo_test mongo
+	docker run -d --name pysymo_web_test --link pysymo_mongo_test:db pysymo_web:$(VERSION)
+	docker run --rm -it --link pysymo_mongo_test:db pysymo_init:$(VERSION)
+	docker run --rm -it --link pysymo_mongo_test:db pysymo_fill_db:$(VERSION) 10000
+	docker run --rm -it --link pysymo_mongo_test:db pysymo_refresh_cache:$(VERSION)
+	docker run --rm -it --link pysymo_mongo_test:db pysymo_refresh_charts:$(VERSION)
