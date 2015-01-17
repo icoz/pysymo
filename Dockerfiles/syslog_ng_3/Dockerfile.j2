@@ -10,5 +10,5 @@ RUN sed 's/PYSYMO_PORT/{{port}}/' -i /etc/syslog.conf
 RUN sed 's/PYSYMO_DB/{{db}}/' -i /etc/syslog.conf
 
 
-CMD [ "/usr/sbin/syslog-ng",  "-f", "/etc/syslog.conf" ]
+CMD [ "/usr/sbin/syslog-ng",  "-f", "/etc/syslog.conf", "--no-caps", "-e", "-F" ]
 
