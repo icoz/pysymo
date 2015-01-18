@@ -5,11 +5,11 @@ REPO = localhost:5000
 # DOCKER_BUILD_OPTS = --pull
 DOCKER_BUILD_OPTS = 
 
-.PHONY: all build test tag_latest release ssh
+.PHONY: all build test tag_latest release ssh run run_test
 
 all: build
 
-build: build_web build_init build_refresh_cache build_refresh_charts
+build: build_web build_init build_refresh_cache build_refresh_charts build_syslog
 
 build_init:
 	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_init:$(VERSION) Dockerfiles/init
@@ -19,12 +19,18 @@ build_web:
 
 build_fill_db:
 	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_fill_db:$(VERSION) Dockerfiles/fill_db
+
 build_refresh_cache:
 	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_refresh_cache:$(VERSION) Dockerfiles/refresh_cache
+
 build_refresh_charts:
 	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_refresh_charts:$(VERSION) Dockerfiles/refresh_charts
+
 build_dev:
 	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_dev:$(VERSION) Dockerfiles/dev
+
+build_syslog:
+	docker build --rm $(DOCKER_BUILD_OPTS) -t $(NAME)_syslog:$(VERSION) Dockerfiles/syslog_ng_3
 
 tag_latest:
 	# docker tag $(NAME)_dev:$(VERSION) $(NAME)_dev:latest
@@ -41,7 +47,13 @@ upload:
 	docker push $(REPO)/$(NAME)_refresh_charts:latest
 	docker push $(REPO)/$(NAME)_refresh_cache:latest
 
-run: build build_fill_db
+run: build
+	docker run -d --name pysymo_mongo_test mongo || docker start pysymo_mongo_test && sleep 10
+	docker run -d --name pysymo_web_test --link pysymo_mongo_test:db pysymo_web:$(VERSION) || docker start pysymo_web_test
+	docker run --rm -it --link pysymo_mongo_test:db pysymo_init:$(VERSION)
+	docker run -d --name pysymo_syslog_test --link pysymo_mongo_test:db pysymo_syslog:$(VERSION) || docker start pysymo_syslog_test
+
+run_test: build build_fill_db
 	docker run -d --name pysymo_mongo_test mongo && sleep 10
 	docker run -d --name pysymo_web_test --link pysymo_mongo_test:db pysymo_web:$(VERSION)
 	docker run --rm -it --link pysymo_mongo_test:db pysymo_init:$(VERSION)
