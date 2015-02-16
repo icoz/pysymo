@@ -8,7 +8,7 @@ from app.utils import get_formatted_bytes, get_formatted_thousand_sep
 from os import environ as env
 
 MONGO_HOST = env.get('PYSYMO_MONGO_HOST') or env.get('DB_PORT_27017_TCP_ADDR') or '127.0.0.1'
-MONGO_PORT = int(env.get('PYSYMO_MONGO_PORT') or env.get('DB_PORT_27017_TCP_PORT')) or 27017
+MONGO_PORT = env.get('PYSYMO_MONGO_PORT') or env.get('DB_PORT_27017_TCP_PORT') or 27017
 MONGO_DATABASE = env.get('PYSYMO_MONGO_DATABASE') or 'syslog'
 
 db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
