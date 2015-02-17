@@ -193,6 +193,7 @@
     {% if form.watch.data == '0' %}
         {% if req_stat %}
             <div class="text-right">
+                {# FIXME (IL): Translate (see https://youtrack.jetbrains.com/issue/PY-14055) #}
                 Time elapsed - {{ req_stat['time_elapsed'] }} seconds
                 <br>
                 Records found - {{ req_stat['total_records'] }}

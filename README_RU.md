@@ -16,6 +16,7 @@ https://github.com/icoz/pysymo
     - flask-login                       - user login
     - pycrypto                          - password protection
     - python-ldap                       - LDAP authentication
+    - Babel, Flask-Babel                - i18n
 - MongoDB
 - Web-server
 - Linux logging system (syslog-ng, ...)

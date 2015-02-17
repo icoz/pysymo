@@ -41,7 +41,7 @@ class UserLDAP(UserMixin):
 
             if not res:
                 # user not found
-                return None, 'Invalid username or password.'
+                return None, gettext('Invalid username or password.')
 
             # res format - [(<user_dn>, {<properties>})]
             user_dn = res[0][0]
@@ -114,9 +114,9 @@ class UserPlain(UserMixin):
                                    'email': self.email})
             # insert() returns document id
             self.id = res
-            return self.id, 'No error'
+            return self.id, gettext('No error')
         else:
-            return None, 'Cannot save - user already exists'
+            return None, gettext('Cannot save - user already exists')
 
     def get_by_username_w_password(self, username, pwd):
         """Find user by name and check password."""
@@ -132,11 +132,11 @@ class UserPlain(UserMixin):
             # check user password
             # pwd - plain text password from user input
             if self.__check_password(pwd):
-                return self, 'No error'
+                return self, gettext('No error')
             else:
-                return None, 'Invalid username or password.'
+                return None, gettext('Invalid username or password.')
         else:
-            return None, 'Invalid username or password.'
+            return None, gettext('Invalid username or password.')
 
     def get_by_id(self, user_id):
         """Get user by userid. For user_loader callback."""
@@ -192,10 +192,10 @@ def login():
             flash(error, 'warning')
         else:
             if login_user(user, remember=form.remember_me.data):
-                flash('Logged in successfully.', 'success')
+                flash(gettext('Logged in successfully.'), 'success')
                 return redirect(url_for('search'))
             else:
-                flash("Unable to log you in.", 'warning')
+                flash(gettext('Unable to log you in.'), 'warning')
                 return redirect(url_for('home'))
     else:
         flash_form_errors(form)
@@ -225,10 +225,10 @@ def register():
             if user_id:
                 # try to login
                 if login_user(user):
-                    flash('Logged in successfully.', 'success')
+                    flash(gettext('Logged in successfully.'), 'success')
                     return redirect(url_for('search'))
                 else:
-                    flash('Unable to log you in.', 'warning')
+                    flash(gettext('Unable to log you in.'), 'warning')
                     return redirect(url_for('home'))
             else:
                 flash(save_error, 'warning')
