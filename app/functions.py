@@ -21,7 +21,6 @@ def medb_parse_msg(msg):
         if res:
             mes_id = res.group(1)
             medb_entry = db_get_medb_entry(mes_id)
-            #print medb_entry
             if medb_entry:
                 # exit on first medb entry
                 content = '<b>Message:</b> {m}<br>' \

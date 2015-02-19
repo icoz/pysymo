@@ -97,8 +97,6 @@ def search():
         if form.search_str.data:
             req['m'] = {'$regex': form.search_str.data}
 
-        #print('db-request', req)
-
         # pagination skip records
         skip_records = (int(form.current_page.data) - 1) * form.records_per_page.data
 
@@ -117,7 +115,6 @@ def search():
         if app.config['MEDB_ENABLED'] == 1:
             for i in range(len(data)):
                 t = medb_parse_msg(data[i]['m'])
-                #print parsed_msg
                 if t:
                     data[i]['m'] = t + ' ' + data[i]['m']
 

@@ -44,7 +44,7 @@ Pysymo использует Flask, так что в качестве веб-се
     - пример для rsyslog в *examples/rsyslog/syslog-ng.conf*.
 6. Настройте веб-сервер для запуска pysymo.fcgi. Смотрите пример для lighttpd in *examples/lighttps/fastcgi.conf* .
 7. Настройте директорию для логов (смотрите config['PYSYMO_LOG']) и права на нее для веб-сервера.
-8. Настройте crontab для выполнения периодических задач: *refresh_cache.py*, *refresh_charts.py*.
+8. Настройте crontab для выполнения периодических задач: *tools/refresh_cache.py*, *tools/refresh_charts.py*.
 
 ## Типы аутентификации
 
@@ -70,8 +70,10 @@ Pysymo использует Flask, так что в качестве веб-се
     - initdb.py - инициализация БД, создание коллекций и индексов. Используется однократно при установке.
     - init_medb.py - инициализация MEDB (база данных с описанием сообщений), создание коллекции 'medb' и заполнение данными из *data/medb.zip* file. Используется однократно при установке.
     - refresh_cache.py - скрипт создания кешей, списков хостов и т.п., используемых в веб-интерфейсе. Рекомендуется включить в crontab.
-    - refresh_charts.py - скрипт, выполняющий предобработку данных, для последующего использования в отрисовке диаграмм. Рекомендуется включить в crontab.
-    - syslog-ng_piper.py - скрипт сохранения данных с центрального syslog-ng в MongoDB. Требуется syslog-ng 2.x.
+    - refresh_charts.py - скрипт, выполняющий предобработку данных, для последующего использования в отрисовке графиков. Рекомендуется включить в crontab.
+    - syslog-ng_piper.py - скрипт сохранения данных syslog-ng в MongoDB. Требуется syslog-ng 2.x.
+    - syslog-ng_piper2.py - скрипт сохранения данных syslog-ng в MongoDB. Требуется syslog-ng 2.x.
+    - rsyslog_piper.py - скрипт сохранения данных rsyslog в MongoDB. Требуется rsyslog
 - config.py - основной конфиг
 - pysymo.fcgi - запуск pysymo средствами веб-сервера
 - run.py - запуск pysymo в одиночном режиме на localhost

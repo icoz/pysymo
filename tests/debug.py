@@ -26,7 +26,7 @@ def random_record():
     facility = facilities[int(random() * len(facilities))]
     priority = int(random() * 7)
     apps = ['samba', 'exim', 'postfix', 'httpd', 'ftpd']
-    app = apps[int(random() * len(apps))]
+    ap = apps[int(random() * len(apps))]
     dt = datetime.utcnow()
     words = ['hello', 'world', 'how', 'are', 'you']
     message = ' '.join([words[int(random() * len(words))] for i in range(5)])
@@ -36,7 +36,7 @@ def random_record():
     # dt = date-time.timestamp
     # a = app | program
     # m = msg
-    return host, facility, priority, app, dt, message
+    return host, facility, priority, ap, dt, message
 
 
 @app.route('/gen_info/<int:num>')

@@ -45,7 +45,7 @@ Pysymo is a web-interface for view and analyze syslog data stored in MongoDB. Th
     - example for rsyslog in *examples/rsyslog/pysymo.conf*.
 6. Config web-server to run pysymo.fcgi. See example for lighttpd in *examples/lighttpd/fastcgi.conf* .
 7. Config logging (see config['PYSYMO_LOG']) directory and set permissions to web-server.
-8. Config crontab to run periodic tasks: *refresh_cache.py*, *refresh_charts.py*.
+8. Config crontab to run periodic tasks: *tools/refresh_cache.py*, *tools/refresh_charts.py*.
 
 ## Authentication types
 
@@ -86,6 +86,8 @@ See Cisco ASA message codes: http://www.cisco.com/c/en/us/td/docs/security/asa/s
                          Use in crontab.
     - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab.
     - syslog-ng_piper.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x.
+    - syslog-ng_piper2.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x.
+    - rsyslog_piper.py - script to store rsyslog data to MongoDB. Use with rsyslog
 - config.py - main config
 - pysymo.fcgi - run pysymo with web-server
 - run.py - run pysymo standalone on localhost
