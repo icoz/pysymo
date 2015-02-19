@@ -37,9 +37,12 @@ Pysymo использует Flask, так что в качестве веб-се
     - Инициализируейте базу данных используя *tools/initdb.py*.
     - Инициализируйте MEDB (базу данных с описанием сообщений) используя *tools/init_medb.py*.
 3. Настройте LDAP в *config.py* если необходимо.
-4. Настройте AppArmor (если он есть). Смотрите пример в *examples/sbin.syslog-ng*.
-5. Настройте систему логирования (syslog-ng, rsyslog и т.п.) на сохранение данных в MongoDB. Смотрите пример для syslog-ng 2.x в *examples/syslog-ng.conf*.
-6. Настройте веб-сервер для запуска pysymo.fcgi. Смотрите пример для lighttpd in *examples/fastcgi.conf* .
+4. Настройте AppArmor (если он есть). Смотрите пример в *examples/apparmor/sbin.syslog-ng*.
+5. Настройте систему логирования (syslog-ng, rsyslog и т.п.) на сохранение данных в MongoDB. 
+    - пример для syslog-ng 2.x в *examples/syslog-ng-2.x/syslog-ng.conf*.
+    - пример для syslog-ng 3.x в *examples/syslog-ng-3.x/syslog-ng.conf*.
+    - пример для rsyslog в *examples/rsyslog/syslog-ng.conf*.
+6. Настройте веб-сервер для запуска pysymo.fcgi. Смотрите пример для lighttpd in *examples/lighttps/fastcgi.conf* .
 7. Настройте директорию для логов (смотрите config['PYSYMO_LOG']) и права на нее для веб-сервера.
 8. Настройте crontab для выполнения периодических задач: *refresh_cache.py*, *refresh_charts.py*.
 
