@@ -42,8 +42,9 @@ Pysymo использует Flask, так что в качестве веб-се
     - пример для syslog-ng 2.x в *examples/syslog-ng-2.x/syslog-ng.conf*.
     - пример для syslog-ng 3.x в *examples/syslog-ng-3.x/syslog-ng.conf*.
     - пример для rsyslog в *examples/rsyslog/syslog-ng.conf*.
+        - процесс syslog должен иметь права на выполнение piper-скрипта!
 6. Настройте веб-сервер для запуска pysymo.fcgi. Смотрите пример для lighttpd in *examples/lighttps/fastcgi.conf* .
-7. Настройте директорию для логов (смотрите config['PYSYMO_LOG']) и права на нее для веб-сервера.
+7. Настройте директорию для логов (config['PYSYMO_LOG'], tools/config['PYSYMO_ERROR_LOG']) и права на запись в нее для веб-сервера и процесса syslog.
 8. Настройте crontab для выполнения периодических задач: *tools/refresh_cache.py*, *tools/refresh_charts.py*.
 
 ## Типы аутентификации

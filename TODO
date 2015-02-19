@@ -30,3 +30,5 @@ Pysymo
 25) Data export
 26) favicon
 27) Chart-to-chart links. Ex: messages per day -> messages by host selected day
+28) User management (with local registration)
+29) localLDAP auth (user must exist in 'users' collection)
