@@ -72,9 +72,7 @@ Pysymo использует Flask, так что в качестве веб-се
     - init_medb.py - инициализация MEDB (база данных с описанием сообщений), создание коллекции 'medb' и заполнение данными из *data/medb.zip* file. Используется однократно при установке.
     - refresh_cache.py - скрипт создания кешей, списков хостов и т.п., используемых в веб-интерфейсе. Рекомендуется включить в crontab.
     - refresh_charts.py - скрипт, выполняющий предобработку данных, для последующего использования в отрисовке графиков. Рекомендуется включить в crontab.
-    - syslog-ng_piper.py - скрипт сохранения данных syslog-ng в MongoDB. Требуется syslog-ng 2.x.
-    - syslog-ng_piper2.py - скрипт сохранения данных syslog-ng в MongoDB. Требуется syslog-ng 2.x.
-    - rsyslog_piper.py - скрипт сохранения данных rsyslog в MongoDB. Требуется rsyslog
+    - syslog_piper.py - скрипт сохранения данных syslog в MongoDB. Требуется rsyslog, syslog-ng 2.x
 - config.py - основной конфиг
 - pysymo.fcgi - запуск pysymo средствами веб-сервера
 - run.py - запуск pysymo в одиночном режиме на localhost

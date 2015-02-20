@@ -86,9 +86,7 @@ See Cisco ASA message codes: http://www.cisco.com/c/en/us/td/docs/security/asa/s
     - refresh_cache.py - caching script, creates lists of hosts, applications, facilities displayed in web-interface. 
                          Use in crontab.
     - refresh_charts.py - chart script, aggregates data to create charts. Use in crontab.
-    - syslog-ng_piper.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x.
-    - syslog-ng_piper2.py - script to store syslog-ng data to MongoDB. Use with syslog-ng 2.x.
-    - rsyslog_piper.py - script to store rsyslog data to MongoDB. Use with rsyslog
+    - syslog_piper.py - script to store syslog data to MongoDB. Use with rsyslog, syslog-ng 2.x
 - config.py - main config
 - pysymo.fcgi - run pysymo with web-server
 - run.py - run pysymo standalone on localhost
