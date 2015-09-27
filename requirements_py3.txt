@@ -1,0 +1,12 @@
+Flask
+Flask-WTF
+Jinja2
+WTForms
+pymongo
+flask-paginate
+flask-login
+pycrypto
+python-ldap
+Babel
+Flask-Babel
+
