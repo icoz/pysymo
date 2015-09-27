@@ -21,7 +21,7 @@ from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE, PIPER_ERROR_LOG
 
 
 def main():
-    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+    db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
 
     while 1:
         line = sys.stdin.readline()

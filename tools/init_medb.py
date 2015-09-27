@@ -17,7 +17,7 @@ from os import remove
 
 
 def main():
-    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+    db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
 
     if 'medb' not in db.collection_names():
         db.create_collection('medb')

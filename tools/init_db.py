@@ -15,7 +15,7 @@ from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 
 
 def main():
-    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+    db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
 
     if 'messages' not in db.collection_names():
         db.create_collection('messages')

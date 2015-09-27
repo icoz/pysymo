@@ -19,7 +19,7 @@ from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE, MSG_PRIORITY_LIST
 
 def top_hosts():
     """Top hosts by messages count."""
-    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+    db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
 
     # Top 10 hosts by message count
     res = db.messages.aggregate([{"$group": {"_id": "$h", "count": {"$sum": 1}}},

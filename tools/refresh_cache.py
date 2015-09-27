@@ -17,7 +17,7 @@ from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 
 
 def main():
-    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+    db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
 
     # refresh host list
     hosts = db.messages.distinct('h')

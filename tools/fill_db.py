@@ -43,7 +43,7 @@ def fill_db(count):
     else:
         r = xrange(count)
 
-    db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+    db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
     start_time = datetime.now()
 
     for i in r:
