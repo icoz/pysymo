@@ -11,7 +11,7 @@ MONGO_HOST = env.get('PYSYMO_MONGO_HOST') or env.get('DB_PORT_27017_TCP_ADDR') o
 MONGO_PORT = env.get('PYSYMO_MONGO_PORT') or env.get('DB_PORT_27017_TCP_PORT') or 27017
 MONGO_DATABASE = env.get('PYSYMO_MONGO_DATABASE') or 'syslog'
 
-db = MongoClient(host=MONGO_HOST, port=MONGO_PORT)[MONGO_DATABASE]
+db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
 
 
 # MESSAGES
