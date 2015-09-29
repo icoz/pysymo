@@ -41,7 +41,7 @@ def fill_db(count):
     if sys.version_info >= (3, 0):
         r = range(count)
     else:
-        r = xrange(count)
+        r = range(count)
 
     db = MongoClient(host=MONGO_HOST, port=int(MONGO_PORT))[MONGO_DATABASE]
     start_time = datetime.now()
