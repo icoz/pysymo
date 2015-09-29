@@ -11,7 +11,7 @@ import os
 import sys
 
 MONGO_HOST = env.get('PYSYMO_MONGO_HOST') or env.get('DB_PORT_27017_TCP_ADDR') or '127.0.0.1'
-MONGO_PORT = int(env.get('PYSYMO_MONGO_PORT')) or int(env.get('DB_PORT_27017_TCP_PORT')) or 27017
+MONGO_PORT = int(env.get('PYSYMO_MONGO_PORT') or env.get('DB_PORT_27017_TCP_PORT') or 27017)
 MONGO_DATABASE = env.get('PYSYMO_MONGO_DATABASE') or 'syslog'
 
 # log file
