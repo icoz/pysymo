@@ -3,7 +3,7 @@
 
 """ Common syslog to MongoDB piper script.
 
-Reads line from stdin. Line should be a python dict.
+Reads line from stdin. Line should be in JSON format.
 Puts it in MongoDB collection 'messages'.
 
 Use for rsyslog, syslog-ng 2.x.
@@ -14,7 +14,7 @@ Use for rsyslog, syslog-ng 2.x.
 __author__ = 'ilya-il'
 
 import sys
-import ast
+import json
 import traceback
 from datetime import datetime
 from pymongo import MongoClient
@@ -31,7 +31,8 @@ def main():
             if not line:
                 break
 
-            data = ast.literal_eval(line)
+            # line should be in JSON format
+            data = json.loads(line)
             # convert datetime string to Python datetime
             # rsyslog   - RFC 3339 - %timestamp:::date-rfc3339%
             # syslog-ng - ISO 8601 - $ISODATE

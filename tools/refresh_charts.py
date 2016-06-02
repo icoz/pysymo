@@ -30,7 +30,7 @@ def top_hosts():
     main_series = []
     drilldown = dict()
 
-    for i in res['result']:
+    for i in list(res):
         host_list.append(i['_id'])
         # use format() to avoid unicode strings
         # [{'name': <host>, 'drilldown': <host>, 'y': <count>}, ]
