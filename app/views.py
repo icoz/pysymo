@@ -10,15 +10,15 @@ from app.db import db, db_get_charts_list, db_get_chart, db_get_messages_stat, d
 from app.functions import medb_parse_msg
 
 from flask_paginate import Pagination
-from flask.ext.login import login_required, current_user
-from flask.ext.babel import gettext
+from flask_login import login_required, current_user
+from flask_babel import gettext
 
 from flask import request, render_template, redirect, url_for, flash
 
 
 @app.route('/')
 def home():
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('search'))
     else:
         return redirect(url_for('login'))
