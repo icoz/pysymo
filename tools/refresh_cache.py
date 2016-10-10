@@ -21,17 +21,17 @@ def main():
 
     # refresh host list
     hosts = db.messages.distinct('h')
-    db.cache.update({'type': 'h'}, {'$set': {'value': hosts}}, upsert=True)
+    db.cache.update_one({'type': 'h'}, {'$set': {'value': hosts}}, upsert=True)
 
     # refresh program list
     # remove digital programs, marks, empty strings
     query = {'a': {'$nin': ['--', ''], '$regex': '\D'}}
     apps = db.messages.find(query).distinct('a')
-    db.cache.update({'type': 'a'}, {'$set': {'value': apps}}, upsert=True)
+    db.cache.update_one({'type': 'a'}, {'$set': {'value': apps}}, upsert=True)
 
     # refresh facility list
     fac = db.messages.distinct('f')
-    db.cache.update({'type': 'f'}, {'$set': {'value': fac}}, upsert=True)
+    db.cache.update_one({'type': 'f'}, {'$set': {'value': fac}}, upsert=True)
 
 if __name__ == '__main__':
     main()

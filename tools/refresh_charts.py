@@ -30,7 +30,7 @@ def top_hosts():
     main_series = []
     drilldown = dict()
 
-    for i in list(res['result']):
+    for i in list(res):
         host_list.append(i['_id'])
         # use format() to avoid unicode strings
         # [{'name': <host>, 'drilldown': <host>, 'y': <count>}, ]
@@ -44,7 +44,7 @@ def top_hosts():
                                  {"$group": {"_id": {"h": "$h", "p": "$p"}, "count": {"$sum": 1}}},
                                  {"$sort": {"count": DESCENDING}}
                                  ])
-    for i in list(res['result']):
+    for i in list(res):
         # fill data for specified host
         # data for host will be sorted DESC because of db query sort
         # drilldown[<host>]['data'].append([MSG_PRIORITY_LIST[<priority>], <count>])
@@ -102,7 +102,7 @@ def top_hosts():
         }
     }"""
 
-    db.charts.update({'name': 'tophosts'},
+    db.charts.update_one({'name': 'tophosts'},
                          {'$set': {'title': 'Top 10 hosts (all data)',
                                    'created': datetime.now(),
                                    # save as str() to avoid unicode
@@ -127,7 +127,7 @@ def messages_per_day():
     # data list [['Label', value], ] - ['dd.mm', value]
     data = [['{0:02d}.{1:02d}'.format(i["_id"]["d"], i["_id"]["m"]),
              i['count']]
-            for i in list(res['result'])]
+            for i in list(res)]
 
     chart = """{
         chart: {
@@ -163,7 +163,7 @@ def messages_per_day():
         }]
     }"""
 
-    db.charts.update({'name': 'mesperday'},
+    db.charts.update_one({'name': 'mesperday'},
                          {'$set': {'title': 'Messages per day',
                                    'created': datetime.now(),
                                    # save as str() to avoid unicode

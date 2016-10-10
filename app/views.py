@@ -104,7 +104,10 @@ def search():
         begin = time.time()
         total_records = db.messages.find(req).count()
 
-        info = db.messages.find(req).skip(skip_records).limit(form.records_per_page.data).sort([('d', form.sort_direction.data)])
+        info = db.messages.find(filter=req,
+                                skip=skip_records,
+                                limit=form.records_per_page.data,
+                                sort=[('d', form.sort_direction.data)])
 
         data = [i for i in info]
 
