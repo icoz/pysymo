@@ -11,8 +11,6 @@ Use for rsyslog, syslog-ng 2.x.
 """
 
 
-__author__ = 'ilya-il'
-
 import sys
 import json
 import traceback
@@ -20,6 +18,8 @@ from datetime import datetime
 from pymongo import MongoClient
 
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE, PIPER_ERROR_LOG
+
+__author__ = 'ilya-il'
 
 
 def main():

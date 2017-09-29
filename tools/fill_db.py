@@ -7,8 +7,6 @@ Fill database with number of random records.
 
 """
 
-__author__ = 'ilya-il'
-
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 from datetime import datetime, timedelta
@@ -16,6 +14,7 @@ from random import random, randrange
 import argparse
 import sys
 
+__author__ = 'ilya-il'
 
 def random_record():
     """Generate random record."""

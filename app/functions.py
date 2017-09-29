@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'ilya-il'
 
 import re
-
 from app.db import db_get_medb_entry
+
+__author__ = 'ilya-il'
 
 # regular expressions to search
 MSG_REGEXP = (

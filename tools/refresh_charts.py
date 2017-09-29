@@ -9,12 +9,12 @@ Puts chart data and properties in collection 'charts'
 """
 
 
-__author__ = 'ilya-il'
-
 from pymongo import MongoClient, DESCENDING
 from datetime import datetime
 
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE, MSG_PRIORITY_LIST
+
+__author__ = 'ilya-il'
 
 
 def top_hosts():

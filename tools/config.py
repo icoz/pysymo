@@ -3,12 +3,11 @@
 
 """ Config file ONLY for tools scripts."""
 
-
-__author__ = 'ilya-il'
-
 from os import environ as env
 import os
 import sys
+
+__author__ = 'ilya-il'
 
 MONGO_HOST = env.get('PYSYMO_MONGO_HOST') or env.get('DB_PORT_27017_TCP_ADDR') or '127.0.0.1'
 MONGO_PORT = int(env.get('PYSYMO_MONGO_PORT') or env.get('DB_PORT_27017_TCP_PORT') or 27017)
@@ -25,4 +24,3 @@ else:
 # priority list
 # WARNING! do not change item position in list
 MSG_PRIORITY_LIST = ('emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 'debug')
-

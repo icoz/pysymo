@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'icoz'
-
 from pymongo import MongoClient
-
 from app.utils import get_formatted_bytes, get_formatted_thousand_sep
 from os import environ as env
+
+__author__ = 'icoz'
 
 MONGO_HOST = env.get('PYSYMO_MONGO_HOST') or env.get('DB_PORT_27017_TCP_ADDR') or '127.0.0.1'
 MONGO_PORT = int(env.get('PYSYMO_MONGO_PORT') or env.get('DB_PORT_27017_TCP_PORT') or 27017)

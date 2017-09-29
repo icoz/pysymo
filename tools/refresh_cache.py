@@ -10,10 +10,10 @@ These values will be displayed in search form.
 """
 
 
-__author__ = 'ilya-il'
-
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
+
+__author__ = 'ilya-il'
 
 
 def main():

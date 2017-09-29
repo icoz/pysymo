@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'icoz'
-
 import time
 
 from app import app, babel
@@ -14,6 +12,8 @@ from flask_login import login_required, current_user
 from flask_babel import gettext
 
 from flask import request, render_template, redirect, url_for, flash
+
+__author__ = 'icoz'
 
 
 @app.route('/')
@@ -112,7 +112,7 @@ def search():
         data = [i for i in info]
 
         # if MEDB enabled, process messages
-        if app.config['MEDB_ENABLED'] == 1:
+        if app.config['MEDB_ENABLED']:
             for i in range(len(data)):
                 t = medb_parse_msg(data[i]['m'])
                 if t:
@@ -187,5 +187,3 @@ def internal_error(e):
         agent=request.user_agent.string
     ))
     return render_template('500.html'), 500
-
-

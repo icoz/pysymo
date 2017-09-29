@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'icoz'
-
 from app import app, login_manager
 from app.db import db
 from app.forms import RegistrationForm, flash_form_errors, LoginForm
@@ -17,6 +15,8 @@ from Crypto.Hash import SHA256
 
 if app.config['AUTH_TYPE'] == 'ldap':
     import ldap
+
+__author__ = 'icoz'
 
 
 class UserLDAP(UserMixin):

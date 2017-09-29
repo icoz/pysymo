@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'ilya-il'
-
 import sys
 import os
+
+__author__ = 'ilya-il'
 
 # ==================================================
 #       PROGRAM CONFIG SECTION. DO NOT EDIT!
@@ -22,7 +22,7 @@ MSG_PRIORITY_LIST = ['emerg', 'alert', 'crit', 'err', 'warn', 'notice', 'info', 
 DATETIME_FORMAT = '%d.%m.%Y %H:%M:%S'
 
 # pysymo version
-PYSYMO_VERSION = 0.1
+PYSYMO_VERSION = 0.2
 
 # log file
 if sys.platform == 'win32':
@@ -57,4 +57,7 @@ LDAP_SERVICE_USER = os.environ.get('PYSYMO_LDAP_USER') or '[service_user_dn]'
 LDAP_SERVICE_PASSWORD = os.environ.get('PYSYMO_LDAP_PASSWORD') or '[password]'
 
 # MEDB - message explanation database
-MEDB_ENABLED = 1
+MEDB_ENABLED = True
+
+# Use
+USE_FQDN = True

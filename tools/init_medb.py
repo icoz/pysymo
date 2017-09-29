@@ -7,13 +7,13 @@ Creates collection and indexes. Puts data/medb.txt into collection.
 
 """
 
-__author__ = 'ilya-il'
-
 from pymongo import MongoClient
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
 from ast import literal_eval
 from subprocess import call
 from os import remove
+
+__author__ = 'ilya-il'
 
 
 def main():

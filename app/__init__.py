@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__author__ = 'ilya-il'
-
 from flask import Flask
 from flask_login import LoginManager
 from flask.ext.babel import Babel
 from flask_wtf.csrf import CsrfProtect
 import logging
 from logging.handlers import RotatingFileHandler
+
+__author__ = 'ilya-il'
 
 app = Flask(__name__)
 app.config.from_object('config')

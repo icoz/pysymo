@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'ilya-il'
-
 from math import log, pow, trunc
 import sys
+import re
+
+__author__ = 'ilya-il'
 
 SIZES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
 
@@ -34,3 +35,16 @@ def get_formatted_thousand_sep(value):
     else:
         # FIXME (IL): Python <= 2.6 doesn't support ',' format
         return '{0}'.format(value)
+
+
+def get_formatted_host(value):
+    """Format host to support FQDN and IP address"""
+    # IP address
+    if re.match('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', value):
+        return value
+    # FQDN ('.' find) - leave only short name
+    elif value.find('.') > 0:
+        return value[:value.find('.')]
+    # any other value (short hostname)
+    else:
+        return value

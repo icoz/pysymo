@@ -2,6 +2,7 @@
 
 __author__ = 'ilya-il'
 
+from app import app
 from app.db import db_get_hosts, db_get_applications, db_get_facility
 from flask import flash
 from flask_wtf import Form
@@ -9,6 +10,7 @@ from flask.ext.babel import lazy_gettext
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, \
     StringField, HiddenField, PasswordField, BooleanField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
+from utils import get_formatted_host
 
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, lazy_gettext('Include')), (1, lazy_gettext('Exclude'))]
@@ -63,7 +65,10 @@ class RequestForm(Form):
     @classmethod
     def new(cls):
         form = cls()
-        form.host.choices = sorted([(j, j) for j in db_get_hosts()])
+        if app.config['USE_FQDN']:
+            form.host.choices = sorted([(j, get_formatted_host(j)) for j in db_get_hosts()])
+        else:
+            form.host.choices = sorted([(j, j) for j in db_get_hosts()])
         form.application.choices = sorted([(j, j) for j in db_get_applications()])
         form.facility.choices = sorted([(j, j) for j in db_get_facility()])
         return form

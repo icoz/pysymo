@@ -7,11 +7,10 @@ Creates collections and indexes.
 
 """
 
-
-__author__ = 'ilya-il'
-
 from pymongo import MongoClient, DESCENDING
 from config import MONGO_HOST, MONGO_PORT, MONGO_DATABASE
+
+__author__ = 'ilya-il'
 
 
 def main():
