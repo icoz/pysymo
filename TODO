@@ -33,3 +33,4 @@ Pysymo
 28) User management (with local registration)
 29) localLDAP auth (user must exist in 'users' collection)
 30) Use %timegenerated% (when the message was RECEIVED) instead %timestamp% (provided in the message)
+31) Auto-increment field for sort. Some messages have same timestamp and sort is undefined
