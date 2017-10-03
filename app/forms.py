@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'ilya-il'
-
 from app import app
 from app.db import db_get_hosts, db_get_applications, db_get_facility
 from flask import flash
 from flask_wtf import Form
-from flask.ext.babel import lazy_gettext
+from flask_babel import lazy_gettext
 from wtforms import validators, SelectMultipleField, DateTimeField, RadioField, SelectField, \
     StringField, HiddenField, PasswordField, BooleanField
 from config import MSG_PRIORITY_LIST, DATETIME_FORMAT
 from utils import get_formatted_host
+
+__author__ = 'ilya-il'
 
 priority_list = [(i, MSG_PRIORITY_LIST[i]) for i in range(len(MSG_PRIORITY_LIST))]
 ie_list = [(0, lazy_gettext('Include')), (1, lazy_gettext('Exclude'))]

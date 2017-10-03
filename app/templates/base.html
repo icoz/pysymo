@@ -31,7 +31,7 @@
 
     <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-              {% if not current_user.is_authenticated() %}
+              {% if not current_user.is_authenticated %}
                     <li class="tabs-right">
                         <form class="navbar-form navbar-right" action="{{ url_for('login') }}" method=post id="login_form">
                             {{ login_form.hidden_tag() }}

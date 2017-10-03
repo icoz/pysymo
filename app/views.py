@@ -18,7 +18,7 @@ __author__ = 'icoz'
 
 @app.route('/')
 def home():
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         return redirect(url_for('search'))
     else:
         return redirect(url_for('login'))
